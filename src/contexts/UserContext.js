@@ -43,6 +43,17 @@ const UserProvider = ({ children }) => {
   const { user } = useAuth();
   const [userInfo, dispatch] = useReducer(userInfoReducer, null);
 
+  const hasSubjects = async () => {
+    const userSubjectsRef = db
+      .collection('accounts')
+      .doc(user.uid)
+      .collection('subjects');
+
+    const subjectsCol = await userSubjectsRef.get();
+
+    return subjectsCol.docs.length > 0;
+  };
+
   const updateType = (type) => {
     const userRef = db.collection('accounts').doc(user.uid);
     return userRef.set({
@@ -88,6 +99,7 @@ const UserProvider = ({ children }) => {
     updateType,
     updateName,
     updateGender,
+    hasSubjects,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

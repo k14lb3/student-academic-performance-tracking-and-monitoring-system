@@ -5,12 +5,18 @@ import PopupNotification from './PopupNotification';
 import Loader from './Loader';
 
 const Gender = () => {
-  const { userInfo, dispatch: userInfoDispatch, updateType } = useUser();
+  const {
+    userInfo,
+    dispatch: userInfoDispatch,
+    updateType,
+    hasSubjects,
+  } = useUser();
   const typeRef = useRef();
+  const [updateButton, setUpdateButton] = useState(false);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
-  const [updateButton, setUpdateButton] = useState(false);
   const [popup, setPopup] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (userInfo) {
@@ -28,7 +34,15 @@ const Gender = () => {
 
     const type = typeRef.current.value;
 
+    setError('');
     setUpdating(true);
+    if (await hasSubjects()) {
+      setError(
+        'You cannot change account type as long as you have active subjects.'
+      );
+      setUpdating(false);
+      return;
+    }
     await updateType(type);
     userInfoDispatch({ type: ACTIONS.UPDATE_TYPE, payload: { type: type } });
     setPopup(true);
@@ -59,6 +73,7 @@ const Gender = () => {
                   <option value="Student">Student</option>
                 </select>
               </div>
+              {error && <div className="error">{error}</div>}
             </div>
             <button
               disabled={updating || !updateButton}
