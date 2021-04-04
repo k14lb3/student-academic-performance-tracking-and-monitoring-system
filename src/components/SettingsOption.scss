@@ -1,0 +1,64 @@
+@import 'variables';
+@import 'media-queries';
+
+.settingsOption {
+  justify-content: left;
+  padding: 20px;
+  margin: 10px 0 10px 20px;
+  background-color: transparent;
+  color: $light-gray;
+  letter-spacing: normal;
+
+  @include xs {
+    padding: 10px;
+  }
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
+  &:hover {
+    background-color: fade-out($orange, 0.9);
+
+    & .settingsOption__icon {
+      transform: scale(1.2);
+    }
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-right: 20px;
+    font-size: 1.3rem;
+    transition-duration: 0.2s;
+
+    @include xs {
+      font-size: 0.9rem;
+      margin-right: 10px;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    font-weight: 500;
+    font-size: 0.9rem;
+
+    @include xs {
+      font-size: 0.7rem;
+    }
+  }
+
+  &__title {
+    color: $white;
+    font-size: 1rem;
+    font-weight: 500;
+
+    @include xs {
+      font-size: .8rem;
+    }
+  }
+}

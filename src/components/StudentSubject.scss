@@ -1,0 +1,64 @@
+@import 'variables';
+@import 'media-queries';
+
+.studentSubject {
+  .subject {
+    &__body {
+      grid-template-columns: 60% 40%;
+
+      & > div:first-of-type {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        @include xm {
+          align-items: center;
+          border-right: 0;
+        }
+      }
+    }
+
+    &__instructor {
+      padding-right: 20px;
+      font-size: 1.3rem;
+      font-weight: 500;
+      @include xm {
+        padding-right: 0;
+        font-size: 1.2rem;
+        text-align: center;
+      }
+    }
+
+    &__code {
+      margin-top: 10px;
+    }
+
+    &__grade {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2rem;
+
+      @include xm {
+        border-top: solid 1px $orange;
+        padding-top: 20px;
+        margin-top: 20px;
+      }
+
+      & div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 108px;
+        height: 100%;
+        border-bottom: solid 1px $orange;
+        border-right: solid 1px $orange;
+
+        @include xm {
+          border-bottom: 0;
+          border-left: solid 1px $orange;
+        }
+      }
+    }
+  }
+}

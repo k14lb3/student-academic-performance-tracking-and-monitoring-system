@@ -1,0 +1,20 @@
+@import 'media-queries';
+
+.navigation {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+
+  @include xs {
+    width: 80%;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0;
+  }
+
+  &__signOutButton {
+    width: 100%;
+  }
+}

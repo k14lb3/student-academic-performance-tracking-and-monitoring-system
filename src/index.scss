@@ -1,0 +1,461 @@
+@import 'variables';
+@import 'media-queries';
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+::-webkit-scrollbar {
+  width: auto;
+}
+
+::-webkit-scrollbar-track {
+  background: $light-gray;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $orange;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: $dark-orange;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+li {
+  list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Open Sans';
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  font-family: 'Roboto';
+  color: $white;
+
+  @include xs {
+    background-color: $gray;
+  }
+}
+
+#app {
+  display: flex;
+  min-height: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.error {
+  font-weight: 500;
+  color: $red;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.button {
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+  border-radius: 4px;
+  background-color: $orange;
+  border: solid 1px $orange;
+  outline: none;
+  font-size: 1rem;
+  font-family: 'Open Sans';
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: 0.2s;
+  color: $black;
+  cursor: pointer;
+
+  @include xs {
+    padding: 6px 12px;
+    font-size: 0.7rem;
+  }
+
+  &:disabled {
+    background-color: desaturate($orange, 40%);
+    border-color: desaturate($orange, 40%);
+  }
+
+  &--outline {
+    color: $white;
+    background-color: transparent;
+    &:hover {
+      background-color: fade-out($orange, 0.9) !important;
+    }
+
+    &:disabled {
+      background-color: lighten($gray, 5%);
+      border-color: lighten($gray, 5%);
+    }
+  }
+
+  &:focus {
+    border: solid 1px $black;
+  }
+
+  &:hover {
+    background-color: lighten($orange, 8%);
+  }
+
+  .loader {
+    position: absolute;
+    width: 26px;
+    stroke-width: 4;
+    stroke: $black;
+
+    @include xs {
+      width: 18px;
+    }
+  }
+}
+
+.input {
+  margin: 10px 0;
+  color: $black;
+  > input[type='text'],
+  input[type='email'],
+  input[type='password'] {
+    height: 40px;
+    width: 100%;
+    padding: 10px;
+    background-color: $light-gray;
+    border: solid 1px $black;
+    border-radius: 4px;
+    outline: none;
+    font-size: 0.9rem;
+    transition-duration: 0.2s;
+
+    @include xs {
+      height: 30px;
+      font-size: 0.7rem;
+    }
+
+    &:focus {
+      border-color: $orange;
+    }
+  }
+
+  > select {
+    position: relative;
+    padding: 10px 20px;
+    background-color: $light-gray;
+    border: solid 1px $black;
+    border-radius: 4px;
+    font-size: 0.9rem;
+
+    @include xs {
+      padding: 5px 10px;
+      font-size: 0.7rem;
+    }
+    option {
+      border-radius: 4px;
+    }
+  }
+}
+
+.subject {
+  text-align: left;
+  padding: 20px;
+  margin: 20px 0;
+  border: solid 1px $orange;
+  border-radius: 4px;
+
+  &:hover {
+    background-color: transparent;
+  }
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: solid 1px $orange;
+    @include xm {
+      padding-bottom: 10px;
+    }
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    word-break: break-word;
+    margin-right: 20px;
+    @include xm {
+      font-size: 1.3rem;
+    }
+  }
+
+  &__deleteButton {
+    font-size: 1.5rem;
+    padding: 0;
+    margin-bottom: 5px;
+    background-color: transparent;
+    color: $white;
+    outline: none;
+    border: 0;
+
+    @include xs {
+      font-size: 1.3rem;
+    }
+
+    &:hover {
+      background-color: transparent;
+      color: $orange;
+    }
+
+    &:focus {
+      transform: scale(0.9);
+      color: $orange;
+      border: 0;
+    }
+
+    &--wrapper {
+      display: flex;
+      align-items: flex-end;
+    }
+  }
+
+  &__body {
+    display: grid;
+    width: 100%;
+
+    @include xm {
+      display: block;
+    }
+
+    > div:first-of-type {
+      border-right: solid 1px $orange;
+    }
+  }
+
+  &__code {
+    position: relative;
+    padding: 10px 0;
+    padding-left: 20px;
+    width: 220px;
+    font-weight: 500;
+    text-align: center;
+
+    @include xm {
+      padding: 6px 12px 6px 20px;
+    }
+
+    &:hover .tooltip {
+      display: block;
+    }
+
+    :focus {
+      & code {
+        border-left: solid 1px $black;
+      }
+    }
+
+    code {
+      width: 100%;
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      margin-left: 20px;
+      padding-left: 20px;
+      border-left: solid 1px $orange;
+
+      @include xs {
+        padding-left: 10px;
+        font-size: 0.9rem;
+      }
+
+      &:hover {
+        & .tooltip {
+          display: inline-block;
+        }
+      }
+    }
+  }
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 99;
+
+  p {
+    font-size: 1.1rem;
+    line-height: 1.5rem;
+    @include xs {
+      font-size: 0.9rem;
+      line-height: 1.3rem;
+    }
+  }
+
+  label {
+    font-weight: 1rem;
+    @include xs {
+      font-size: 0.8rem;
+    }
+  }
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    margin: 0 20px;
+    padding: 20px;
+    background-color: $gray;
+    border-radius: 4px;
+  }
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: solid 1px $orange;
+  }
+
+  &__title {
+    font-size: 2rem;
+    @include xs {
+      font-size: 1.5rem;
+    }
+  }
+
+  &__closeButton {
+    padding: 5px 10px;
+    width: auto;
+    height: fit-content;
+    background-color: transparent;
+    color: $white;
+    &:hover {
+      background-color: $red;
+    }
+  }
+
+  &__buttonGroup {
+    display: flex;
+    justify-content: flex-end;
+    & .button {
+      margin-left: 10px;
+    }
+  }
+
+  &__button {
+    position: relative;
+    margin-top: 20px;
+    margin-left: auto;
+
+    .loader {
+      margin: 0;
+    }
+  }
+
+  &__shadow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: fade-out($black, 0.8);
+    z-index: -1;
+  }
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  color: $black;
+  background-color: $orange;
+  text-align: center;
+  z-index: 99;
+  font-size: 1.2rem;
+
+  @include xs {
+    font-size: 0.9rem;
+    bottom: calc(20px + 52px);
+  }
+
+  &--active {
+    display: block;
+  }
+}
+
+.tooltip {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 110%;
+  transform: translateY(-50%);
+  width: fit-content;
+  padding: 5px 10px;
+  background-color: $black;
+  border-radius: 4px;
+  color: $white;
+  text-align: center;
+  z-index: 1;
+  transition-duration: 0.2s;
+
+  @include xm {
+    top: 140%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -5%;
+    transform: translateY(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent $black transparent transparent;
+
+    @include xm {
+      top: -35%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-color: transparent transparent $black transparent;
+    }
+  }
+}

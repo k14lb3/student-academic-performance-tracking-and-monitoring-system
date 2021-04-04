@@ -1,0 +1,33 @@
+@import 'variables';
+@import 'media-queries';
+
+.main {
+  width: 100%;
+  background-color: $gray;
+
+  &--signin {
+    background-color: transparent;
+    margin-bottom: 0 !important;
+
+    .main__container {
+      @include xs {
+        padding: 0;
+      }
+    }
+  }
+
+  @include xs {
+    margin-bottom: 52px;
+  }
+
+  &__container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+
+    @include xs{
+      padding: 10px;
+    }
+  }
+}

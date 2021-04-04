@@ -1,0 +1,48 @@
+@import 'variables';
+@import 'media-queries';
+
+.instructorSubject {
+  @include xm {
+    padding: 10px;
+  }
+  .subject {
+    &__body {
+      grid-template-columns: 70% 30%;
+
+      @include xm {
+        display: block;
+      }
+    }
+    &__buttonGroup {
+      display: flex;
+      justify-content: center;
+      @include xm {
+        border-right: 0 !important;
+      }
+    }
+
+    &__openButton {
+      flex-grow: 1;
+      margin: 0 20px;
+
+      @include xm {
+        margin-right: 0;
+      }
+    }
+
+    &__students {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.2rem;
+      text-align: center;
+
+      @include xm {
+        padding-top: 10px;
+        margin-top: 20px;
+        border-top: solid 1px $orange;
+        font-size: 1.1rem;
+      }
+    }
+  }
+}

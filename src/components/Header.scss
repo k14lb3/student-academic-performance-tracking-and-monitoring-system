@@ -1,0 +1,101 @@
+@import 'variables';
+@import 'media-queries';
+
+.header {
+  padding: 20px 0;
+  background-color: $gray;
+  transition-duration: 0.2s;
+  z-index: 99;
+
+  @include xs {
+    position: fixed;
+    bottom: 0;
+    min-width: 100vw;
+    height: 52px;
+    padding: 0;
+    border-top: solid 1px $orange;
+  }
+
+  &__container {
+    height: 100%;
+    padding: 0 20px;
+    border-right: solid 1px $orange;
+
+    @include xs {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-right: 0;
+    }
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 20px 0;
+    cursor: auto;
+
+    @include xs {
+      display: none;
+    }
+
+    @include sm {
+      height: 102.6px;
+    }
+
+    & > img {
+      margin: 0 auto;
+      height: 81.25px;
+      transition-duration: 0.2s;
+      cursor: pointer;
+
+      @include sm {
+        width: 47px;
+        height: 47px;
+      }
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  &__signOutButton {
+    width: 100%;
+
+    @include xs {
+      display: none;
+      padding: 4px !important;
+      width: fit-content;
+      height: fit-content;
+    }
+
+    @include sm {
+      padding: 12px;
+    }
+
+    & > .button {
+      &__icon {
+        display: none;
+        width: 100%;
+        font-size: 25px;
+
+        @include xs {
+          width: 35px;
+          font-size: 25px;
+        }
+
+        @include sm {
+          display: block;
+        }
+      }
+
+      &__label {
+        @include sm {
+          display: none;
+        }
+      }
+    }
+  }
+}

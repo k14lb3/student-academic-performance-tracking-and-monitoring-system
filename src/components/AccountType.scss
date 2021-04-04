@@ -1,0 +1,32 @@
+@import 'variables';
+@import 'media-queries';
+
+.accountType {
+  form {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      font-size: 1rem;
+      @include xs {
+        font-size: 0.8rem;
+      }
+    }
+
+    > div {
+      padding: 20px;
+      margin-bottom: 20px;
+      border: solid 1px $orange;
+      border-radius: 4px;
+
+      @include xs {
+        padding: 10px;
+      }
+    }
+  }
+
+  &__updateButton {
+    position: relative;
+    margin-left: auto;
+  }
+}
