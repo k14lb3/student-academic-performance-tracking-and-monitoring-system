@@ -1,11 +1,11 @@
 import './Gender.scss';
 import { useState, useEffect, useRef } from 'react';
-import { useUser } from '../contexts/UserContext';
+import { useUser, ACTIONS } from '../contexts/UserContext';
 import PopupNotification from './PopupNotification';
 import Loader from './Loader';
 
 const Gender = () => {
-  const { userInfo, setUserInfo, updateGender } = useUser();
+  const { userInfo, dispatch: userInfoDispatch, updateGender } = useUser();
   const genderRef = useRef();
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
@@ -27,11 +27,13 @@ const Gender = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const gender = genderRef.current.value;
+
     setUpdating(true);
-    await updateGender(genderRef.current.value);
-    setUserInfo({
-      ...userInfo,
-      gender: genderRef.current.value,
+    await updateGender(gender);
+    userInfoDispatch({
+      type: ACTIONS.UPDATE_GENDER,
+      payload: { gender: gender },
     });
     setPopup(true);
     setUpdating(false);
@@ -57,7 +59,7 @@ const Gender = () => {
                   ref={genderRef}
                   onChange={handleChange}
                 >
-                  <option value="NA">N/A</option>
+                  <option value="N/A">N/A</option>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                 </select>

@@ -1,11 +1,11 @@
 import './AccountType.scss';
 import { useState, useEffect, useRef } from 'react';
-import { useUser } from '../contexts/UserContext';
+import { useUser, ACTIONS } from '../contexts/UserContext';
 import PopupNotification from './PopupNotification';
 import Loader from './Loader';
 
 const Gender = () => {
-  const { userInfo, setUserInfo, updateType } = useUser();
+  const { userInfo, dispatch: userInfoDispatch, updateType } = useUser();
   const typeRef = useRef();
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
@@ -26,12 +26,11 @@ const Gender = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const type = typeRef.current.value;
+
     setUpdating(true);
-    await updateType(typeRef.current.value);
-    setUserInfo({
-      ...userInfo,
-      type: typeRef.current.value,
-    });
+    await updateType(type);
+    userInfoDispatch({ type: ACTIONS.UPDATE_TYPE, payload: { type: type } });
     setPopup(true);
     setUpdating(false);
     setUpdateButton(false);
