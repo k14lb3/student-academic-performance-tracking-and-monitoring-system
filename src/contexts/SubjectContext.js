@@ -8,12 +8,15 @@ const SubjectContext = createContext();
 export const useSubject = () => useContext(SubjectContext);
 
 export const ACTIONS = {
+  RESET_SUBJECTS: 'reset_subjects',
   INSTRUCTOR_SUBJECTS: 'instructor_subjects',
   STUDENT_SUBJECTS: 'student_subjects',
 };
 
 const subjectsReducer = (subjects, action) => {
   switch (action.type) {
+    case 'reset_subjects':
+      return null;
     case 'instructor_subjects':
       return action.payload.data.map((doc) => ({
         code: doc.id,
@@ -43,6 +46,8 @@ const SubjectProvider = ({ children }) => {
   };
 
   const getSubjects = async () => {
+    subjectsDispatch({type: ACTIONS.RESET_SUBJECTS})
+
     const userSubjectsRef = db
       .collection('accounts')
       .doc(user.uid)
@@ -57,7 +62,6 @@ const SubjectProvider = ({ children }) => {
     const subjects = subjectsCol.docs.filter((doc) =>
       userSubjects.includes(doc.id)
     );
-
     subjectsDispatch({
       type:
         userInfo.type === 'Instructor'
