@@ -6,7 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 import Loader from './Loader';
 
 const JoinSubjectModal = ({
-  userSubjects,
+  subjects,
   getUserSubjects,
   doesExist,
   setSubjectModal,
@@ -28,7 +28,7 @@ const JoinSubjectModal = ({
       );
     }
 
-    if (userSubjects.includes(code)) {
+    if (subjects.includes(code)) {
       return setError('You are already in the class with that key.');
     }
 
