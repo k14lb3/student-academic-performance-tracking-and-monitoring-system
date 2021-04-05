@@ -7,7 +7,7 @@ import Loader from './Loader';
 const Gender = () => {
   const {
     userInfo,
-    dispatch: userInfoDispatch,
+    userInfoDispatch,
     updateType,
     hasSubjects,
   } = useUser();

@@ -5,7 +5,7 @@ import PopupNotification from './PopupNotification';
 import Loader from './Loader';
 
 const Name = () => {
-  const { userInfo, dispatch: userInfoDispatch, updateName } = useUser();
+  const { userInfo, userInfoDispatch, updateName } = useUser();
   const firstNameRef = useRef();
   const lastNameRef = useRef();
   const middleNameRef = useRef();

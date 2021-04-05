@@ -5,7 +5,7 @@ import PopupNotification from './PopupNotification';
 import Loader from './Loader';
 
 const Gender = () => {
-  const { userInfo, dispatch: userInfoDispatch, updateGender } = useUser();
+  const { userInfo, userInfoDispatch, updateGender } = useUser();
   const genderRef = useRef();
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);

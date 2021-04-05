@@ -41,7 +41,7 @@ const userInfoReducer = (userInfo, action) => {
 
 const UserProvider = ({ children }) => {
   const { user } = useAuth();
-  const [userInfo, dispatch] = useReducer(userInfoReducer, null);
+  const [userInfo, userInfoDispatch] = useReducer(userInfoReducer, null);
 
   const hasSubjects = async () => {
     const userSubjectsRef = db
@@ -85,7 +85,10 @@ const UserProvider = ({ children }) => {
       const getUserInfo = async () => {
         const accountRef = db.collection('accounts').doc(user.uid);
         const account = await accountRef.get();
-        dispatch({ type: ACTIONS.SET_INFO, payload: { data: account.data() } });
+        userInfoDispatch({
+          type: ACTIONS.SET_INFO,
+          payload: { data: account.data() },
+        });
       };
 
       const unsubscribe = getUserInfo();
@@ -95,7 +98,7 @@ const UserProvider = ({ children }) => {
 
   const value = {
     userInfo,
-    dispatch,
+    userInfoDispatch,
     updateType,
     updateName,
     updateGender,
