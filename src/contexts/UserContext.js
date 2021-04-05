@@ -7,6 +7,7 @@ const UserContext = createContext();
 export const useUser = () => useContext(UserContext);
 
 export const ACTIONS = {
+  RESET_INFO: 'reset_info',
   SET_INFO: 'set_info',
   UPDATE_TYPE: 'update_type',
   UPDATE_NAME: 'update_name',
@@ -15,6 +16,8 @@ export const ACTIONS = {
 
 const userInfoReducer = (userInfo, action) => {
   switch (action.type) {
+    case 'reset_info':
+      return null;
     case 'set_info':
       return action.payload.data;
     case 'update_type':
@@ -81,6 +84,7 @@ const UserProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    userInfoDispatch({ type: ACTIONS.RESET_INFO });
     if (user) {
       const getUserInfo = async () => {
         const accountRef = db.collection('accounts').doc(user.uid);
