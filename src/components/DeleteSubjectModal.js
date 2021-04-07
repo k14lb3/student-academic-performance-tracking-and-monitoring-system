@@ -33,7 +33,7 @@ const DeleteSubjectModal = ({ code, students, setDeleteModal }) => {
                   students === 1 ? 'a student' : 'students'
                 }. `
               : ''}
-            Are you really sure you want to delete the subject?
+            Are you sure you want to delete the subject?
           </p>
           <div className="modal__buttonGroup">
             <button
