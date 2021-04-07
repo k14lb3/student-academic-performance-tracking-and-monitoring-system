@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { Redirect } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import Loader from './Loader';
 
 const SignIn = () => {
   const { user, signIn } = useAuth();
@@ -63,7 +64,8 @@ const SignIn = () => {
                 disabled={loading}
                 className="signIn__signInButton button"
               >
-                Sign In
+                <span className={loading ? 'hidden' : ''}>Sign in</span>
+                {loading && <Loader />}
               </button>
             </form>
           </div>
