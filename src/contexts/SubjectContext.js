@@ -1,4 +1,4 @@
-import React, { useReducer, useContext, createContext } from 'react';
+import React, { useReducer, useEffect, useContext, createContext } from 'react';
 import { useAuth } from './AuthContext';
 import { useUser } from './UserContext';
 import { db } from '../firebase';
@@ -7,28 +7,26 @@ const SubjectContext = createContext();
 
 export const useSubject = () => useContext(SubjectContext);
 
+const characters =
+  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
 export const ACTIONS = {
   RESET_SUBJECTS: 'reset_subjects',
-  SET_INSTRUCTOR_SUBJECTS: 'set_instructor_subjects',
-  SET_STUDENT_SUBJECTS: 'set_student_subjects',
+  SET_SUBJECTS: 'set_subjects',
+  ADD_SUBJECT: 'add_subject',
+  DELETE_SUBJECT: 'delete_subject',
 };
 
 const subjectsReducer = (subjects, action) => {
   switch (action.type) {
     case 'reset_subjects':
       return null;
-    case 'set_instructor_subjects':
-      return action.payload.data.map((doc) => ({
-        code: doc.id,
-        title: doc.data().title,
-        students: doc.data().students,
-      }));
-    case 'set_student_subjects':
-      return action.payload.data.map((doc) => ({
-        code: doc.id,
-        title: doc.data().title,
-        instructor: doc.data().instructor,
-      }));
+    case 'set_subjects':
+      return action.payload.subjects;
+    case 'add_subject':
+      return [...subjects, action.payload.subject];
+    case 'delete_subject':
+      return subjects.filter((subject) => subject.code !== action.payload.code);
     default:
       return subjects;
   }
@@ -45,9 +43,128 @@ const SubjectProvider = ({ children }) => {
     return subject.exists;
   };
 
-  const getSubjects = async () => {
-    subjectsDispatch({ type: ACTIONS.RESET_SUBJECTS });
+  const createSubject = async (title) => {
+    const generateCode = async () => {
+      let code, duplicate;
+      do {
+        code = '';
 
+        for (let i = 0; i < 7; i++) {
+          code += characters[Math.floor(Math.random() * characters.length)];
+        }
+
+        duplicate = await doesExist(code);
+      } while (duplicate);
+
+      return code;
+    };
+
+    const code = await generateCode();
+
+    await db
+      .collection('accounts')
+      .doc(user.uid)
+      .collection('subjects')
+      .doc(code)
+      .set({});
+
+    await db
+      .collection('subjects')
+      .doc(code)
+      .set({
+        title: title,
+        instructor: `${userInfo.lastName}, ${userInfo.firstName}${
+          userInfo.middleName && ` ${userInfo.middleName[0]}.`
+        }`,
+        students: 0,
+      });
+
+    subjectsDispatch({
+      type: ACTIONS.ADD_SUBJECT,
+      payload: {
+        subject: {
+          code: code,
+          title: title,
+          students: 0,
+        },
+      },
+    });
+  };
+
+  const joinSubject = async (code) => {
+    if (code.length < 5 || code.length > 7) {
+      throw new Error(
+        'Subject codes are 5-7 characters that are made up of letters and numbers, and no spaces or symbols.'
+      );
+    }
+
+    if (subjects.some((subject) => subject.code === code)) {
+      throw new Error('You are already in the class with that key.');
+    }
+
+    if (!(await doesExist(code))) {
+      throw new Error('Subject with that code does not exist.');
+    }
+
+    await db
+      .collection('accounts')
+      .doc(user.uid)
+      .collection('subjects')
+      .doc(code)
+      .set({});
+
+    const subjectRef = db.collection('subjects').doc(code);
+
+    await subjectRef.collection('students').doc(user.uid).set({ grade: '' });
+
+    const subject = await subjectRef.get();
+
+    const { instructor, title, students } = subject.data();
+
+    await subjectRef.set({
+      title: title,
+      instructor: instructor,
+      students: parseInt(students) + 1,
+    });
+
+    subjectsDispatch({
+      type: ACTIONS.ADD_SUBJECT,
+      payload: {
+        subject: {
+          code: code,
+          title: title,
+          instructor: instructor,
+          grade: '',
+        },
+      },
+    });
+  };
+
+  const deleteSubject = async (code) => {
+    await db
+      .collection('accounts')
+      .doc(user.uid)
+      .collection('subjects')
+      .doc(code)
+      .delete();
+
+    const subjectRef = db.collection('subjects').doc(code);
+
+    if (userInfo.type === 'Instructor') {
+      await subjectRef.delete();
+    } else {
+      await subjectRef.collection('students').doc(user.uid).delete();
+      const subject = await subjectRef.get();
+      await subjectRef.set({
+        ...subject.data(),
+        students: parseInt(subject.data().students) - 1,
+      });
+    }
+
+    subjectsDispatch({ type: ACTIONS.DELETE_SUBJECT, payload: { code: code } });
+  };
+
+  const getSubjects = async () => {
     const userSubjectsRef = db
       .collection('accounts')
       .doc(user.uid)
@@ -57,24 +174,77 @@ const SubjectProvider = ({ children }) => {
     const userSubjects = userSubjectsCol.docs.map((doc) => doc.id);
 
     const subjectsRef = db.collection('subjects');
-    const subjectsCol = await subjectsRef.orderBy('title', 'asc').get();
+    const subjectsCol = await subjectsRef.get();
 
-    const subjects = subjectsCol.docs.filter((doc) =>
+    const joinedSubjects = subjectsCol.docs.filter((doc) =>
       userSubjects.includes(doc.id)
     );
+
+    let subjects;
+
+    if (userInfo.type === 'Instructor') {
+      subjects = joinedSubjects.map((subject) => ({
+        code: subject.id,
+        title: subject.data().title,
+        students: subject.data().students,
+      }));
+    } else {
+      const getGrade = async (code) => {
+        const userSubjectRef = db
+          .collection('subjects')
+          .doc(code)
+          .collection('students')
+          .doc(user.uid);
+
+        const userSubject = await userSubjectRef.get();
+        return userSubject.data().grade;
+      };
+
+      subjects = joinedSubjects.map(async (subject) => ({
+        code: subject.id,
+        title: subject.data().title,
+        instructor: subject.data().instructor,
+        grade: await getGrade(subject.id),
+      }));
+
+      subjects = await Promise.all(subjects);
+    }
+
     subjectsDispatch({
-      type:
-        userInfo.type === 'Instructor'
-          ? ACTIONS.SET_INSTRUCTOR_SUBJECTS
-          : ACTIONS.SET_STUDENT_SUBJECTS,
-      payload: { data: subjects },
+      type: ACTIONS.SET_SUBJECTS,
+      payload: { subjects: subjects },
     });
   };
+
+  useEffect(() => {
+    if (!user) {
+      subjectsDispatch({ type: ACTIONS.RESET_SUBJECTS });
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (subjects) {
+      subjects.sort((a, b) => {
+        const sA = a.title.toLowerCase();
+        const sB = b.title.toLowerCase();
+        if (sA < sB) {
+          return -1;
+        }
+        if (sA > sB) {
+          return 1;
+        }
+        return 0;
+      });
+    } else {
+    }
+  }, [subjects]);
 
   const value = {
     subjects,
     getSubjects,
-    doesExist,
+    createSubject,
+    joinSubject,
+    deleteSubject,
   };
 
   return (

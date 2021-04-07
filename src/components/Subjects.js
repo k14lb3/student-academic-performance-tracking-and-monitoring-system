@@ -11,7 +11,7 @@ import Loader from './Loader';
 
 const Subjects = () => {
   const { userInfo } = useUser();
-  const { subjects, getSubjects, doesExist } = useSubject();
+  const { subjects, getSubjects } = useSubject();
   const [subjectModal, setSubjectModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -26,24 +26,6 @@ const Subjects = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo]);
 
-  const showModal = () => {
-    if (!subjectModal) return;
-    if (userInfo.type === 'Instructor')
-      return (
-        <CreateSubjectModal
-          doesExist={doesExist}
-          setSubjectModal={setSubjectModal}
-        />
-      );
-    return (
-      <JoinSubjectModal
-        subjects={subjects}
-        doesExist={doesExist}
-        setSubjectModal={setSubjectModal}
-      />
-    );
-  };
-
   return (
     <div className="subjects">
       <div className="subjects__header">
@@ -53,7 +35,12 @@ const Subjects = () => {
         <Loader />
       ) : (
         <div className="subjects__body">
-          {showModal()}
+          {subjectModal &&
+            (userInfo.type === 'Instructor' ? (
+              <CreateSubjectModal setSubjectModal={setSubjectModal} />
+            ) : (
+              <JoinSubjectModal setSubjectModal={setSubjectModal} />
+            ))}
           <button
             className="subjects__button button"
             onClick={() => {
@@ -69,7 +56,6 @@ const Subjects = () => {
                   code={code}
                   title={title}
                   students={students}
-                  getUserSubjects={getSubjects}
                 />
               ))
             : subjects.map(({ code, title, instructor, grade }) => (
@@ -79,7 +65,6 @@ const Subjects = () => {
                   title={title}
                   instructor={instructor}
                   grade={grade}
-                  getUserSubjects={getSubjects}
                 />
               ))}
         </div>

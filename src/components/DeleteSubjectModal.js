@@ -1,48 +1,16 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { db } from '../firebase';
-import { useAuth } from '../contexts/AuthContext';
-import { useUser } from '../contexts/UserContext';
+import { useSubject } from '../contexts/SubjectContext';
 import Loader from './Loader';
 
-const DeleteSubjectModal = ({
-  code,
-  students,
-  setDeleteModal,
-  getUserSubjects,
-}) => {
-  const { user } = useAuth();
-  const { userInfo } = useUser();
+const DeleteSubjectModal = ({ code, students, setDeleteModal }) => {
+  const { deleteSubject } = useSubject();
   const [loading, setLoading] = useState(false);
 
-  const deleteSubject = async () => {
+  const handleDelete = async () => {
     setLoading(true);
-    await db
-      .collection('accounts')
-      .doc(user.uid)
-      .collection('subjects')
-      .doc(code)
-      .delete();
-
-    const subjectRef = db.collection('subjects').doc(code);
-
-    if (userInfo.type === 'Instructor') {
-      await subjectRef.delete();
-    } else {
-      await subjectRef.collection('students').doc(user.uid).delete();
-      const subject = await subjectRef.get();
-      const { instructor, title, students } = subject.data();
-      await subjectRef.set({
-        title: title,
-        instructor: instructor,
-        students: parseInt(students) - 1,
-      });
-    }
-
-    setLoading(false);
-    setDeleteModal(false);
-    getUserSubjects();
+    await deleteSubject(code);
   };
   return (
     <div className="deleteSubjectModal modal">
@@ -72,7 +40,7 @@ const DeleteSubjectModal = ({
               disabled={loading}
               className="modal__button button"
               onClick={() => {
-                deleteSubject();
+                handleDelete();
               }}
             >
               <span className={loading ? 'hidden' : ''}>Yes</span>

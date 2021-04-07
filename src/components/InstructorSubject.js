@@ -6,7 +6,7 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import PopupNotification from './PopupNotification';
 import DeleteSubjectModal from './DeleteSubjectModal';
 
-const InstructorSubject = ({ code, title, students, getUserSubjects }) => {
+const InstructorSubject = ({ code, title, students }) => {
   const [popup, setPopup] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   return (
@@ -20,7 +20,6 @@ const InstructorSubject = ({ code, title, students, getUserSubjects }) => {
           code={code}
           students={students}
           setDeleteModal={setDeleteModal}
-          getUserSubjects={getUserSubjects}
         />
       )}
       <div className="subject__header">

@@ -84,7 +84,6 @@ const UserProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    userInfoDispatch({ type: ACTIONS.RESET_INFO });
     if (user) {
       const getUserInfo = async () => {
         const accountRef = db.collection('accounts').doc(user.uid);
@@ -97,6 +96,8 @@ const UserProvider = ({ children }) => {
 
       const unsubscribe = getUserInfo();
       return unsubscribe;
+    } else {
+      userInfoDispatch({ type: ACTIONS.RESET_INFO });
     }
   }, [user]);
 
