@@ -1,22 +1,30 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { useUser } from '../contexts/UserContext';
 import { useSubject } from '../contexts/SubjectContext';
 import Loader from './Loader';
 
-const DeleteSubjectModal = ({ code, students, setDeleteModal }) => {
-  const { deleteSubject } = useSubject();
+const DeleteSubjectModal = ({ code, setDeleteModal }) => {
+  const { userInfo } = useUser();
+  const { archiveSubject, deleteSubject } = useSubject();
   const [loading, setLoading] = useState(false);
 
   const handleDelete = async () => {
     setLoading(true);
-    await deleteSubject(code);
+    if (userInfo.type === 'Instructor') {
+      await archiveSubject(code);
+    } else {
+      await deleteSubject(code);
+    }
   };
   return (
     <div className="deleteSubjectModal modal">
       <div className="modal__inner">
         <div className="modal__header">
-          <h1>Delete subject</h1>
+          <h1>{`${
+            userInfo.type === 'Instructor' ? 'Archive' : 'Delete'
+          } Subject`}</h1>
           <button
             className="modal__closeButton button"
             onClick={() => {
@@ -27,14 +35,9 @@ const DeleteSubjectModal = ({ code, students, setDeleteModal }) => {
           </button>
         </div>
         <div>
-          <p>
-            {students > 0
-              ? `Subject currently has ${
-                  students === 1 ? 'a student' : 'students'
-                }. `
-              : ''}
-            Are you sure you want to delete the subject?
-          </p>
+          <p>{`Are you sure you want to ${
+            userInfo.type === 'Instructor' ? 'archive' : 'delete'
+          } the subject?`}</p>
           <div className="modal__buttonGroup">
             <button
               disabled={loading}

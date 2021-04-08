@@ -2,7 +2,7 @@ import './InstructorSubject.scss';
 import { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faArchive } from '@fortawesome/free-solid-svg-icons';
 import PopupNotification from './PopupNotification';
 import DeleteSubjectModal from './DeleteSubjectModal';
 
@@ -31,7 +31,7 @@ const InstructorSubject = ({ code, title, students }) => {
               setDeleteModal(true);
             }}
           >
-            <FontAwesomeIcon icon={faTrashAlt} />
+            <FontAwesomeIcon icon={faArchive} />
           </button>
         </div>
       </div>

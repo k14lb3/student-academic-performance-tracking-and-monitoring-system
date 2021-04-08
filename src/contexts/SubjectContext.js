@@ -35,7 +35,11 @@ const subjectsReducer = (subjects, action) => {
 const SubjectProvider = ({ children }) => {
   const { user } = useAuth();
   const { userInfo } = useUser();
-  const [subjects, subjectsDispatch] = useReducer(subjectsReducer, null);
+  const [subjects, subjectsDispatch] = useReducer(subjectsReducer, []);
+  const [archivedSubjects, archivedSubjectsDispatch] = useReducer(
+    subjectsReducer,
+    []
+  );
 
   const doesExist = async (code) => {
     const subjectRef = db.collection('subjects').doc(code);
@@ -140,6 +144,63 @@ const SubjectProvider = ({ children }) => {
     });
   };
 
+  const archiveSubject = async (code) => {
+    const subjectRef = db.collection('subjects').doc(code);
+
+    const subject = await subjectRef.get();
+
+    const archive = async (id, grade) => {
+      const userRef = db.collection('accounts').doc(id);
+
+      const userArchivedSubjectRef = userRef.collection('archived_subjects');
+
+      await userArchivedSubjectRef.add({
+        type: 'Student',
+        title: subject.data().title,
+        instructor: subject.data().instructor,
+        grade: grade,
+      });
+
+      const userSubjectRef = userRef.collection('subjects').doc(code);
+
+      await userSubjectRef.delete();
+
+      const subjectStudentRef = subjectRef.collection('students').doc(id);
+
+      await subjectStudentRef.delete();
+    };
+
+    const studentsRef = subjectRef.collection('students');
+
+    const studentsCol = await studentsRef.get();
+
+    studentsCol.forEach(async (student) => {
+      await archive(student.id, student.data().grade);
+    });
+
+    const userRef = db.collection('accounts').doc(user.uid);
+
+    const userArchivedSubjectRef = userRef.collection('archived_subjects');
+
+    await userArchivedSubjectRef.add({
+      type: 'Instructor',
+      ...subject.data(),
+    });
+
+    const userSubjectRef = userRef.collection('subjects').doc(code);
+
+    await userSubjectRef.delete();
+
+    await subjectRef.delete();
+
+    subjectsDispatch({ type: ACTIONS.DELETE_SUBJECT, payload: { code: code } });
+
+    archivedSubjectsDispatch({
+      type: ACTIONS.ADD_SUBJECT,
+      payload: { subject: subject.data() },
+    });
+  };
+
   const deleteSubject = async (code) => {
     await db
       .collection('accounts')
@@ -241,9 +302,11 @@ const SubjectProvider = ({ children }) => {
 
   const value = {
     subjects,
+    archivedSubjects,
     getSubjects,
     createSubject,
     joinSubject,
+    archiveSubject,
     deleteSubject,
   };
 
