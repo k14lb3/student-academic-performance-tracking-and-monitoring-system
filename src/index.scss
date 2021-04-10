@@ -187,6 +187,10 @@ body {
   border: solid 1px $orange;
   border-radius: 4px;
 
+  @include xs {
+    padding: 10px;
+  }
+
   &:hover {
     background-color: transparent;
   }
@@ -205,7 +209,7 @@ body {
     padding-bottom: 20px;
     margin-bottom: 20px;
     border-bottom: solid 1px $orange;
-    @include xm {
+    @include xs {
       padding-bottom: 10px;
     }
   }
@@ -222,7 +226,7 @@ body {
   &__deleteButton {
     font-size: 1.5rem;
     padding: 0;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
     background-color: transparent;
     color: $white;
     outline: none;
@@ -264,15 +268,9 @@ body {
 
   &__code {
     position: relative;
-    padding: 10px 0;
-    padding-left: 20px;
-    width: 220px;
+    width: 180px;
     font-weight: 500;
     text-align: center;
-
-    @include xm {
-      padding: 5px 10px 5px 20px;
-    }
 
     &:hover .tooltip {
       display: block;
@@ -294,6 +292,7 @@ body {
 
       @include xs {
         padding-left: 10px;
+        margin-left: 10px;
         font-size: 0.9rem;
       }
 
