@@ -2,11 +2,11 @@ import './InstructorSubject.scss';
 import { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArchive } from '@fortawesome/free-solid-svg-icons';
+import { faArchive, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import PopupNotification from './PopupNotification';
 import DeleteSubjectModal from './DeleteSubjectModal';
 
-const InstructorSubject = ({ code, title, students }) => {
+const InstructorSubject = ({ archived, code, title, students }) => {
   const [popup, setPopup] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   return (
@@ -17,6 +17,7 @@ const InstructorSubject = ({ code, title, students }) => {
       />
       {deleteModal && (
         <DeleteSubjectModal
+          archived={archived}
           code={code}
           students={students}
           setDeleteModal={setDeleteModal}
@@ -31,26 +32,31 @@ const InstructorSubject = ({ code, title, students }) => {
               setDeleteModal(true);
             }}
           >
-            <FontAwesomeIcon icon={faArchive} />
+            <FontAwesomeIcon icon={archived ? faTrashAlt : faArchive} />
           </button>
         </div>
       </div>
       <div className="subject__body">
-        <div className="subject__buttonGroup">
-          <CopyToClipboard
-            text={code}
-            onCopy={() => {
-              setPopup(true);
-            }}
-          >
-            <button className="subject__code button button--outline">
-              Code
-              <code>{code}</code>
-              <span className="tooltip">Click to copy code</span>
-            </button>
-          </CopyToClipboard>
+        {!archived && (
+          <div className="subject__buttonGroup">
+            <CopyToClipboard
+              text={code}
+              onCopy={() => {
+                setPopup(true);
+              }}
+            >
+              <button className="subject__code button button--outline">
+                Code
+                <code>{code}</code>
+                <span className="tooltip">Click to copy code</span>
+              </button>
+            </CopyToClipboard>
+            <button className="subject__openButton button">Open</button>
+          </div>
+        )}
+        {archived && (
           <button className="subject__openButton button">Open</button>
-        </div>
+        )}
         <div className="subject__students">
           {students > 0 ? `Student/s: ${students}` : 'No students'}
         </div>

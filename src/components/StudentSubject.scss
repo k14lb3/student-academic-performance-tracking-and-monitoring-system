@@ -27,6 +27,14 @@
         font-size: 1.2rem;
         text-align: center;
       }
+
+      &Label {
+        font-size: 1.2rem;
+
+        @include xm {
+          font-size: 1rem;
+        }
+      }
     }
 
     &__code {
@@ -39,6 +47,10 @@
       align-items: center;
       font-size: 2rem;
 
+      @include xs {
+        padding-top: 10px !important;
+      }
+
       @include xm {
         border-top: solid 1px $orange;
         padding-top: 20px;
@@ -49,12 +61,14 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 108px;
-        height: 100%;
+        width: 102px;
+        padding: 10px 20px;
         border-bottom: solid 1px $orange;
         border-right: solid 1px $orange;
 
         @include xm {
+          padding-top: 0;
+          padding-bottom: 0;
           border-bottom: 0;
           border-left: solid 1px $orange;
         }

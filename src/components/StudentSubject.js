@@ -6,13 +6,7 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import PopupNotification from './PopupNotification';
 import DeleteSubjectModal from './DeleteSubjectModal';
 
-const StudentSubject = ({
-  code,
-  title,
-  instructor,
-  grade,
-  getUserSubjects,
-}) => {
+const StudentSubject = ({ archived, code, title, instructor, grade }) => {
   const [popup, setPopup] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
 
@@ -23,11 +17,7 @@ const StudentSubject = ({
         message="Link copied"
       />
       {deleteModal && (
-        <DeleteSubjectModal
-          code={code}
-          setDeleteModal={setDeleteModal}
-          getUserSubjects={getUserSubjects}
-        />
+        <DeleteSubjectModal archived={archived} code={code} setDeleteModal={setDeleteModal} />
       )}
       <div className="subject__header">
         <h2 className="subject__title">{title}</h2>
@@ -44,19 +34,24 @@ const StudentSubject = ({
       </div>
       <div className="subject__body">
         <div>
+          {archived && (
+            <span className="subject__instructorLabel">Instructor :</span>
+          )}
           <h3 className="subject__instructor">{instructor}</h3>
-          <CopyToClipboard
-            text={code}
-            onCopy={() => {
-              setPopup(true);
-            }}
-          >
-            <button className="subject__code button button--outline">
-              Code
-              <code>{code}</code>
-              <span className="tooltip">Click to copy code</span>
-            </button>
-          </CopyToClipboard>
+          {!archived && (
+            <CopyToClipboard
+              text={code}
+              onCopy={() => {
+                setPopup(true);
+              }}
+            >
+              <button className="subject__code button button--outline">
+                Code
+                <code>{code}</code>
+                <span className="tooltip">Click to copy code</span>
+              </button>
+            </CopyToClipboard>
+          )}
         </div>
         <div className="subject__grade">
           <div>

@@ -28,7 +28,19 @@
     padding: 20px 0;
   }
 
-  &__button {
-    margin: 0 0 20px auto;
+  &__controls {
+    display: flex;
+    margin-bottom: 20px;
+    justify-content: space-between;
+
+    :first-child {
+      @include xxx {
+        margin-bottom: 10px;
+      }
+    }
+
+    @include xxx {
+      flex-direction: column;
+    }
   }
 }

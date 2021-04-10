@@ -1,0 +1,87 @@
+@import 'variables';
+@import 'media-queries';
+
+.archivedSubjects {
+  &__navigation {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  &__backButton {
+    padding: 4px 8px;
+    margin-right: 10px;
+    border-radius: 100%;
+    color: $orange;
+    font-size: 1.2rem;
+    transition: 0.2s;
+    cursor: pointer;
+
+    @include xs {
+      font-size: 0.9rem;
+    }
+
+    &:hover {
+      background-color: fade-out($orange, 0.9);
+    }
+  }
+
+  &__title {
+    font-size: 1.5rem;
+
+    @include xs {
+      font-size: 1.3rem;
+    }
+  }
+
+  .studentSubject {
+    .subject {
+      &__grade {
+        font-size: 1.5rem !important;
+      }
+    }
+  }
+
+  .instructorSubject {
+    .subject {
+      &__body {
+        grid-template-columns: 1fr 1fr;
+
+        @include xxx {
+          display: flex !important;
+          flex-direction: column;
+        }
+
+        @include xm {
+          display: grid;
+        }
+      }
+
+      &__openButton {
+        margin: 0 !important;
+      }
+
+      &__students {
+        font-size: 1.3rem;
+        border: none;
+        border-left: solid 1px $orange;
+        margin-left: 20px;
+
+        @include xxx {
+          padding-top: 10px !important;
+          margin-top: 20px !important;
+          margin-left: 0 !important;
+          border-left: none;
+          border-top: solid 1px $orange;
+        }
+
+        @include xm {
+          font-size: 1.1rem;
+          padding: 0;
+          margin-top: 0;
+          margin-left: 20px;
+        }
+      }
+    }
+  }
+}

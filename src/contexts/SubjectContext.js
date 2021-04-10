@@ -149,6 +149,8 @@ const SubjectProvider = ({ children }) => {
 
     const subject = await subjectRef.get();
 
+    const { title, instructor, students } = subject.data();
+
     const archive = async (id, grade) => {
       const userRef = db.collection('accounts').doc(id);
 
@@ -156,8 +158,8 @@ const SubjectProvider = ({ children }) => {
 
       await userArchivedSubjectRef.add({
         type: 'Student',
-        title: subject.data().title,
-        instructor: subject.data().instructor,
+        title: title,
+        instructor: instructor,
         grade: grade,
       });
 
@@ -184,7 +186,8 @@ const SubjectProvider = ({ children }) => {
 
     await userArchivedSubjectRef.add({
       type: 'Instructor',
-      ...subject.data(),
+      title: title,
+      students: students,
     });
 
     const userSubjectRef = userRef.collection('subjects').doc(code);
@@ -201,25 +204,39 @@ const SubjectProvider = ({ children }) => {
     });
   };
 
-  const deleteSubject = async (code) => {
-    await db
-      .collection('accounts')
-      .doc(user.uid)
-      .collection('subjects')
-      .doc(code)
-      .delete();
+  const deleteSubject = async ({ archived, code }) => {
+    if (archived) {
+      await db
+        .collection('accounts')
+        .doc(user.uid)
+        .collection('archived_subjects')
+        .doc(code)
+        .delete();
 
-    const subjectRef = db.collection('subjects').doc(code);
-
-    if (userInfo.type === 'Instructor') {
-      await subjectRef.delete();
-    } else {
-      await subjectRef.collection('students').doc(user.uid).delete();
-      const subject = await subjectRef.get();
-      await subjectRef.set({
-        ...subject.data(),
-        students: parseInt(subject.data().students) - 1,
+      archivedSubjectsDispatch({
+        type: ACTIONS.DELETE_SUBJECT,
+        payload: { code: code },
       });
+    } else {
+      await db
+        .collection('accounts')
+        .doc(user.uid)
+        .collection('subjects')
+        .doc(code)
+        .delete();
+
+      const subjectRef = db.collection('subjects').doc(code);
+
+      if (userInfo.type === 'Instructor') {
+        await subjectRef.delete();
+      } else {
+        await subjectRef.collection('students').doc(user.uid).delete();
+        const subject = await subjectRef.get();
+        await subjectRef.set({
+          ...subject.data(),
+          students: parseInt(subject.data().students) - 1,
+        });
+      }
     }
 
     subjectsDispatch({ type: ACTIONS.DELETE_SUBJECT, payload: { code: code } });
@@ -277,6 +294,24 @@ const SubjectProvider = ({ children }) => {
     });
   };
 
+  const getArchivedSubjects = async () => {
+    const userSubjectsRef = db
+      .collection('accounts')
+      .doc(user.uid)
+      .collection('archived_subjects');
+    const userSubjectsCol = await userSubjectsRef.get();
+
+    const archivedSubjects = userSubjectsCol.docs.map((doc) => ({
+      code: doc.id,
+      ...doc.data(),
+    }));
+
+    archivedSubjectsDispatch({
+      type: ACTIONS.SET_SUBJECTS,
+      payload: { subjects: archivedSubjects },
+    });
+  };
+
   useEffect(() => {
     if (!user) {
       subjectsDispatch({ type: ACTIONS.RESET_SUBJECTS });
@@ -304,6 +339,7 @@ const SubjectProvider = ({ children }) => {
     subjects,
     archivedSubjects,
     getSubjects,
+    getArchivedSubjects,
     createSubject,
     joinSubject,
     archiveSubject,

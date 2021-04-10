@@ -2,9 +2,6 @@
 @import 'media-queries';
 
 .instructorSubject {
-  @include xm {
-    padding: 10px;
-  }
   .subject {
     &__body {
       grid-template-columns: 70% 30%;
@@ -38,7 +35,7 @@
       text-align: center;
 
       @include xm {
-        padding-top: 10px;
+        padding-top: 20px;
         margin-top: 20px;
         border-top: solid 1px $orange;
         font-size: 1.1rem;

@@ -5,25 +5,31 @@ import { useUser } from '../contexts/UserContext';
 import { useSubject } from '../contexts/SubjectContext';
 import Loader from './Loader';
 
-const DeleteSubjectModal = ({ code, setDeleteModal }) => {
+const DeleteSubjectModal = ({ archived, code, setDeleteModal }) => {
   const { userInfo } = useUser();
   const { archiveSubject, deleteSubject } = useSubject();
   const [loading, setLoading] = useState(false);
 
   const handleDelete = async () => {
     setLoading(true);
-    if (userInfo.type === 'Instructor') {
-      await archiveSubject(code);
-    } else {
-      await deleteSubject(code);
+
+    if (archived) {
+      return await deleteSubject({ archived: archived, code: code });
     }
+
+    if (userInfo.type === 'Instructor') {
+      return await archiveSubject(code);
+    }
+
+    return deleteSubject({ code: code });
   };
+
   return (
     <div className="deleteSubjectModal modal">
       <div className="modal__inner">
         <div className="modal__header">
           <h1>{`${
-            userInfo.type === 'Instructor' ? 'Archive' : 'Delete'
+            userInfo.type === 'Instructor' && !archived ? 'Archive' : 'Delete'
           } Subject`}</h1>
           <button
             className="modal__closeButton button"
