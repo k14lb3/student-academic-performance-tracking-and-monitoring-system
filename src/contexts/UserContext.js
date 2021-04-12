@@ -57,12 +57,13 @@ const UserProvider = ({ children }) => {
     return subjectsCol.docs.length > 0;
   };
 
-  const updateType = (type) => {
+  const updateType = async (type) => {
     const userRef = db.collection('accounts').doc(user.uid);
-    return userRef.set({
+    await userRef.set({
       ...userInfo,
       type: type,
     });
+    userInfoDispatch({ type: ACTIONS.UPDATE_TYPE, payload: { type: type } });
   };
 
   const updateName = async (firstName, lastName, middleName) => {

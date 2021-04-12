@@ -1,16 +1,11 @@
 import './AccountType.scss';
 import { useState, useEffect, useRef } from 'react';
-import { useUser, ACTIONS } from '../contexts/UserContext';
+import { useUser } from '../contexts/UserContext';
 import PopupNotification from './PopupNotification';
 import Loader from './Loader';
 
 const Gender = () => {
-  const {
-    userInfo,
-    userInfoDispatch,
-    updateType,
-    hasSubjects,
-  } = useUser();
+  const { userInfo, updateType, hasSubjects } = useUser();
   const typeRef = useRef();
   const [updateButton, setUpdateButton] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -44,7 +39,6 @@ const Gender = () => {
       return;
     }
     await updateType(type);
-    userInfoDispatch({ type: ACTIONS.UPDATE_TYPE, payload: { type: type } });
     setPopup(true);
     setUpdating(false);
     setUpdateButton(false);
