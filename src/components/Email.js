@@ -20,22 +20,26 @@ const Email = () => {
   }, [user]);
 
   const handleChange = () => {
-    if (emailRef.current.value === user.email) return setUpdateButton(false);
+    const email = emailRef.current.value.trim();
+    if (email === user.email || email === '') return setUpdateButton(false);
     return setUpdateButton(true);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setUpdating(true);
-    try {
-      await updateEmail(emailRef.current.value);
-      setPopup(true);
-      setUpdateButton(false);
-    } catch (err) {
-      setError('Invalid email address format.');
+
+    if (updateButton) {
+      setError('');
+      setUpdating(true);
+      try {
+        await updateEmail(emailRef.current.value);
+        setPopup(true);
+        setUpdateButton(false);
+      } catch (err) {
+        setError('Invalid email address format.');
+      }
+      setUpdating(false);
     }
-    setUpdating(false);
   };
 
   return (
