@@ -63,8 +63,13 @@ body {
 }
 
 .error {
+  font-size: 0.9rem;
   font-weight: 500;
   color: $red;
+
+  @include xs{
+    font-size: 0.7rem;
+  }
 }
 
 .hidden {
