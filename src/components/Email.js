@@ -11,6 +11,7 @@ const Email = () => {
   const [updating, setUpdating] = useState(false);
   const [updateButton, setUpdateButton] = useState(false);
   const [popup, setPopup] = useState(false);
+  const [error, setError] = useState();
 
   useEffect(() => {
     if (user) {
@@ -25,11 +26,16 @@ const Email = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     setUpdating(true);
-    await updateEmail(emailRef.current.value);
-    setPopup(true);
+    try {
+      await updateEmail(emailRef.current.value);
+      setPopup(true);
+      setUpdateButton(false);
+    } catch (err) {
+      setError('Invalid email address format.');
+    }
     setUpdating(false);
-    setUpdateButton(false);
   };
 
   return (
@@ -53,6 +59,7 @@ const Email = () => {
                   onChange={handleChange}
                 />
               </div>
+              {error && <div className="error">{error}</div>}
             </div>
             <button
               disabled={updating || !updateButton}
