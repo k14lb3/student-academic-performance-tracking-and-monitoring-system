@@ -1,11 +1,11 @@
 import './Name.scss';
 import { useState, useEffect, useRef } from 'react';
-import { useUser, ACTIONS } from '../contexts/UserContext';
+import { useUser } from '../contexts/UserContext';
 import PopupNotification from './PopupNotification';
 import Loader from './Loader';
 
 const Name = () => {
-  const { userInfo, userInfoDispatch, updateName } = useUser();
+  const { userInfo, updateName } = useUser();
   const firstNameRef = useRef();
   const lastNameRef = useRef();
   const middleNameRef = useRef();
@@ -42,14 +42,6 @@ const Name = () => {
 
     setUpdating(true);
     await updateName(firstName, lastName, middleName);
-    userInfoDispatch({
-      type: ACTIONS.UPDATE_NAME,
-      payload: {
-        firstName: firstName,
-        lastName: lastName,
-        middleName: middleName,
-      },
-    });
     setPopup(true);
     setUpdating(false);
     setUpdateButton(false);

@@ -65,13 +65,21 @@ const UserProvider = ({ children }) => {
     });
   };
 
-  const updateName = (firstName, lastName, middleName) => {
+  const updateName = async (firstName, lastName, middleName) => {
     const userRef = db.collection('accounts').doc(user.uid);
-    return userRef.set({
+    await userRef.set({
       ...userInfo,
       firstName: firstName,
       middleName: middleName,
       lastName: lastName,
+    });
+    userInfoDispatch({
+      type: ACTIONS.UPDATE_NAME,
+      payload: {
+        firstName: firstName,
+        lastName: lastName,
+        middleName: middleName,
+      },
     });
   };
 
