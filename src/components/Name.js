@@ -21,9 +21,9 @@ const Name = () => {
   }, [userInfo]);
 
   const handleChange = () => {
-    const firstName = firstNameRef.current.value,
-      lastName = lastNameRef.current.value,
-      middleName = middleNameRef.current.value;
+    const firstName = firstNameRef.current.value.trim(),
+      lastName = lastNameRef.current.value.trim(),
+      middleName = middleNameRef.current.value.trim();
     if (
       firstName === userInfo.firstName &&
       lastName === userInfo.lastName &&
@@ -36,9 +36,9 @@ const Name = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const firstName = firstNameRef.current.value,
-      lastName = lastNameRef.current.value,
-      middleName = middleNameRef.current.value;
+    const firstName = firstNameRef.current.value.trim(),
+      lastName = lastNameRef.current.value.trim(),
+      middleName = middleNameRef.current.value.trim();
 
     setUpdating(true);
     await updateName(firstName, lastName, middleName);
