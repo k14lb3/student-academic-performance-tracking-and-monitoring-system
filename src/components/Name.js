@@ -25,9 +25,12 @@ const Name = () => {
       lastName = lastNameRef.current.value.trim(),
       middleName = middleNameRef.current.value.trim();
     if (
-      firstName === userInfo.firstName &&
-      lastName === userInfo.lastName &&
-      middleName === userInfo.middleName
+      (firstName === userInfo.firstName &&
+        lastName === userInfo.lastName &&
+        middleName === userInfo.middleName) ||
+      firstName === '' ||
+      lastName === '' ||
+      middleName === ''
     )
       return setUpdateButton(false);
     return setUpdateButton(true);
@@ -40,11 +43,13 @@ const Name = () => {
       lastName = lastNameRef.current.value.trim(),
       middleName = middleNameRef.current.value.trim();
 
-    setUpdating(true);
-    await updateName(firstName, lastName, middleName);
-    setPopup(true);
-    setUpdating(false);
-    setUpdateButton(false);
+    if (updateButton) {
+      setUpdating(true);
+      await updateName(firstName, lastName, middleName);
+      setPopup(true);
+      setUpdateButton(false);
+      setUpdating(false);
+    }
   };
 
   return (
