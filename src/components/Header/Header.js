@@ -5,7 +5,7 @@ import { Switch, Route, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from 'contexts/AuthContext';
-import Navigation from 'components/Navigation';
+import Navigation from '../Navigation';
 
 const Header = () => {
   const { signOut } = useAuth();
