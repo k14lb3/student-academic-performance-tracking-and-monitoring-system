@@ -1,9 +1,9 @@
-import { v4 as uuid } from 'uuid';
+import './AccountInformation.scss';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from 'contexts/AuthContext';
 import { useUser } from 'contexts/UserContext';
 import Loader from 'components/Loader';
-import AccountInformationItem from 'components/AccountInformationItem';
 
 const AccountInformation = () => {
   const { user } = useAuth();
@@ -21,32 +21,27 @@ const AccountInformation = () => {
       {loading ? (
         <Loader />
       ) : (
-        <>
-          <AccountInformationItem
-            key={uuid()}
-            link={'/settings/account-information/account-type'}
-            title={'Account type'}
-            info={userInfo.type}
-          />
-          <AccountInformationItem
-            key={uuid()}
-            link={'/settings/account-information/name'}
-            title={'Name'}
-            info={`${userInfo.firstName} ${userInfo.middleName} ${userInfo.lastName}`}
-          />
-          <AccountInformationItem
-            key={uuid()}
-            link={'/settings/account-information/email'}
-            title={'Email'}
-            info={user?.email}
-          />
-          <AccountInformationItem
-            key={uuid()}
-            link={'/settings/account-information/gender'}
-            title={'Gender'}
-            info={userInfo?.gender}
-          />
-        </>
+        <div className="accountInformation">
+          <Link
+            to="/settings/account-information/account-type"
+            className="button"
+          >
+            <h3>Account Type</h3>
+            <div>{userInfo.type}</div>
+          </Link>
+          <Link to="/settings/account-information/name" className="button">
+            <h3>Name</h3>
+            <div>{`${userInfo.firstName} ${userInfo.middleName} ${userInfo.lastName}`}</div>
+          </Link>
+          <Link to="/settings/account-information/email" className="button">
+            <h3>Email</h3>
+            <div>{user.email}</div>
+          </Link>
+          <Link to="/settings/account-information/gender" className="button">
+            <h3>Gender</h3>
+            <div>{userInfo.gender}</div>
+          </Link>
+        </div>
       )}
     </>
   );
