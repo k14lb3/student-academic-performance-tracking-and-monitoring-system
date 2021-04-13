@@ -3,7 +3,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import PrivateRoute from 'hoc/PrivateRoute';
 import { useAuth } from 'contexts/AuthContext';
 import SignIn from './SignIn';
-import Home from './Home';
+import Home from './Home/Home';
 import Subjects from './Subjects/Subjects';
 import Settings from './Settings/Settings';
 
