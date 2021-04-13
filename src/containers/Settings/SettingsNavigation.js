@@ -9,7 +9,8 @@ const SettingsNavigation = () => {
     <div className="settingsNavigation">
       <Switch>
         <Route
-          path={['/settings/account-information', '/settings/change-password']}
+          strict
+          path={['/settings/']}
           component={() => (
             <div
               className="settingsNavigation__backButton"
