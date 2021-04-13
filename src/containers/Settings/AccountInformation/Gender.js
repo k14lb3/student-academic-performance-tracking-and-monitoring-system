@@ -27,17 +27,19 @@ const Gender = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const gender = genderRef.current.value;
+    if (updateButton) {
+      const gender = genderRef.current.value;
 
-    setUpdating(true);
-    await updateGender(gender);
-    userInfoDispatch({
-      type: ACTIONS.UPDATE_GENDER,
-      payload: { gender: gender },
-    });
-    setPopup(true);
-    setUpdating(false);
-    setUpdateButton(false);
+      setUpdating(true);
+      await updateGender(gender);
+      userInfoDispatch({
+        type: ACTIONS.UPDATE_GENDER,
+        payload: { gender: gender },
+      });
+      setPopup(true);
+      setUpdating(false);
+      setUpdateButton(false);
+    }
   };
 
   return (
