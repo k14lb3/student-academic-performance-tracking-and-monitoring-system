@@ -27,21 +27,23 @@ const Gender = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const type = typeRef.current.value;
+    if (updateButton) {
+      const type = typeRef.current.value;
 
-    setError('');
-    setUpdating(true);
-    if (await hasSubjects()) {
-      setError(
-        'You cannot change account type as long as you have active subjects.'
-      );
+      setError('');
+      setUpdating(true);
+      if (await hasSubjects()) {
+        setError(
+          'You cannot change account type as long as you have active subjects.'
+        );
+        setUpdating(false);
+        return;
+      }
+      await updateType(type);
+      setPopup(true);
       setUpdating(false);
-      return;
+      setUpdateButton(false);
     }
-    await updateType(type);
-    setPopup(true);
-    setUpdating(false);
-    setUpdateButton(false);
   };
 
   return (
