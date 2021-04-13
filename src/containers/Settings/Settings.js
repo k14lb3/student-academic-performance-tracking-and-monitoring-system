@@ -1,10 +1,9 @@
 import './Settings.scss';
 import { useState, useEffect } from 'react';
-import { v4 as uuid } from 'uuid';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Link } from 'react-router-dom';
 import { faUser, faKey } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from 'contexts/AuthContext';
-import SettingsOption from 'components/SettingsOption';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SettingsNavigation from 'components/SettingsNavigation';
 import AccountInformation from './AccountInformation/AccountInformation';
 import ChangePassword from './ChangePassword/ChangePassword';
@@ -12,21 +11,6 @@ import AccountType from './AccountInformation/AccountType';
 import Name from './AccountInformation/Name';
 import Email from './AccountInformation/Email';
 import Gender from './AccountInformation/Gender';
-
-const settingsOptions = [
-  {
-    link: '/settings/account-information',
-    icon: faUser,
-    title: 'Account information',
-    description: 'See your account information.',
-  },
-  {
-    link: '/settings/change-password',
-    icon: faKey,
-    title: 'Change password',
-    description: 'Change your password.',
-  },
-];
 
 const Settings = () => {
   const { signOut } = useAuth();
@@ -57,15 +41,32 @@ const Settings = () => {
             path="/settings"
             component={() => (
               <>
-                {settingsOptions.map(({ link, icon, title, description }) => (
-                  <SettingsOption
-                    key={uuid()}
-                    link={link}
-                    icon={icon}
-                    title={title}
-                    description={description}
-                  />
-                ))}
+                <Link
+                  to="/settings/account-information"
+                  className="settingsOption button"
+                >
+                  <div className="settingsOption__icon">
+                    <FontAwesomeIcon icon={faUser} />
+                  </div>
+                  <div className="settingsOption__body">
+                    <h3 className="settingsOption__title">
+                      Account information
+                    </h3>
+                    <div>See your account information.</div>
+                  </div>
+                </Link>
+                <Link
+                  to="/settings/change-password"
+                  className="settingsOption button"
+                >
+                  <div className="settingsOption__icon">
+                    <FontAwesomeIcon icon={faKey} />
+                  </div>
+                  <div className="settingsOption__body">
+                    <h3 className="settingsOption__title">Change password</h3>
+                    <div>See your account information.</div>
+                  </div>
+                </Link>
                 {width <= 480 ? (
                   <button
                     className="settings__signOutButton button"
