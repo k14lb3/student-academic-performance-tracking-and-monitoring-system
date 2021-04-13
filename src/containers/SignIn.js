@@ -1,10 +1,10 @@
 import './SignIn.scss';
 import { useState, useRef } from 'react';
-import { useAuth } from '../contexts/AuthContext';
 import { Redirect } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import Loader from './Loader';
+import { useAuth } from 'contexts/AuthContext';
+import Loader from 'components/Loader';
 
 const SignIn = () => {
   const { user, signIn } = useAuth();

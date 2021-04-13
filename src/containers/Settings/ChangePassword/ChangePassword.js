@@ -1,7 +1,7 @@
 import './ChangePassword.scss';
 import React, { useState, useRef } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import Loader from './Loader';
+import { useAuth } from 'contexts/AuthContext';
+import Loader from 'components/Loader';
 
 const errors = [
   'Your password needs to be at least 8 characters. Please enter a long one.',

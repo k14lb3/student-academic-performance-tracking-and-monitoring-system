@@ -1,26 +1,30 @@
-import './StudentSubject.scss';
+import './InstructorSubject.scss';
 import { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import PopupNotification from './PopupNotification';
+import { faArchive, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import PopupNotification from 'components/PopupNotification';
 import DeleteSubjectModal from './DeleteSubjectModal';
 
-const StudentSubject = ({ archived, code, title, instructor, grade }) => {
+const InstructorSubject = ({ archived, code, title, students }) => {
   const [popup, setPopup] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-
   return (
-    <div className="studentSubject subject">
+    <div className="instructorSubject subject">
       <PopupNotification
         popupState={{ popup: popup, setPopup: setPopup }}
         message="Link copied"
       />
       {deleteModal && (
-        <DeleteSubjectModal archived={archived} code={code} setDeleteModal={setDeleteModal} />
+        <DeleteSubjectModal
+          archived={archived}
+          code={code}
+          students={students}
+          setDeleteModal={setDeleteModal}
+        />
       )}
       <div className="subject__header">
-        <h2 className="subject__title">{title}</h2>
+        <h1 className="subject__title">{title}</h1>
         <div className="subject__deleteButton--wrapper">
           <button
             className="subject__deleteButton button"
@@ -28,17 +32,13 @@ const StudentSubject = ({ archived, code, title, instructor, grade }) => {
               setDeleteModal(true);
             }}
           >
-            <FontAwesomeIcon icon={faTrashAlt} />
+            <FontAwesomeIcon icon={archived ? faTrashAlt : faArchive} />
           </button>
         </div>
       </div>
       <div className="subject__body">
-        <div>
-          {archived && (
-            <span className="subject__instructorLabel">Instructor :</span>
-          )}
-          <h3 className="subject__instructor">{instructor}</h3>
-          {!archived && (
+        {!archived && (
+          <div className="subject__buttonGroup">
             <CopyToClipboard
               text={code}
               onCopy={() => {
@@ -51,16 +51,18 @@ const StudentSubject = ({ archived, code, title, instructor, grade }) => {
                 <span className="tooltip">Click to copy code</span>
               </button>
             </CopyToClipboard>
-          )}
-        </div>
-        <div className="subject__grade">
-          <div>
-            <h2>{grade ? grade : '--'}</h2>
+            <button className="subject__openButton button">Open</button>
           </div>
+        )}
+        {archived && (
+          <button className="subject__openButton button">Open</button>
+        )}
+        <div className="subject__students">
+          {students > 0 ? `Student/s: ${students}` : 'No students'}
         </div>
       </div>
     </div>
   );
 };
 
-export default StudentSubject;
+export default InstructorSubject;

@@ -2,14 +2,14 @@ import './Subjects.scss';
 import { useState, useEffect } from 'react';
 import { Switch, Route, Link, useLocation } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
-import { useUser } from '../contexts/UserContext';
-import { useSubject } from '../contexts/SubjectContext';
+import { useUser } from 'contexts/UserContext';
+import { useSubject } from 'contexts/SubjectContext';
+import Loader from 'components/Loader';
 import ArchivedSubjects from './ArchivedSubjects';
 import CreateSubjectModal from './CreateSubjectModal';
 import JoinSubjectModal from './JoinSubjectModal';
-import StudentSubject from './StudentSubject';
 import InstructorSubject from './InstructorSubject';
-import Loader from './Loader';
+import StudentSubject from './StudentSubject';
 
 const Subjects = () => {
   const { userInfo } = useUser();

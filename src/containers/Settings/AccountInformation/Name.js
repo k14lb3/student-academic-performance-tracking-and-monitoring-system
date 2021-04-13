@@ -1,8 +1,8 @@
 import './Name.scss';
 import { useState, useEffect, useRef } from 'react';
-import { useUser } from '../contexts/UserContext';
-import PopupNotification from './PopupNotification';
-import Loader from './Loader';
+import { useUser } from 'contexts/UserContext';
+import Loader from 'components/Loader';
+import PopupNotification from 'components/PopupNotification';
 
 const Name = () => {
   const { userInfo, updateName } = useUser();

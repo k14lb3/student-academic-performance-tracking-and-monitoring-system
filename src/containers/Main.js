@@ -1,11 +1,11 @@
 import './Main.scss';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import PrivateRoute from './PrivateRoute';
+import PrivateRoute from 'hoc/PrivateRoute';
+import { useAuth } from 'contexts/AuthContext';
 import SignIn from './SignIn';
 import Home from './Home';
-import Subjects from './Subjects';
-import Settings from './Settings';
+import Subjects from './Subjects/Subjects';
+import Settings from './Settings/Settings';
 
 const Main = () => {
   const { user } = useAuth();

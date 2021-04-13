@@ -1,17 +1,16 @@
-import './AccountType.scss';
+import './Gender.scss';
 import { useState, useEffect, useRef } from 'react';
-import { useUser } from '../contexts/UserContext';
-import PopupNotification from './PopupNotification';
-import Loader from './Loader';
+import { useUser, ACTIONS } from 'contexts/UserContext';
+import Loader from 'components/Loader';
+import PopupNotification from 'components/PopupNotification';
 
 const Gender = () => {
-  const { userInfo, updateType, hasSubjects } = useUser();
-  const typeRef = useRef();
-  const [updateButton, setUpdateButton] = useState(false);
+  const { userInfo, userInfoDispatch, updateGender } = useUser();
+  const genderRef = useRef();
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+  const [updateButton, setUpdateButton] = useState(false);
   const [popup, setPopup] = useState(false);
-  const [error, setError] = useState('');
 
   useEffect(() => {
     if (userInfo) {
@@ -20,25 +19,22 @@ const Gender = () => {
   }, [userInfo]);
 
   const handleChange = () => {
-    if (typeRef.current.value === userInfo.type) return setUpdateButton(false);
+    if (genderRef.current.value === userInfo.gender)
+      return setUpdateButton(false);
     return setUpdateButton(true);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const type = typeRef.current.value;
+    const gender = genderRef.current.value;
 
-    setError('');
     setUpdating(true);
-    if (await hasSubjects()) {
-      setError(
-        'You cannot change account type as long as you have active subjects.'
-      );
-      setUpdating(false);
-      return;
-    }
-    await updateType(type);
+    await updateGender(gender);
+    userInfoDispatch({
+      type: ACTIONS.UPDATE_GENDER,
+      payload: { gender: gender },
+    });
     setPopup(true);
     setUpdating(false);
     setUpdateButton(false);
@@ -49,29 +45,29 @@ const Gender = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div className="accountType">
+        <div className="gender">
           <PopupNotification
             popupState={{ popup: popup, setPopup: setPopup }}
-            message="Account type updated"
+            message="Gender updated"
           />
           <form onSubmit={handleSubmit}>
             <div>
-              <label>Account type</label>
+              <label>Gender</label>
               <div className="input">
                 <select
-                  defaultValue={userInfo.type}
-                  ref={typeRef}
+                  defaultValue={userInfo.gender}
+                  ref={genderRef}
                   onChange={handleChange}
                 >
-                  <option value="Instructor">Instructor</option>
-                  <option value="Student">Student</option>
+                  <option value="N/A">N/A</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
                 </select>
               </div>
-              {error && <div className="error">{error}</div>}
             </div>
             <button
               disabled={updating || !updateButton}
-              className="accountType__updateButton button"
+              className="gender__updateButton button"
             >
               <span className={updating ? 'hidden' : ''}>Update</span>
               {updating && <Loader />}

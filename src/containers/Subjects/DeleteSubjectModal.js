@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { useUser } from '../contexts/UserContext';
-import { useSubject } from '../contexts/SubjectContext';
-import Loader from './Loader';
+import { useUser } from 'contexts/UserContext';
+import { useSubject } from 'contexts/SubjectContext';
+import Loader from 'components/Loader';
 
 const DeleteSubjectModal = ({ archived, code, setDeleteModal }) => {
   const { userInfo } = useUser();

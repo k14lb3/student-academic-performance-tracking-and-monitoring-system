@@ -1,7 +1,7 @@
 import './Home.scss';
 import { useEffect, useState } from 'react';
-import { useUser } from '../contexts/UserContext';
-import Loader from './Loader';
+import { useUser } from 'contexts/UserContext';
+import Loader from 'components/Loader';
 
 const Home = () => {
   const { userInfo } = useUser();

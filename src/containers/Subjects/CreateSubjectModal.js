@@ -1,8 +1,8 @@
 import { useState, useRef } from 'react';
-import { useSubject } from '../contexts/SubjectContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import Loader from './Loader';
+import { useSubject } from 'contexts/SubjectContext';
+import Loader from 'components/Loader';
 
 const CreateSubjectModal = ({ setSubjectModal }) => {
   const { createSubject } = useSubject();

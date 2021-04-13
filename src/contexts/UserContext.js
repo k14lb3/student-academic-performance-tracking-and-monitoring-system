@@ -1,6 +1,6 @@
 import React, { useReducer, useEffect, useContext, createContext } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { db } from '../firebase';
+import { db } from 'firebase.js';
+import { useAuth } from './AuthContext';
 
 const UserContext = createContext();
 

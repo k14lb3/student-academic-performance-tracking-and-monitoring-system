@@ -1,17 +1,17 @@
 import './Settings.scss';
 import { useState, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
 import { v4 as uuid } from 'uuid';
 import { Switch, Route } from 'react-router-dom';
 import { faUser, faKey } from '@fortawesome/free-solid-svg-icons';
-import SettingsOption from './SettingsOption';
-import SettingsNavigation from './SettingsNavigation';
-import AccountInformation from './AccountInformation';
-import ChangePassword from './ChangePassword';
-import AccountType from './AccountType';
-import Name from './Name';
-import Email from './Email';
-import Gender from './Gender';
+import { useAuth } from 'contexts/AuthContext';
+import SettingsOption from 'components/SettingsOption';
+import SettingsNavigation from 'components/SettingsNavigation';
+import AccountInformation from './AccountInformation/AccountInformation';
+import ChangePassword from './ChangePassword/ChangePassword';
+import AccountType from './AccountInformation/AccountType';
+import Name from './AccountInformation/Name';
+import Email from './AccountInformation/Email';
+import Gender from './AccountInformation/Gender';
 
 const settingsOptions = [
   {

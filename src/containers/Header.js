@@ -1,11 +1,11 @@
 import './Header.scss';
+import logo from 'assets/logo512.png';
 import { useState, useEffect } from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import Navigation from './Navigation';
-import logo from '../logo512.png';
+import { useAuth } from 'contexts/AuthContext';
+import Navigation from 'components/Navigation';
 
 const Header = () => {
   const { signOut } = useAuth();

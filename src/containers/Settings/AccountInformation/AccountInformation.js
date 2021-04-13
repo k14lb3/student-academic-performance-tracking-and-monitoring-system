@@ -1,9 +1,9 @@
 import { v4 as uuid } from 'uuid';
 import { useEffect, useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { useUser } from '../contexts/UserContext';
-import AccountInformationItem from './AccountInformationItem';
-import Loader from './Loader';
+import { useAuth } from 'contexts/AuthContext';
+import { useUser } from 'contexts/UserContext';
+import Loader from 'components/Loader';
+import AccountInformationItem from 'components/AccountInformationItem';
 
 const AccountInformation = () => {
   const { user } = useAuth();

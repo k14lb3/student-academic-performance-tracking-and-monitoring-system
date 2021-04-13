@@ -1,7 +1,7 @@
 import React, { useReducer, useEffect, useContext, createContext } from 'react';
+import { db } from 'firebase.js';
 import { useAuth } from './AuthContext';
 import { useUser } from './UserContext';
-import { db } from '../firebase';
 
 const SubjectContext = createContext();
 

@@ -1,8 +1,8 @@
 import './Email.scss';
 import { useState, useEffect, useRef } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import PopupNotification from './PopupNotification';
-import Loader from './Loader';
+import { useAuth } from 'contexts/AuthContext';
+import Loader from 'components/Loader';
+import PopupNotification from 'components/PopupNotification';
 
 const Email = () => {
   const { user, updateEmail } = useAuth();

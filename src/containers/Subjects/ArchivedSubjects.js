@@ -4,15 +4,15 @@ import { useHistory } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { useUser } from '../contexts/UserContext';
-import { useSubject } from '../contexts/SubjectContext';
-import StudentSubject from './StudentSubject';
+import { useUser } from 'contexts/UserContext';
+import { useSubject } from 'contexts/SubjectContext';
+import Loader from 'components/Loader';
 import InstructorSubject from './InstructorSubject';
-import Loader from './Loader';
+import StudentSubject from './StudentSubject';
 
 const ArchivedSubjects = () => {
-  const { userInfo } = useUser();
   const history = useHistory();
+  const { userInfo } = useUser();
   const { archivedSubjects, getArchivedSubjects } = useSubject();
   const [loading, setLoading] = useState(true);
 
