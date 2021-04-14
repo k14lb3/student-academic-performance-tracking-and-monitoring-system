@@ -1,4 +1,3 @@
-import './AccountInformation.scss';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from 'contexts/AuthContext';
@@ -21,27 +20,35 @@ const AccountInformation = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div className="accountInformation">
+        <>
           <Link
             to="/settings/account-information/account-type"
             className="button"
           >
-            <h3>Account Type</h3>
-            <div>{userInfo.type}</div>
+            <div>
+              <h3>Account Type</h3>
+              <div>{userInfo.type}</div>
+            </div>
           </Link>
           <Link to="/settings/account-information/name" className="button">
-            <h3>Name</h3>
-            <div>{`${userInfo.firstName} ${userInfo.middleName} ${userInfo.lastName}`}</div>
+            <div>
+              <h3>Name</h3>
+              <div>{`${userInfo.firstName} ${userInfo.middleName} ${userInfo.lastName}`}</div>
+            </div>
           </Link>
           <Link to="/settings/account-information/email" className="button">
-            <h3>Email</h3>
-            <div>{user.email}</div>
+            <div>
+              <h3>Email</h3>
+              <div>{user.email}</div>
+            </div>
           </Link>
           <Link to="/settings/account-information/gender" className="button">
-            <h3>Gender</h3>
-            <div>{userInfo.gender}</div>
+            <div>
+              <h3>Gender</h3>
+              <div>{userInfo.gender}</div>
+            </div>
           </Link>
-        </div>
+        </>
       )}
     </>
   );
