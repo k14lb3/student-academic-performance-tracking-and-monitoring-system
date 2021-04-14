@@ -92,29 +92,21 @@ const Settings = () => {
             path="/settings"
             component={() => (
               <>
-                <Link
-                  to="/settings/account-information"
-                  className="settingsOption button"
-                >
-                  <div className="settingsOption__icon">
+                <Link to="/settings/account-information" className="button">
+                  <span>
                     <FontAwesomeIcon icon={faUser} />
-                  </div>
-                  <div className="settingsOption__body">
-                    <h3 className="settingsOption__title">
-                      Account information
-                    </h3>
+                  </span>
+                  <div>
+                    <h3>Account information</h3>
                     <p>See your account information.</p>
                   </div>
                 </Link>
-                <Link
-                  to="/settings/change-password"
-                  className="settingsOption button"
-                >
-                  <div className="settingsOption__icon">
+                <Link to="/settings/change-password" className="button">
+                  <span>
                     <FontAwesomeIcon icon={faKey} />
-                  </div>
-                  <div className="settingsOption__body">
-                    <h3 className="settingsOption__title">Change password</h3>
+                  </span>
+                  <div>
+                    <h3>Change password</h3>
                     <p>See your account information.</p>
                   </div>
                 </Link>
