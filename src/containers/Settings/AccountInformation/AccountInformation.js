@@ -26,7 +26,7 @@ const AccountInformation = () => {
             className="button"
           >
             <div>
-              <h3>Account Type</h3>
+              <h3>Account type</h3>
               <div>{userInfo.type}</div>
             </div>
           </Link>
