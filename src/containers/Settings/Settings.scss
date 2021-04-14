@@ -85,7 +85,7 @@
       &:hover {
         background-color: fade-out($orange, 0.9);
 
-        & .settingsOption__icon {
+        & span {
           transform: scale(1.2);
         }
       }
