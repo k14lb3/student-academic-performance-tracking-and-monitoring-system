@@ -72,7 +72,7 @@ const Settings = () => {
               <Route
                 exact
                 path="/settings/account-information"
-                component={() => <>Account Information</>}
+                component={() => <>Account information</>}
               />
               <Route
                 path="/settings/change-password"
