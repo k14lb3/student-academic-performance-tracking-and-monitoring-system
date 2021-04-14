@@ -98,13 +98,12 @@
     margin-bottom: 10px;
   }
 
-  &__registerLink{
+  &__registerLink {
     margin-left: 5px;
     color: $orange;
 
-    &:hover{
+    &:hover {
       text-decoration: underline;
     }
-
   }
 }
