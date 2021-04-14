@@ -35,7 +35,7 @@
   &__title {
     font-size: 2rem;
 
-    @include sm{
+    @include sm {
       text-align: center;
     }
   }
@@ -95,5 +95,11 @@
     position: relative;
     width: 100%;
     margin-top: 20px;
+    margin-bottom: 10px;
+  }
+
+  &__registerLink{
+    margin-left: 5px;
+    color: $orange;
   }
 }

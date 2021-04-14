@@ -1,6 +1,6 @@
 import './SignIn.scss';
 import { useState, useRef } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from 'contexts/AuthContext';
@@ -68,6 +68,10 @@ const SignIn = () => {
                 {loading && <Loader />}
               </button>
             </form>
+            Need an account?
+            <Link to="/register" className="signIn__registerLink">
+              Register
+            </Link>
           </div>
         </div>
       )}
