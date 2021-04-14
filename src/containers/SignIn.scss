@@ -3,7 +3,7 @@
 
 .signIn {
   display: flex;
-  max-width: 768px;
+  width: 768px;
   height: fit-content;
   padding: 20px;
   margin: auto;
@@ -12,16 +12,24 @@
 
   @include xs {
     height: 100%;
+    font-size: 0.8rem;
   }
 
   @include sm {
     flex-direction: column;
   }
 
+  label {
+    font-size: 1rem;
+    @include xs {
+      font-size: 0.8rem;
+    }
+  }
+
   &__header {
     display: flex;
     align-items: center;
-    width: 40%;
+    width: 45%;
     padding: 20px;
     border-right: solid 1px $orange;
     color: $orange;
@@ -33,7 +41,11 @@
   }
 
   &__title {
-    font-size: 2rem;
+    font-size: 2.2rem;
+
+    @include xs {
+      font-size: 1.7rem;
+    }
 
     @include sm {
       text-align: center;
@@ -55,7 +67,7 @@
     border-bottom: 1px solid $orange;
     font-size: 1.7rem;
 
-    @include xs{
+    @include xs {
       font-size: 1.5rem;
     }
   }
