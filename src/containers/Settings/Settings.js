@@ -103,7 +103,7 @@ const Settings = () => {
                     <h3 className="settingsOption__title">
                       Account information
                     </h3>
-                    <div>See your account information.</div>
+                    <p>See your account information.</p>
                   </div>
                 </Link>
                 <Link
@@ -115,7 +115,7 @@ const Settings = () => {
                   </div>
                   <div className="settingsOption__body">
                     <h3 className="settingsOption__title">Change password</h3>
-                    <div>See your account information.</div>
+                    <p>See your account information.</p>
                   </div>
                 </Link>
                 {width <= 480 ? (
