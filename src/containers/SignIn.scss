@@ -12,6 +12,7 @@
 
   @include xs {
     height: 100%;
+    padding: 10px;
     font-size: 0.8rem;
   }
 
@@ -34,6 +35,10 @@
     border-right: solid 1px $orange;
     color: $orange;
 
+    @include xs {
+      padding: 10px;
+    }
+
     @include sm {
       width: 100%;
       border: none;
@@ -55,6 +60,10 @@
   &__body {
     width: 60%;
     padding: 20px;
+
+    @include xs {
+      padding: 10px;
+    }
 
     @include sm {
       width: 100%;
