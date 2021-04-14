@@ -101,5 +101,10 @@
   &__registerLink{
     margin-left: 5px;
     color: $orange;
+
+    &:hover{
+      text-decoration: underline;
+    }
+
   }
 }
