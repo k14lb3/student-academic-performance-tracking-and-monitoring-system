@@ -9,6 +9,9 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
 
+  const register = (email, password) =>
+    auth.createUserWithEmailAndPassword(email, password);
+
   const signIn = (email, password) =>
     auth.signInWithEmailAndPassword(email, password);
 
