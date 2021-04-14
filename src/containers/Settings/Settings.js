@@ -1,11 +1,10 @@
 import './Settings.scss';
 import { useState, useEffect } from 'react';
-import { Switch, Route, Link } from 'react-router-dom';
-import { faUser, faKey } from '@fortawesome/free-solid-svg-icons';
+import { Switch, Route, Link, useHistory } from 'react-router-dom';
 import { useAuth } from 'contexts/AuthContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faKey, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import AccountInformation from './AccountInformation/AccountInformation';
-import SettingsNavigation from './SettingsNavigation';
 import ChangePassword from './ChangePassword/ChangePassword';
 import AccountType from './AccountInformation/AccountType';
 import Name from './AccountInformation/Name';
@@ -15,6 +14,7 @@ import Gender from './AccountInformation/Gender';
 const Settings = () => {
   const { signOut } = useAuth();
   const [width, setWidth] = useState(window.innerWidth);
+  const history = useHistory();
 
   useEffect(() => {
     const handleWindowSizeChange = () => {
@@ -34,7 +34,58 @@ const Settings = () => {
         <h1 className="settings__title">Settings</h1>
       </div>
       <div className="settings__body">
-        <SettingsNavigation />
+        <div className="settings__navigation">
+          <Switch>
+            <Route
+              strict
+              path={['/settings/']}
+              component={() => (
+                <div
+                  className="settings__backButton"
+                  onClick={() => {
+                    history.goBack();
+                  }}
+                >
+                  <FontAwesomeIcon icon={faArrowLeft} />
+                </div>
+              )}
+            />
+          </Switch>
+          <h2>
+            <Switch>
+              <Route
+                path="/settings/account-information/account-type"
+                component={() => <>Account type</>}
+              />
+              <Route
+                path="/settings/account-information/name"
+                component={() => <>Name</>}
+              />
+              <Route
+                path="/settings/account-information/email"
+                component={() => <>Email</>}
+              />
+              <Route
+                path="/settings/account-information/gender"
+                component={() => <>Gender</>}
+              />
+              <Route
+                exact
+                path="/settings/account-information"
+                component={() => <>Account Information</>}
+              />
+              <Route
+                path="/settings/change-password"
+                component={() => <>Change password</>}
+              />
+              <Route
+                exact
+                path="/settings"
+                component={() => <>Your Account</>}
+              />
+            </Switch>
+          </h2>
+        </div>
         <Switch>
           <Route
             exact
