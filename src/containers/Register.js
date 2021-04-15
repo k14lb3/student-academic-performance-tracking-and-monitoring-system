@@ -1,13 +1,11 @@
 import './Register.scss';
 import { useState, useRef } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from 'contexts/AuthContext';
 import Loader from 'components/Loader';
 
 const SignIn = () => {
-  const { user, register, signIn } = useAuth();
+  const { user, register } = useAuth();
   const firstNameRef = useRef();
   const lastNameRef = useRef();
   const middleNameRef = useRef();
