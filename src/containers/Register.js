@@ -73,7 +73,7 @@ const SignIn = () => {
               </div>
               <div className="input">
                 <label>Email</label>
-                <input ref={emailRef} type="email" />
+                <input ref={emailRef} type="text" />
               </div>
               <div className="register__password">
                 <div className="input">
