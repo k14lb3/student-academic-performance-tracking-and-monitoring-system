@@ -63,38 +63,32 @@ const Name = () => {
           />
           <form onSubmit={handleSubmit}>
             <div>
-              <div>
-                <div className="input">
-                  <label>First Name</label>
-                  <input
-                    type="text"
-                    defaultValue={userInfo.firstName}
-                    ref={firstNameRef}
-                    onChange={handleChange}
-                  ></input>
-                </div>
+              <div className="input">
+                <label>First Name</label>
+                <input
+                  type="text"
+                  defaultValue={userInfo.firstName}
+                  ref={firstNameRef}
+                  onChange={handleChange}
+                ></input>
               </div>
-              <div>
-                <div className="input">
-                  <label>Last Name</label>
-                  <input
-                    type="text"
-                    defaultValue={userInfo.lastName}
-                    ref={lastNameRef}
-                    onChange={handleChange}
-                  ></input>
-                </div>
+              <div className="input">
+                <label>Last Name</label>
+                <input
+                  type="text"
+                  defaultValue={userInfo.lastName}
+                  ref={lastNameRef}
+                  onChange={handleChange}
+                ></input>
               </div>
-              <div>
-                <div className="input">
-                  <label>Middle Name</label>
-                  <input
-                    type="text"
-                    defaultValue={userInfo.middleName}
-                    ref={middleNameRef}
-                    onChange={handleChange}
-                  ></input>
-                </div>
+              <div className="input">
+                <label>Middle Name</label>
+                <input
+                  type="text"
+                  defaultValue={userInfo.middleName}
+                  ref={middleNameRef}
+                  onChange={handleChange}
+                ></input>
               </div>
             </div>
             <button
