@@ -15,20 +15,53 @@ const AuthProvider = ({ children }) => {
     middleName,
     email,
     password,
+    confirmPassword,
     type,
     gender
   ) => {
-    const register = await auth.createUserWithEmailAndPassword(email, password);
-    const user = register.user;
+    if (
+      firstName.length === 0 ||
+      lastName.length === 0 ||
+      email.length === 0 ||
+      password.length === 0 ||
+      confirmPassword.length === 0 ||
+      type.length === 0 ||
+      gender.length === 0
+    ) {
+      throw new Error('Please fill in all the required fields.');
+    }
 
-    const accountsRef = db.collection('accounts');
-    await accountsRef.doc(user.uid).set({
-      type: type,
-      firstName: firstName,
-      lastName: lastName,
-      middleName: middleName,
-      gender: gender,
-    });
+    if (password.length < 8) {
+      throw new Error('Your password needs to be at least 8 characters long.');
+    }
+
+    if (password !== confirmPassword) {
+      throw new Error('Passwords do not match.');
+    }
+
+    try {
+      const register = await auth.createUserWithEmailAndPassword(
+        email,
+        password
+      );
+
+      const user = register.user;
+
+      const accountsRef = db.collection('accounts');
+      await accountsRef.doc(user.uid).set({
+        type: type,
+        firstName: firstName,
+        lastName: lastName,
+        middleName: middleName,
+        gender: gender,
+      });
+    } catch (err) {
+      if (err.message === 'The email address is badly formatted.') {
+        throw new Error('Invalid email address format.');
+      } else {
+        throw new Error('Email address is already taken.');
+      }
+    }
   };
 
   const signIn = (email, password) =>

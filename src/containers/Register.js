@@ -30,15 +30,24 @@ const SignIn = () => {
       type = typeRef.current.value.trim(),
       gender = genderRef.current.value.trim();
 
-    await register(
-      firstName,
-      lastName,
-      middleName,
-      email,
-      password,
-      type,
-      gender
-    );
+    setLoading(true);
+    setError('');
+
+    try {
+      await register(
+        firstName,
+        lastName,
+        middleName,
+        email,
+        password,
+        confirmPassword,
+        type,
+        gender
+      );
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
   };
 
   return (
@@ -77,7 +86,6 @@ const SignIn = () => {
                     type="password"
                   />
                 </div>
-                {error && <span className="error">{error}</span>}
                 <div className="input">
                   <label>Confirm password</label>
                   <input ref={confirmPasswordRef} type="password" />
