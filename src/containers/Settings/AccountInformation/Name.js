@@ -29,8 +29,7 @@ const Name = () => {
         lastName === userInfo.lastName &&
         middleName === userInfo.middleName) ||
       firstName === '' ||
-      lastName === '' ||
-      middleName === ''
+      lastName === ''
     )
       return setUpdateButton(false);
     return setUpdateButton(true);
