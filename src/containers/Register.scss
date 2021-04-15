@@ -44,16 +44,6 @@
     }
   }
 
-  &__body {
-  }
-
-  & .input {
-    // & > input[type='password'],
-    // input[type='text'] {
-    //   display: flex;
-    // }
-  }
-
   &__password {
     display: grid;
     grid-template-columns: 1fr 1fr;
