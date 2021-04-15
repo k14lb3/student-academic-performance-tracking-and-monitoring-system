@@ -55,6 +55,17 @@ body {
   }
 }
 
+label {
+  display: block;
+  color: $white;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  @include xs {
+    margin-bottom: 5px;
+    font-size: 0.8rem;
+  }
+}
+
 #app {
   display: flex;
   min-height: 100%;
@@ -67,7 +78,7 @@ body {
   font-weight: 500;
   color: $red;
 
-  @include xs{
+  @include xs {
     font-size: 0.7rem;
   }
 }
@@ -165,6 +176,14 @@ body {
     &:focus {
       border-color: $orange;
     }
+  }
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+
+  &:last-of-type {
+    margin-bottom: 0;
   }
 
   > select {
