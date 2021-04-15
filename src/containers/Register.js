@@ -21,6 +21,24 @@ const SignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const firstName = firstNameRef.current.value.trim(),
+      lastName = lastNameRef.current.value.trim(),
+      middleName = middleNameRef.current.value.trim(),
+      email = emailRef.current.value.trim(),
+      password = passwordRef.current.value.trim(),
+      confirmPassword = confirmPasswordRef.current.value.trim(),
+      type = typeRef.current.value.trim(),
+      gender = genderRef.current.value.trim();
+
+    await register(
+      firstName,
+      lastName,
+      middleName,
+      email,
+      password,
+      type,
+      gender
+    );
   };
 
   return (
