@@ -19,8 +19,8 @@
     color: $orange;
   }
 
-  .input:nth-of-type(3){
-    label::after{
+  .input:nth-of-type(3) {
+    label::after {
       content: '';
     }
   }
@@ -92,8 +92,14 @@
 
   &__signInLink {
     color: $orange;
+    font-size: 1rem;
+
     &:hover {
       text-decoration: underline;
+    }
+
+    @include xs {
+      font-size: 0.8rem;
     }
   }
 }
