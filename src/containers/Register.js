@@ -67,18 +67,18 @@ const SignIn = () => {
               </div>
               <div>
                 <div className="input">
+                  <label>Account type</label>
+                  <select ref={typeRef}>
+                    <option value="Instructor">Instructor</option>
+                    <option value="Student">Student</option>
+                  </select>
+                </div>
+                <div className="input">
                   <label>Gender</label>
                   <select ref={genderRef}>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                     <option value="N/A">N/A</option>
-                  </select>
-                </div>
-                <div className="input">
-                  <label>Account type</label>
-                  <select ref={typeRef}>
-                    <option value="Instructor">Instructor</option>
-                    <option value="Student">Student</option>
                   </select>
                 </div>
               </div>
