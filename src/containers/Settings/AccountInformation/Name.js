@@ -64,8 +64,8 @@ const Name = () => {
           <form onSubmit={handleSubmit}>
             <div>
               <div>
-                <label>First Name</label>
                 <div className="input">
+                  <label>First Name</label>
                   <input
                     type="text"
                     defaultValue={userInfo.firstName}
@@ -75,8 +75,8 @@ const Name = () => {
                 </div>
               </div>
               <div>
-                <label>Last Name</label>
                 <div className="input">
+                  <label>Last Name</label>
                   <input
                     type="text"
                     defaultValue={userInfo.lastName}
@@ -86,8 +86,8 @@ const Name = () => {
                 </div>
               </div>
               <div>
-                <label>Middle Name</label>
                 <div className="input">
+                  <label>Middle Name</label>
                   <input
                     type="text"
                     defaultValue={userInfo.middleName}
