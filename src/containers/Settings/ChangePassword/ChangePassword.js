@@ -76,8 +76,8 @@ const ChangePassword = () => {
       </div>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Current password</label>
           <div className="input">
+            <label>Current password</label>
             <input
               ref={currentPassword}
               type="password"
@@ -87,15 +87,15 @@ const ChangePassword = () => {
           {error === 3 && <div className="error"> {errors[error]}</div>}
         </div>
         <div>
-          <label>New password</label>
           <div className="input">
+            <label>New password</label>
             <input ref={newPassword} type="password" onChange={handleChange} />
           </div>
           {(error === 0 || error === 2) && (
             <div className="error"> {errors[error]}</div>
           )}
-          <label>Confirm new password</label>
           <div className="input">
+            <label>Confirm new password</label>
             <input
               ref={confirmNewPassword}
               type="password"
