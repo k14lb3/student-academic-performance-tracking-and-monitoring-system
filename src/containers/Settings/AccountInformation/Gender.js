@@ -54,8 +54,8 @@ const Gender = () => {
           />
           <form onSubmit={handleSubmit}>
             <div>
-              <label>Gender</label>
               <div className="input">
+                <label>Gender</label>
                 <select
                   defaultValue={userInfo.gender}
                   ref={genderRef}

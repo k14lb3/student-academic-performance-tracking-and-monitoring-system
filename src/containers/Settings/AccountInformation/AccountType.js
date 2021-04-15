@@ -58,8 +58,8 @@ const Gender = () => {
           />
           <form onSubmit={handleSubmit}>
             <div>
-              <label>Account type</label>
               <div className="input">
+                <label>Account type</label>
                 <select
                   defaultValue={userInfo.type}
                   ref={typeRef}

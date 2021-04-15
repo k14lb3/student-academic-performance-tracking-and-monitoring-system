@@ -54,8 +54,8 @@ const Email = () => {
           />
           <form onSubmit={handleSubmit}>
             <div>
-              <label>Email</label>
               <div className="input">
+              <label>Email</label>
                 <input
                   defaultValue={user.email}
                   type="text"
