@@ -61,9 +61,9 @@ const Gender = () => {
                   ref={genderRef}
                   onChange={handleChange}
                 >
-                  <option value="N/A">N/A</option>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
+                  <option value="N/A">N/A</option>
                 </select>
               </div>
             </div>
