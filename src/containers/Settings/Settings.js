@@ -15,6 +15,7 @@ import AccountType from './AccountInformation/AccountType';
 import Name from './AccountInformation/Name';
 import Email from './AccountInformation/Email';
 import Gender from './AccountInformation/Gender';
+import DeleteAccount from './DeleteAccount';
 
 const Settings = () => {
   const { signOut } = useAuth();
@@ -82,6 +83,10 @@ const Settings = () => {
               <Route
                 path="/settings/change-password"
                 component={() => <>Change password</>}
+              />
+              <Route
+                path="/settings/delete-account"
+                component={() => <>Delete account</>}
               />
               <Route
                 exact
@@ -152,6 +157,7 @@ const Settings = () => {
             component={AccountInformation}
           />
           <Route path="/settings/change-password" component={ChangePassword} />
+          <Route path="/settings/delete-account" component={DeleteAccount} />
         </Switch>
       </div>
     </div>
