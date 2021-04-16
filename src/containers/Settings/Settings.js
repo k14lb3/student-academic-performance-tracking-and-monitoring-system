@@ -3,7 +3,12 @@ import { useState, useEffect } from 'react';
 import { Switch, Route, Link, useHistory } from 'react-router-dom';
 import { useAuth } from 'contexts/AuthContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faKey, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowLeft,
+  faUser,
+  faKey,
+  faUserTimes,
+} from '@fortawesome/free-solid-svg-icons';
 import AccountInformation from './AccountInformation/AccountInformation';
 import ChangePassword from './ChangePassword/ChangePassword';
 import AccountType from './AccountInformation/AccountType';
@@ -108,6 +113,15 @@ const Settings = () => {
                   <div>
                     <h3>Change password</h3>
                     <p>See your account information.</p>
+                  </div>
+                </Link>
+                <Link to="/settings/delete-account" className="button">
+                  <span>
+                    <FontAwesomeIcon icon={faUserTimes} />
+                  </span>
+                  <div>
+                    <h3>Delete account</h3>
+                    <p>Delete your account.</p>
                   </div>
                 </Link>
                 {width <= 480 ? (
