@@ -54,7 +54,7 @@ const ChangePassword = () => {
       }, 5000);
     } catch {
       setLoading(false);
-      setError(2);
+      setError(3);
     }
   };
 
