@@ -12,9 +12,9 @@ const errors = [
 
 const ChangePassword = () => {
   const { reauthenticateWithCredential, updatePassword } = useAuth();
-  const currentPassword = useRef();
-  const newPassword = useRef();
-  const confirmNewPassword = useRef();
+  const currentPasswordRef = useRef();
+  const newPasswordRef = useRef();
+  const confirmNewPasswordRef = useRef();
   const [changeButton, setChangeButton] = useState(false);
   const [loading, setLoading] = useState(false);
   const [popup, setPopup] = useState(false);
@@ -23,17 +23,17 @@ const ChangePassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (newPassword.current.value.length < 8) {
+    if (newPasswordRef.current.value.length < 8) {
       setError(0);
       return;
     }
 
-    if (newPassword.current.value !== confirmNewPassword.current.value) {
+    if (newPasswordRef.current.value !== confirmNewPasswordRef.current.value) {
       setError(1);
       return;
     }
 
-    if (currentPassword.current.value === newPassword.current.value) {
+    if (currentPasswordRef.current.value === newPasswordRef.current.value) {
       setError(2);
       return;
     }
@@ -42,13 +42,13 @@ const ChangePassword = () => {
       setError('');
       setLoading(true);
       setChangeButton(false);
-      await reauthenticateWithCredential(currentPassword.current.value);
-      await updatePassword(newPassword.current.value);
+      await reauthenticateWithCredential(currentPasswordRef.current.value);
+      await updatePassword(newPasswordRef.current.value);
       setLoading(false);
       setPopup(true);
-      currentPassword.current.value = '';
-      newPassword.current.value = '';
-      confirmNewPassword.current.value = '';
+      currentPasswordRef.current.value = '';
+      newPasswordRef.current.value = '';
+      confirmNewPasswordRef.current.value = '';
       setTimeout(() => {
         setPopup(false);
       }, 5000);
@@ -60,9 +60,9 @@ const ChangePassword = () => {
 
   const handleChange = () => {
     if (
-      currentPassword.current.value.length > 0 &&
-      newPassword.current.value.length > 0 &&
-      confirmNewPassword.current.value.length > 0
+      currentPasswordRef.current.value.length > 0 &&
+      newPasswordRef.current.value.length > 0 &&
+      confirmNewPasswordRef.current.value.length > 0
     ) {
       return setChangeButton(true);
     }
@@ -79,7 +79,7 @@ const ChangePassword = () => {
           <div className="input">
             <label>Current password</label>
             <input
-              ref={currentPassword}
+              ref={currentPasswordRef}
               type="password"
               onChange={handleChange}
             />
@@ -89,7 +89,7 @@ const ChangePassword = () => {
         <div>
           <div className="input">
             <label>New password</label>
-            <input ref={newPassword} type="password" onChange={handleChange} />
+            <input ref={newPasswordRef} type="password" onChange={handleChange} />
           </div>
           {(error === 0 || error === 2) && (
             <div className="error"> {errors[error]}</div>
@@ -97,7 +97,7 @@ const ChangePassword = () => {
           <div className="input">
             <label>Confirm new password</label>
             <input
-              ref={confirmNewPassword}
+              ref={confirmNewPasswordRef}
               type="password"
               onChange={handleChange}
             />
