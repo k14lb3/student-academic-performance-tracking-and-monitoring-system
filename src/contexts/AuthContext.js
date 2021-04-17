@@ -64,6 +64,72 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  const deleteAccount = async (type, password) => {
+    try {
+      await reauthenticateWithCredential(password);
+    } catch (err) {
+      throw new Error('The password you entered was incorrect.');
+    }
+
+    const userRef = db.collection('accounts').doc(user.uid);
+
+    const userArchivedSubjectsRef = userRef.collection('archived_subjects');
+
+    const userArchivedSubjects = await userArchivedSubjectsRef.get();
+
+    if (!userArchivedSubjects.empty) {
+      userArchivedSubjects.forEach(async (subject) => {
+        await userArchivedSubjectsRef.doc(subject.id).delete();
+      });
+    }
+
+    const userSubjectsRef = userRef.collection('subjects');
+
+    const userSubjects = await userSubjectsRef.get();
+
+    if (!userSubjects.empty) {
+      const userSubjectsCodes = userSubjects.docs.map((doc) => doc.id);
+
+      const subjectsRef = db.collection('subjects');
+
+      const subjects = await subjectsRef.get();
+
+      const joinedSubjects = subjects.docs.filter((doc) =>
+        userSubjectsCodes.includes(doc.id)
+      );
+
+      if (type === 'Instructor') {
+        // subjects.forEach((subject) => {
+        //   const subjectStudent = subjectsRef
+        //     .doc(subject.id)
+        //     .collection('students');
+        // });
+        // const subjectStudentsRef = subjectsRef.
+      } else {
+        joinedSubjects.forEach((subject) => {
+          const subjectRef = subjectsRef.doc(subject.id);
+
+          const subjectStudentsRef = subjectRef.collection('students');
+
+          subjectStudentsRef.doc(user.uid).delete();
+
+          subjectRef.set({
+            ...subject.data(),
+            students: parseInt(subject.data().students) - 1,
+          });
+        });
+      }
+    }
+
+    userSubjects.forEach((subject) => {
+      userSubjectsRef.doc(subject.id).delete();
+    });
+
+    await userRef.delete();
+
+    await auth.currentUser.delete();
+  };
+
   const signIn = (email, password) =>
     auth.signInWithEmailAndPassword(email, password);
 
@@ -93,6 +159,7 @@ const AuthProvider = ({ children }) => {
   const value = {
     user,
     register,
+    deleteAccount,
     signIn,
     signOut,
     reauthenticateWithCredential,
