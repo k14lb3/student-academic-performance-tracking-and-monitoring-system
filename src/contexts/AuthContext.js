@@ -71,7 +71,9 @@ const AuthProvider = ({ children }) => {
       throw new Error('The password you entered was incorrect.');
     }
 
-    const userRef = db.collection('accounts').doc(user.uid);
+    const usersRef = db.collection('accounts');
+
+    const userRef = usersRef.doc(user.uid);
 
     const userArchivedSubjectsRef = userRef.collection('archived_subjects');
 
@@ -99,12 +101,44 @@ const AuthProvider = ({ children }) => {
       );
 
       if (type === 'Instructor') {
-        // subjects.forEach((subject) => {
-        //   const subjectStudent = subjectsRef
-        //     .doc(subject.id)
-        //     .collection('students');
-        // });
-        // const subjectStudentsRef = subjectsRef.
+        joinedSubjects.forEach(async (subject) => {
+          const subjectRef = subjectsRef.doc(subject.id);
+
+          const subjectStudentsRef = subjectRef.collection('students');
+
+          const subjectStudents = await subjectStudentsRef.get();
+
+          const { title, instructor } = subject.data();
+
+          subjectStudents.forEach(async (student) => {
+            subjectStudentsRef.doc(student.id).delete();
+
+            const userRef = usersRef.doc(student.id);
+
+            const userSubjectRef = userRef.collection('subjects');
+
+            const userArchivedSubjectsRef = userRef.collection(
+              'archived_subjects'
+            );
+
+            await userSubjectRef.doc(subject.id).delete();
+
+            const { grade } = student.data();
+
+            await userArchivedSubjectsRef.add({
+              type: 'Student',
+              title: title,
+              instructor: instructor,
+              grade: grade,
+            });
+
+            const subjectStudent = subjectStudentsRef.doc(student.id);
+
+            await subjectStudent.delete();
+          });
+
+          subjectRef.delete();
+        });
       } else {
         joinedSubjects.forEach((subject) => {
           const subjectRef = subjectsRef.doc(subject.id);
