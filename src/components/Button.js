@@ -6,7 +6,7 @@ const Button = ({ disabled, outlined, onClick, children }) => {
         outlined
           ? ' bg-transparent text-orange-500 hover:bg-yellow-500 hover:bg-opacity-5'
           : ' bg-yellow-500 text-gray-500 hover:bg-yellow-400 hover:border-yellow-400'
-      } `}
+      }`}
       onClick={onClick}
     >
       {children}
