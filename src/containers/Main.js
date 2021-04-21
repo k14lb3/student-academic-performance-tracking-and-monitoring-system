@@ -1,4 +1,3 @@
-import './Main.scss';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import PrivateRoute from 'hoc/PrivateRoute';
 import { useAuth } from 'contexts/AuthContext';
