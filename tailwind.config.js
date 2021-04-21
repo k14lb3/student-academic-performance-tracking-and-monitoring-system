@@ -58,6 +58,24 @@ module.exports = {
           900: '#570505',
         },
       },
+      animation: {
+        'loader-internal-circle-spin':
+          'loader-internal-circle-spin 1s ease-in-out infinite',
+        'loader-external-circle-spin':
+          'loader-external-circle-spin 1s linear infinite',
+      },
+      keyframes: {
+        'loader-internal-circle-spin': {
+          '0%': { 'stroke-dashoffset': '187' },
+          '25%': { 'stroke-dashoffset': '80' },
+          '100%': { 'stroke-dashoffset': '187', transform: 'rotate(360deg)' },
+        },
+        'loader-external-circle-spin': {
+          '0%': { 'stroke-dashoffset': '312', transform: 'rotate(70deg)' },
+          '25%': { 'stroke-dashoffset': '-312' },
+          '100%': { 'stroke-dashoffset': '-312', transform: 'rotate(450deg)' },
+        },
+      },
     },
   },
   variants: {
