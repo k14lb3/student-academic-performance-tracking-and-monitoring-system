@@ -14,7 +14,7 @@ const Main = () => {
     <main
       className={`w-full ${user ? 'bg-gray-500 ' : 'bg-transparent mb-12 '}`}
     >
-      <div className={`flex w-full h-full p-5 ${user ? '' : 'xs:p-0'}`}>
+      <div className={`flex w-full h-full p-5 ${user ? 'xs:p-3' : 'xs:p-0'}`}>
         <Switch>
           <PrivateRoute path="/home" component={Home} />
           <PrivateRoute path="/subjects" component={Subjects} />
