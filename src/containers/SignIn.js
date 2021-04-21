@@ -4,14 +4,14 @@ import { Link, Redirect } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from 'contexts/AuthContext';
-import Loader from 'components/Loader';
+import Button from 'components/Button';
 
 const SignIn = () => {
   const { user, signIn } = useAuth();
   const emailRef = useRef();
   const passwordRef = useRef();
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(!false);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
@@ -60,13 +60,9 @@ const SignIn = () => {
                 </div>
               </div>
               {error && <span className="error">{error}</span>}
-              <button
-                disabled={loading}
-                className="signIn__signInButton button"
-              >
+              <Button className="w-full mt-4" hasLoader={{ loading: loading }}>
                 <span className={loading ? 'hidden' : ''}>Sign in</span>
-                {loading && <Loader />}
-              </button>
+              </Button>
             </form>
             Need an account?
             <Link to="/register" className="signIn__registerLink">
