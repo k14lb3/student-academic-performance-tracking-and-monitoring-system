@@ -11,7 +11,7 @@ const SignIn = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(!false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
