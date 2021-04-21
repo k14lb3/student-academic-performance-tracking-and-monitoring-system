@@ -1,5 +1,3 @@
-import './Loader.scss';
-
 const Loader = ({ inButton }) => {
   return (
     <svg
