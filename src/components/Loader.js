@@ -1,14 +1,37 @@
 import './Loader.scss';
 
-const Loader = () => {
+const Loader = ({ inButton }) => {
   return (
     <svg
-      className="loader"
+      className={`${inButton ? 'absolute ' : ''}${
+        inButton?.width || 'w-7 '
+      }loader stroke-current ${
+        inButton
+          ? inButton.outlined
+            ? 'text-orange-500 '
+            : 'text-gray-500 '
+          : 'text-orange-500 '
+      }-rotate-90`}
+      fill="none"
+      strokeWidth="4"
+      strokeLinecap="round"
       viewBox="0 0 120 120"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <circle className="internal-circle" cx="60" cy="60" r="30"></circle>
-      <circle className="external-circle" cx="60" cy="60" r="50"></circle>
+      <circle
+        className="origin-center opacity-40 animate-loader-internal-circle-spin"
+        strokeDasharray="187"
+        cx="60"
+        cy="60"
+        r="30"
+      ></circle>
+      <circle
+        className="origin-center opacity-90 animate-loader-external-circle-spin"
+        strokeDasharray="312"
+        cx="60"
+        cy="60"
+        r="50"
+      ></circle>
     </svg>
   );
 };
