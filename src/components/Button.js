@@ -10,8 +10,6 @@ const VARIATIONS = {
 const Button = ({
   disabled,
   hasLoader,
-  wFull,
-  hFull,
   outlined,
   onClick,
   children,
@@ -21,15 +19,13 @@ const Button = ({
       disabled={disabled}
       className={`disabled:opacity-80 ${
         hasLoader ? 'relative flex justify-center items-center ' : ''
-      }${wFull ? 'w-full ' : ''}${
-        hFull ? 'h-full ' : ''
       }py-2 px-6 border-solid border border-orange-500 rounded-md font-roboto font-semibold duration-200 ${
         outlined ? VARIATIONS.OUTLINED : VARIATIONS.DEFAULT
       }`}
       onClick={onClick}
     >
       {children}
-      {hasLoader.loading && (
+      {hasLoader && hasLoader.loading && (
         <Loader inButton={{ outlined: outlined, width: hasLoader.width }} />
       )}
     </button>
