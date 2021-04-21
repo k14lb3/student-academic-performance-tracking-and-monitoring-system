@@ -61,7 +61,7 @@ const SignIn = () => {
               </div>
               {error && <span className="error">{error}</span>}
               <Button className="w-full mt-4" hasLoader={{ loading: loading }}>
-                <span className={loading ? 'hidden' : ''}>Sign in</span>
+                <span className={loading ? 'invisible' : ''}>Sign in</span>
               </Button>
             </form>
             Need an account?
