@@ -18,7 +18,7 @@ const Home = () => {
         <h1 className="text-5xl xs:text-3xl">Home</h1>
       </div>
       {loading ? (
-        <Loader />
+        <Loader className="mx-auto mt-5" />
       ) : (
         <div className="py-5 xs:py-3">
           <h2 className="text-3xl xs:text-lg">
