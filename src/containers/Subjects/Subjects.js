@@ -34,12 +34,12 @@ const Subjects = () => {
         <h1 className="text-5xl xs:text-3xl">Subjects</h1>
       </div>
       <div
-        className={`py-5 ${
+        className={`${loading ? "" : "pt-5"} ${
           location.pathname === '/subjects/archived' ? ' archivedSubjects' : ''
         }`}
       >
         {loading ? (
-          <Loader />
+          <Loader className="mx-auto mt-5" />
         ) : (
           <Switch>
             <Route
