@@ -20,7 +20,7 @@ const Button = ({
       disabled={disabled}
       className={`disabled:opacity-80 ${
         hasLoader ? 'relative flex justify-center items-center ' : ''
-      }py-2 px-6 border-solid border border-orange-500 rounded-md font-roboto font-semibold duration-200 ${
+      }py-2 px-6 border-solid border border-orange-500 rounded font-roboto font-semibold duration-200 ${
         outlined ? VARIATIONS.OUTLINED : VARIATIONS.DEFAULT
       }${className ? className : ''}`}
       onClick={onClick}
