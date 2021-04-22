@@ -106,13 +106,13 @@ const Settings = () => {
                 <SettingsButton
                   to="/settings/account-information"
                   icon={faUser}
-                  title="Account Information"
+                  title="Account information"
                   desc="See your account information."
                 />
                 <SettingsButton
                   to="/settings/change-password"
                   icon={faKey}
-                  title="Change Password"
+                  title="Change password"
                   desc="Change your password."
                 />
                 <SettingsButton
