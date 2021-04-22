@@ -1,4 +1,4 @@
-const Loader = ({ inButton }) => {
+const Loader = ({ className, inButton }) => {
   return (
     <svg
       className={`${inButton ? 'absolute ' : ''}${
@@ -9,7 +9,7 @@ const Loader = ({ inButton }) => {
             ? 'text-orange-500 '
             : 'text-gray-500 '
           : 'text-orange-500 '
-      }-rotate-90`}
+      }-rotate-90${className ? ` ${className}` : ''}`}
       fill="none"
       strokeWidth="4"
       strokeLinecap="round"
