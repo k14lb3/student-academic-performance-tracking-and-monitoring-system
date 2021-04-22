@@ -1,6 +1,5 @@
-import './Settings.scss';
 import { useState, useEffect } from 'react';
-import { Switch, Route, Link, useHistory } from 'react-router-dom';
+import { Switch, Route, useHistory } from 'react-router-dom';
 import { useAuth } from 'contexts/AuthContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -9,6 +8,8 @@ import {
   faKey,
   faUserTimes,
 } from '@fortawesome/free-solid-svg-icons';
+import SettingsButton from 'components/Button/SettingsButton';
+import Button from 'components/Button/Button';
 import AccountInformation from './AccountInformation/AccountInformation';
 import ChangePassword from './ChangePassword/ChangePassword';
 import AccountType from './AccountInformation/AccountType';
@@ -35,19 +36,19 @@ const Settings = () => {
   }, []);
 
   return (
-    <div className="settings">
-      <div className="settings__header">
-        <h1 className="settings__title">Settings</h1>
+    <div className="settings w-full">
+      <div className="flex items-center py-5 xs:pt-0 xs:pb-3 border-solid border-b border-orange-500">
+        <h1 className="text-5xl xs:text-3xl">Settings</h1>
       </div>
-      <div className="settings__body">
-        <div className="settings__navigation">
+      <div className="py-5 xs:py-3">
+        <div className="flex items-center mb-5 xs:mb-3">
           <Switch>
             <Route
               strict
               path={['/settings/']}
               component={() => (
                 <div
-                  className="settings__backButton"
+                  className="text-orange-500 px-3 py-1 mr-3 rounded-full text-lg cursor-pointer duration-200 hover:bg-orange-500 hover:bg-opacity-5"
                   onClick={() => {
                     history.goBack();
                   }}
@@ -57,7 +58,7 @@ const Settings = () => {
               )}
             />
           </Switch>
-          <h2>
+          <h2 className="text-2xl xs:text-lg">
             <Switch>
               <Route
                 path="/settings/account-information/account-type"
@@ -102,42 +103,31 @@ const Settings = () => {
             path="/settings"
             component={() => (
               <>
-                <Link to="/settings/account-information" className="button">
-                  <span>
-                    <FontAwesomeIcon icon={faUser} />
-                  </span>
-                  <div>
-                    <h3>Account information</h3>
-                    <p>See your account information.</p>
-                  </div>
-                </Link>
-                <Link to="/settings/change-password" className="button">
-                  <span>
-                    <FontAwesomeIcon icon={faKey} />
-                  </span>
-                  <div>
-                    <h3>Change password</h3>
-                    <p>See your account information.</p>
-                  </div>
-                </Link>
-                <Link to="/settings/delete-account" className="button">
-                  <span>
-                    <FontAwesomeIcon icon={faUserTimes} />
-                  </span>
-                  <div>
-                    <h3>Delete account</h3>
-                    <p>Delete your account.</p>
-                  </div>
-                </Link>
-                {width <= 480 ? (
-                  <button
-                    className="settings__signOutButton button"
+                <SettingsButton
+                  to="/settings/account-information"
+                  icon={faUser}
+                  title="Account Information"
+                  desc="See your account information."
+                />
+                <SettingsButton
+                  to="/settings/change-password"
+                  icon={faKey}
+                  title="Change Password"
+                  desc="See your account information."
+                />
+                <SettingsButton
+                  to="/settings/delete-account"
+                  icon={faUserTimes}
+                  title="Change Password"
+                  desc="See your account information."
+                />
+                {width <= 480 && (
+                  <Button
+                    className="block w-1/2 mt-3 ml-auto"
                     onClick={signOut}
                   >
                     Sign Out
-                  </button>
-                ) : (
-                  <></>
+                  </Button>
                 )}
               </>
             )}
