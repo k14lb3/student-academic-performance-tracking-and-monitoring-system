@@ -1,4 +1,3 @@
-import './Subjects.scss';
 import { useState, useEffect } from 'react';
 import { Switch, Route, Link, useLocation } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
@@ -30,12 +29,12 @@ const Subjects = () => {
   }, [userInfo]);
 
   return (
-    <div className="subjects">
-      <div className="subjects__header">
-        <h1 className="subjects__title">Subjects</h1>
+    <div className="w-full">
+      <div className="flex items-center py-5 xs:pt-0 xs:pb-3 border-solid border-b border-orange-500">
+        <h1 className="text-5xl xs:text-3xl">Subjects</h1>
       </div>
       <div
-        className={`subjects__body${
+        className={`py-5 ${
           location.pathname === '/subjects/archived' ? ' archivedSubjects' : ''
         }`}
       >
@@ -54,10 +53,10 @@ const Subjects = () => {
                     ) : (
                       <JoinSubjectModal setSubjectModal={setSubjectModal} />
                     ))}
-                  <div className="subjects__controls">
+                  <div className="flex xxx:flex-col mb-5 justify-between">
                     <Link
                       to="/subjects/archived"
-                      className="button button--outline"
+                      className="button button--outline xxx:mb-3"
                     >
                       Archived Subjects
                     </Link>
