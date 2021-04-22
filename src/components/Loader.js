@@ -3,7 +3,7 @@ const Loader = ({ className, inButton }) => {
     <svg
       className={`${inButton ? 'absolute ' : ''}${
         inButton?.width || 'w-16'
-      } loader stroke-current ${
+      } stroke-current ${
         inButton
           ? inButton.outlined
             ? 'text-orange-500 '
