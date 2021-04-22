@@ -4,7 +4,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from 'contexts/AuthContext';
-import Button from 'components/Button';
+import Button from 'components/Button/Button';
 
 const SignIn = () => {
   const { user, signIn } = useAuth();
