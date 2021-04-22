@@ -1,7 +1,7 @@
-import './AccountType.scss';
 import { useState, useEffect, useRef } from 'react';
 import { useUser } from 'contexts/UserContext';
 import Loader from 'components/Loader';
+import Button from 'components/Button/Button';
 import PopupNotification from 'components/PopupNotification';
 
 const Gender = () => {
@@ -49,15 +49,15 @@ const Gender = () => {
   return (
     <>
       {loading ? (
-        <Loader />
+        <Loader className="mx-auto mt-5" />
       ) : (
-        <div className="accountType">
+        <div>
           <PopupNotification
             popupState={{ popup: popup, setPopup: setPopup }}
             message="Account type updated"
           />
           <form onSubmit={handleSubmit}>
-            <div>
+            <div className="p-5 xs:p-3 border border-orange-500 rounded">
               <div className="input">
                 <label>Account type</label>
                 <select
@@ -71,13 +71,13 @@ const Gender = () => {
               </div>
               {error && <div className="error">{error}</div>}
             </div>
-            <button
+            <Button
               disabled={updating || !updateButton}
-              className="accountType__updateButton button"
+              className="mt-5 ml-auto"
+              hasLoader={{ loading: updating }}
             >
-              <span className={updating ? 'hidden' : ''}>Update</span>
-              {updating && <Loader />}
-            </button>
+              <span className={updating ? 'invisible' : ''}>Update</span>
+            </Button>
           </form>
         </div>
       )}
