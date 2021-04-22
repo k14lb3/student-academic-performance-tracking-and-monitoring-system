@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useAuth } from 'contexts/AuthContext';
 import { useUser } from 'contexts/UserContext';
+import SettingsButton from 'components/Button/SettingsButton';
 import Loader from 'components/Loader';
 
 const AccountInformation = () => {
@@ -21,33 +21,26 @@ const AccountInformation = () => {
         <Loader />
       ) : (
         <>
-          <Link
+          <SettingsButton
             to="/settings/account-information/account-type"
-            className="button"
-          >
-            <div>
-              <h3>Account type</h3>
-              <div>{userInfo.type}</div>
-            </div>
-          </Link>
-          <Link to="/settings/account-information/name" className="button">
-            <div>
-              <h3>Name</h3>
-              <div>{`${userInfo.firstName} ${userInfo.middleName} ${userInfo.lastName}`}</div>
-            </div>
-          </Link>
-          <Link to="/settings/account-information/email" className="button">
-            <div>
-              <h3>Email</h3>
-              <div>{user.email}</div>
-            </div>
-          </Link>
-          <Link to="/settings/account-information/gender" className="button">
-            <div>
-              <h3>Gender</h3>
-              <div>{userInfo.gender}</div>
-            </div>
-          </Link>
+            title="Account Type"
+            desc={userInfo.type}
+          />
+          <SettingsButton
+            to="/settings/account-information/email"
+            title="Email"
+            desc={user.email}
+          />
+          <SettingsButton
+            to="/settings/account-information/name"
+            title="Name"
+            desc={`${userInfo.firstName} ${userInfo.middleName} ${userInfo.lastName}`}
+          />
+          <SettingsButton
+            to="/settings/account-information/gender"
+            title="Gender"
+            desc={userInfo.gender}
+          />
         </>
       )}
     </>
