@@ -23,7 +23,7 @@ const AccountInformation = () => {
         <>
           <SettingsButton
             to="/settings/account-information/account-type"
-            title="Account Type"
+            title="Account type"
             desc={userInfo.type}
           />
           <SettingsButton
