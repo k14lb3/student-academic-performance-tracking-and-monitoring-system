@@ -1,7 +1,8 @@
-import './Name.scss';
 import { useState, useEffect, useRef } from 'react';
 import { useUser } from 'contexts/UserContext';
 import Loader from 'components/Loader';
+import Button from 'components/Button/Button';
+import Input from 'components/Input';
 import PopupNotification from 'components/PopupNotification';
 
 const Name = () => {
@@ -56,50 +57,47 @@ const Name = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div className="name">
+        <>
           <PopupNotification
             popupState={{ popup: popup, setPopup: setPopup }}
             message="Name updated"
           />
           <form onSubmit={handleSubmit}>
-            <div>
-              <div className="input">
-                <label>First Name</label>
-                <input
-                  type="text"
-                  defaultValue={userInfo.firstName}
-                  ref={firstNameRef}
-                  onChange={handleChange}
-                ></input>
-              </div>
-              <div className="input">
-                <label>Last Name</label>
-                <input
-                  type="text"
-                  defaultValue={userInfo.lastName}
-                  ref={lastNameRef}
-                  onChange={handleChange}
-                ></input>
-              </div>
-              <div className="input">
-                <label>Middle Name</label>
-                <input
-                  type="text"
-                  defaultValue={userInfo.middleName}
-                  ref={middleNameRef}
-                  onChange={handleChange}
-                ></input>
-              </div>
+            <div className="p-5 xs:p-3 border border-orange-500 rounded">
+              <label>First Name</label>
+              <Input
+                ref={firstNameRef}
+                className="w-full mb-3"
+                defaultValue={userInfo.firstName}
+                type="text"
+                onChange={handleChange}
+              />
+              <label>Last Name</label>
+              <Input
+                ref={lastNameRef}
+                className="w-full mb-3"
+                defaultValue={userInfo.lastName}
+                type="text"
+                onChange={handleChange}
+              />
+              <label>Middle Name</label>
+              <Input
+                ref={middleNameRef}
+                className="w-full"
+                defaultValue={userInfo.middleName}
+                type="text"
+                onChange={handleChange}
+              />
             </div>
-            <button
+            <Button
               disabled={updating || !updateButton}
-              className="name__updateButton button"
+              className="mt-5 ml-auto"
+              hasLoader={{ loading: updating }}
             >
-              <span className={updating ? 'hidden' : ''}>Update</span>
-              {updating && <Loader />}
-            </button>
+              <span className={updating ? 'invisible' : ''}>Update</span>
+            </Button>
           </form>
-        </div>
+        </>
       )}
     </>
   );
