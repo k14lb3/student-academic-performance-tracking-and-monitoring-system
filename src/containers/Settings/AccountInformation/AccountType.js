@@ -59,18 +59,16 @@ const Gender = () => {
           />
           <form onSubmit={handleSubmit}>
             <div className="p-5 xs:p-3 border border-orange-500 rounded">
-              <div className="input">
-                <label>Account type</label>
-                <Select
-                  ref={typeRef}
-                  className="w-32 xs:w-24"
-                  defaultValue={userInfo.type}
-                  onChange={handleChange}
-                >
-                  <option value="Instructor">Instructor</option>
-                  <option value="Student">Student</option>
-                </Select>
-              </div>
+              <label>Account type</label>
+              <Select
+                ref={typeRef}
+                className="w-32 xs:w-24"
+                defaultValue={userInfo.type}
+                onChange={handleChange}
+              >
+                <option value="Instructor">Instructor</option>
+                <option value="Student">Student</option>
+              </Select>
               {error && <div className="error">{error}</div>}
             </div>
             <Button
