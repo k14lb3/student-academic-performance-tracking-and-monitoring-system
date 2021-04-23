@@ -58,7 +58,7 @@ const Gender = () => {
               <label>Gender</label>
               <Select
                 ref={genderRef}
-                className="w-28 xs:w-20"
+                className="w-28 xs:w-24"
                 defaultValue={userInfo.gender}
                 onChange={handleChange}
               >
