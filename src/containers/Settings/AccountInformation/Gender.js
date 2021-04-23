@@ -1,7 +1,8 @@
-import './Gender.scss';
 import { useState, useEffect, useRef } from 'react';
 import { useUser, ACTIONS } from 'contexts/UserContext';
 import Loader from 'components/Loader';
+import Button from 'components/Button/Button';
+import Select from 'components/Select';
 import PopupNotification from 'components/PopupNotification';
 
 const Gender = () => {
@@ -45,35 +46,34 @@ const Gender = () => {
   return (
     <>
       {loading ? (
-        <Loader />
+        <Loader className="mx-auto mt-5" />
       ) : (
-        <div className="gender">
+        <div>
           <PopupNotification
             popupState={{ popup: popup, setPopup: setPopup }}
             message="Gender updated"
           />
           <form onSubmit={handleSubmit}>
-            <div>
-              <div className="input">
-                <label>Gender</label>
-                <select
-                  defaultValue={userInfo.gender}
-                  ref={genderRef}
-                  onChange={handleChange}
-                >
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="N/A">N/A</option>
-                </select>
-              </div>
+            <div className="p-5 xs:p-3 border border-orange-500 rounded">
+              <label>Gender</label>
+              <Select
+                ref={genderRef}
+                className="w-28 xs:w-20"
+                defaultValue={userInfo.gender}
+                onChange={handleChange}
+              >
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="N/A">N/A</option>
+              </Select>
             </div>
-            <button
+            <Button
               disabled={updating || !updateButton}
-              className="gender__updateButton button"
+              className="mt-5 ml-auto"
+              hasLoader={{ loading: updating }}
             >
-              <span className={updating ? 'hidden' : ''}>Update</span>
-              {updating && <Loader />}
-            </button>
+              <span className={updating ? 'invisible' : ''}>Update</span>
+            </Button>
           </form>
         </div>
       )}
