@@ -12,7 +12,7 @@ const Main = () => {
 
   return (
     <main
-      className={`w-full ${user ? 'bg-gray-500 ' : 'bg-transparent mb-12 '}`}
+      className={`w-full ${user ? 'bg-gray-500 ' : 'bg-transparent'}`}
     >
       <div className={`flex w-full h-full p-5 ${user ? 'xs:p-3' : 'xs:p-0'}`}>
         <Switch>
