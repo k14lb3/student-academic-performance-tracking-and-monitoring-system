@@ -41,7 +41,7 @@ const Settings = () => {
         <h1 className="text-5xl xs:text-3xl">Settings</h1>
       </div>
       <div className="py-5 xs:py-3">
-        <div className="flex items-center mb-5 xs:mb-3">
+        <div className="flex items-center h-7 mb-5 xs:mb-3">
           <Switch>
             <Route
               strict
