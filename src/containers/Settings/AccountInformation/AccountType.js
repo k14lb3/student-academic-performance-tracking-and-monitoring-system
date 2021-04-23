@@ -52,7 +52,7 @@ const Gender = () => {
       {loading ? (
         <Loader className="mx-auto mt-5" />
       ) : (
-        <div>
+        <>
           <PopupNotification
             popupState={{ popup: popup, setPopup: setPopup }}
             message="Account type updated"
@@ -79,7 +79,7 @@ const Gender = () => {
               <span className={updating ? 'invisible' : ''}>Update</span>
             </Button>
           </form>
-        </div>
+        </>
       )}
     </>
   );
