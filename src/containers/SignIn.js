@@ -1,10 +1,10 @@
-import './SignIn.scss';
 import { useState, useRef } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from 'contexts/AuthContext';
 import Button from 'components/Button/Button';
+import Input from 'components/Input';
 
 const SignIn = () => {
   const { user, signIn } = useAuth();
@@ -31,27 +31,28 @@ const SignIn = () => {
       {user ? (
         <Redirect to="/home" />
       ) : (
-        <div className="signIn">
-          <div className="signIn__header">
-            <h1 className="signIn__title">
+        <div className="flex sm:flex-col w-11/12 xs:h-full p-5 xs:p-0 m-auto bg-gray rounded shadow-xl">
+          <div className="flex items-center w-5/12 sm:w-full p-5 pr-10 sm:pr-5 sm:pb-0 xs:px3 border-r sm:border-none border-orange-500 text-orange-500">
+            <h1 className="text-4xl xs:text-2xl leading-snug sm:text-center">
               Student Academic Performance Tracking and Monitoring System
             </h1>
           </div>
-          <div className="signIn__body">
-            <h2 className="signIn__signInlabel">Sign In</h2>
+          <div className="w-7/12 p-5 pl-10 sm:pl-5 sxs:p-3 sm:w-full">
+            <h2 className="pb-5 xs:pb-3 mb-5 xs:mb-3 border-b border-orange-500 text-2xl xs:text-lg">
+              Sign In
+            </h2>
             <form onSubmit={handleSubmit}>
               <label>Email</label>
-              <div className="input">
-                <input ref={emailRef} type="email" />
-              </div>
+              <Input ref={emailRef} className="w-full mb-4" type="email" />
               <label>Password</label>
-              <div className="input">
-                <input
+              <div className="relative mb-5">
+                <Input
                   ref={passwordRef}
+                  className="w-full"
                   type={showPassword ? 'text' : 'password'}
                 />
                 <div
-                  className="signIn__showPassword"
+                  className="absolute top-1/2 right-3 transform -translate-y-1/2 w-6 text-gray-500 text-center"
                   onClick={() => {
                     setShowPassword(!showPassword);
                   }}
@@ -60,12 +61,12 @@ const SignIn = () => {
                 </div>
               </div>
               {error && <span className="error">{error}</span>}
-              <Button className="w-full mt-4" hasLoader={{ loading: loading }}>
+              <Button className="w-full mb-2" hasLoader={{ loading: loading }}>
                 <span className={loading ? 'invisible' : ''}>Sign in</span>
               </Button>
             </form>
             Need an account?
-            <Link to="/register" className="signIn__registerLink">
+            <Link to="/register" className="ml-1 text-orange-500">
               Register
             </Link>
           </div>
