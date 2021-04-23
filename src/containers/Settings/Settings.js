@@ -48,7 +48,7 @@ const Settings = () => {
               path={['/settings/']}
               component={() => (
                 <div
-                  className="text-orange-500 px-3 py-1 mr-3 rounded-full text-lg cursor-pointer duration-200 hover:bg-orange-500 hover:bg-opacity-5"
+                  className="text-orange-500 px-2.5 py-1 mr-3 rounded-full text-lg cursor-pointer duration-200 hover:bg-orange-500 hover:bg-opacity-5"
                   onClick={() => {
                     history.goBack();
                   }}
