@@ -38,7 +38,7 @@ const SignIn = () => {
             </h1>
           </div>
           <div className="w-7/12 p-5 pl-10 sm:pl-5 sxs:p-3 sm:w-full">
-            <h2 className="pb-5 xs:pb-3 mb-5 xs:mb-3 border-b border-orange-500 text-2xl xs:text-lg">
+            <h2 className="pb-5 xs:pb-3 mb-5 xs:mb-3 border-b border-orange-500 text-3xl xs:text-lg">
               Sign In
             </h2>
             <form onSubmit={handleSubmit}>
