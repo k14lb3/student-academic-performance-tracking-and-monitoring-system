@@ -62,7 +62,7 @@ const Gender = () => {
               <label>Account type</label>
               <Select
                 ref={typeRef}
-                className="w-32 xs:w-24"
+                className="w-32 xs:w-28"
                 defaultValue={userInfo.type}
                 onChange={handleChange}
               >
