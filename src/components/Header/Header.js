@@ -1,7 +1,7 @@
 import './Header.scss';
 import logo from 'assets/logo512.png';
-import { useState, useEffect } from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from 'contexts/AuthContext';
@@ -9,20 +9,8 @@ import Navigation from './Navigation';
 
 const Header = () => {
   const { signOut } = useAuth();
+  const XS = useMediaQuery({ query: '(min-width: 480px)' });
 
-  const [width, setWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    const handleWindowSizeChange = () => {
-      setWidth(window.innerWidth);
-    };
-
-    window.addEventListener('resize', handleWindowSizeChange);
-
-    return () => {
-      window.removeEventListener('resize', handleWindowSizeChange);
-    };
-  }, []);
   return (
     <Switch>
       <Route
@@ -30,14 +18,12 @@ const Header = () => {
         component={() => (
           <header className="header">
             <div className="header__container">
-              {width >= 480 ? (
+              {XS && (
                 <Link to="/home">
                   <div className="header__logo">
                     <img src={logo} alt="" />
                   </div>
                 </Link>
-              ) : (
-                <></>
               )}
               <Navigation />
               <button
