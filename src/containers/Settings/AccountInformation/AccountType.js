@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, forwardRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useUser } from 'contexts/UserContext';
 import Loader from 'components/Loader';
 import Button from 'components/Button/Button';
