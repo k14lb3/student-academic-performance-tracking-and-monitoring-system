@@ -1,7 +1,8 @@
-import './Email.scss';
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from 'contexts/AuthContext';
 import Loader from 'components/Loader';
+import Button from 'components/Button/Button';
+import Input from 'components/Input';
 import PopupNotification from 'components/PopupNotification';
 
 const Email = () => {
@@ -47,31 +48,30 @@ const Email = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div className="email">
+        <div>
           <PopupNotification
             popupState={{ popup: popup, setPopup: setPopup }}
             message="Email updated"
           />
           <form onSubmit={handleSubmit}>
-            <div>
-              <div className="input">
+            <div className="p-5 xs:p-3 border border-orange-500 rounded">
               <label>Email</label>
-                <input
-                  defaultValue={user.email}
-                  type="text"
-                  ref={emailRef}
-                  onChange={handleChange}
-                />
-              </div>
+              <Input
+                ref={emailRef}
+                className="w-full"
+                defaultValue={user.email}
+                type="text"
+                onChange={handleChange}
+              />
               {error && <div className="error">{error}</div>}
             </div>
-            <button
+            <Button
               disabled={updating || !updateButton}
-              className="email__updateButton button"
+              className="mt-5 ml-auto"
+              hasLoader={{ loading: updating }}
             >
-              <span className={updating ? 'hidden' : ''}>Update</span>
-              {updating && <Loader />}
-            </button>
+              <span className={updating ? 'invisible' : ''}>Update</span>
+            </Button>
           </form>
         </div>
       )}
