@@ -27,7 +27,9 @@ const Button = ({
     >
       {children}
       {hasLoader && hasLoader.loading && (
-        <Loader inButton={{ outlined: outlined, width: hasLoader.width || 'w-7'}} />
+        <Loader
+          inButton={{ outlined: outlined, width: hasLoader.width || 'w-7' }}
+        />
       )}
     </button>
   );
