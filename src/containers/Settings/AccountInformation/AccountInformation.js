@@ -18,7 +18,7 @@ const AccountInformation = () => {
   return (
     <>
       {loading ? (
-        <Loader />
+        <Loader className="mx-auto mt-5" />
       ) : (
         <>
           <SettingsButton
