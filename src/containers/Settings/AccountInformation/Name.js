@@ -55,7 +55,7 @@ const Name = () => {
   return (
     <>
       {loading ? (
-        <Loader />
+        <Loader className="mx-auto mt-5" />
       ) : (
         <>
           <PopupNotification
