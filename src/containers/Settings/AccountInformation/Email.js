@@ -46,7 +46,7 @@ const Email = () => {
   return (
     <>
       {loading ? (
-        <Loader />
+        <Loader className="mx-auto mt-5" />
       ) : (
         <div>
           <PopupNotification
