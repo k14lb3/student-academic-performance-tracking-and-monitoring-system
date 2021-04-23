@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, forwardRef } from 'react';
 import { useUser } from 'contexts/UserContext';
 import Loader from 'components/Loader';
 import Button from 'components/Button/Button';
+import Select from 'components/Select';
 import PopupNotification from 'components/PopupNotification';
 
 const Gender = () => {
@@ -60,14 +61,15 @@ const Gender = () => {
             <div className="p-5 xs:p-3 border border-orange-500 rounded">
               <div className="input">
                 <label>Account type</label>
-                <select
-                  defaultValue={userInfo.type}
+                <Select
                   ref={typeRef}
+                  className="w-32 xs:w-24"
+                  defaultValue={userInfo.type}
                   onChange={handleChange}
                 >
                   <option value="Instructor">Instructor</option>
                   <option value="Student">Student</option>
-                </select>
+                </Select>
               </div>
               {error && <div className="error">{error}</div>}
             </div>
