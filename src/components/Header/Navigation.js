@@ -1,30 +1,13 @@
-import './Navigation.scss';
-import { NavLink } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStickyNote } from '@fortawesome/free-regular-svg-icons';
 import { faCog, faHome } from '@fortawesome/free-solid-svg-icons';
+import NavigationButton from 'components/Button/NavigationButton';
 
 const Navigation = () => {
   return (
-    <nav className="navigation">
-      <NavLink to="/home" activeClassName="navigation__link--active">
-        <div>
-          <FontAwesomeIcon icon={faHome} />
-        </div>
-        <span>Home</span>
-      </NavLink>
-      <NavLink to="/subjects" activeClassName="navigation__link--active">
-        <div>
-          <FontAwesomeIcon icon={faStickyNote} />
-        </div>
-        <span>Subjects</span>
-      </NavLink>
-      <NavLink to="/settings" activeClassName="navigation__link--active">
-        <div>
-          <FontAwesomeIcon icon={faCog} />
-        </div>
-        <span>Settings</span>
-      </NavLink>
+    <nav className="flex flex-col xs:flex-row xs:justify-between xs:w-full py-5 xs:py-0 xs:px-5">
+      <NavigationButton to="/home" icon={faHome} title="Home" />
+      <NavigationButton to="/subjects" icon={faStickyNote} title="Subjects" />
+      <NavigationButton to="/settings" icon={faCog} title="Settings" />
     </nav>
   );
 };
