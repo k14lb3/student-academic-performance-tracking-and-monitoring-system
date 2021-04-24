@@ -16,11 +16,15 @@ const Header = () => {
       <Route
         path={['/home', '/subjects', '/settings']}
         component={() => (
-          <header className="py-5 bg-gray xs:fixed xs:bottom-0 xs:w-full xs:py-0 xs:border-t xs:border-orange-500">
+          <header className="py-5 xs:py-1.5 bg-gray xs:fixed xs:bottom-0 xs:w-full xs:border-t xs:border-orange-500">
             <div className="h-full px-5 border-r xs:border-r-0 border-orange">
               {XS && (
                 <Link className="flex justify-start pt-5 pb-5 pl-3" to="/home">
-                  <img className="transform h-12 duration-200 hover:scale-110" src={logo} alt="" />
+                  <img
+                    className="transform h-12 duration-200 hover:scale-110"
+                    src={logo}
+                    alt=""
+                  />
                 </Link>
               )}
               <Navigation />
