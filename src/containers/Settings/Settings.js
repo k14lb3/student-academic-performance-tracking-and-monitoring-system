@@ -102,7 +102,7 @@ const Settings = () => {
             exact
             path="/settings"
             component={() => (
-              <>
+              <div>
                 <SettingsButton
                   to="/settings/account-information"
                   icon={faUser}
@@ -129,7 +129,7 @@ const Settings = () => {
                     Sign Out
                   </Button>
                 )}
-              </>
+              </div>
             )}
           />
           <Route
