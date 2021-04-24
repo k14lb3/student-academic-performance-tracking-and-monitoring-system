@@ -56,7 +56,6 @@ const ArchivedSubjects = () => {
                 />
               );
             }
-
             return (
               <StudentSubject
                 archived
