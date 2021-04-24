@@ -5,7 +5,7 @@ const NavigationButton = ({ to, icon, title }) => {
   return (
     <NavLink
       to={to}
-      className="flex p-3 my-0.5 rounded hover:bg-orange-500 hover:bg-opacity-5 text-2xl hover:text-orange-500"
+      className="flex p-3 xs:p-1.5 my-0.5 rounded hover:bg-orange-500 hover:bg-opacity-5 text-2xl xs:text-xl hover:text-orange-500"
       activeClassName="text-orange-500 pointer-events-none"
     >
       <div className="w-10 mr-3 sm:mr-0 text-center">
