@@ -12,7 +12,7 @@ const Main = () => {
 
   return (
     <main
-      className={`${user ? 'w-full bg-gray-500 ' : 'm-auto bg-transparent'}`}
+      className={`${user ? 'w-full bg-gray-500 xs:mb-14' : 'm-auto bg-transparent'}`}
     >
       <div className={`p-5 ${user ? 'xs:p-3' : 'xs:p-0'}`}>
         <Switch>
