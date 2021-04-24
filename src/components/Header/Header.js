@@ -29,7 +29,7 @@ const Header = () => {
               )}
               <Navigation />
               {XS && (
-                <Button className="w-full" onClick={signOut}>
+                <Button className="w-full sm:p-3" onClick={signOut}>
                   <span className="text-xl sm:hidden">Sign Out</span>
                   <div className="text-xl hidden sm:block">
                     <FontAwesomeIcon icon={faSignOutAlt} />
