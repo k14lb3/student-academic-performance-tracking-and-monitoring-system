@@ -4,7 +4,7 @@ const VARIATIONS = {
   DEFAULT:
     'bg-yellow-500 text-gray-500 hover:bg-yellow-400 hover:border-yellow-400 ',
   OUTLINED:
-    'bg-transparent text-orange-500 hover:bg-yellow-500 hover:bg-opacity-5 ',
+    'bg-transparent text-white hover:bg-yellow-500 hover:bg-opacity-5 ',
 };
 
 const Button = ({
