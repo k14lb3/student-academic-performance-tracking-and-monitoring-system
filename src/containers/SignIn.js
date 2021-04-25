@@ -5,6 +5,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from 'contexts/AuthContext';
 import Button from 'components/Button/Button';
 import Input from 'components/Input';
+import Error from 'components/Error';
 
 const SignIn = () => {
   const { user, signIn } = useAuth();
@@ -60,8 +61,12 @@ const SignIn = () => {
                   <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
                 </div>
               </div>
-              {error && <span className="error">{error}</span>}
-              <Button className="w-full mb-2 mt-3" hasLoader={{ loading: loading }}>
+
+              {error && <Error error={error} />}
+              <Button
+                className="w-full mb-1 mt-3"
+                hasLoader={{ loading: loading }}
+              >
                 <span className={loading ? 'invisible' : ''}>Sign in</span>
               </Button>
             </form>
