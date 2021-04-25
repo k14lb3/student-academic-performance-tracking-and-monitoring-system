@@ -1,6 +1,9 @@
 import { forwardRef } from 'react';
 
-const Input = ({ className, defaultValue, type, onChange }, ref) => {
+const Input = (
+  { className, defaultValue, type, autoComplete, onChange },
+  ref
+) => {
   return (
     <input
       ref={ref}
@@ -9,6 +12,7 @@ const Input = ({ className, defaultValue, type, onChange }, ref) => {
       }`}
       defaultValue={defaultValue}
       type={type}
+      autoComplete={autoComplete}
       onChange={onChange}
     ></input>
   );
