@@ -45,7 +45,7 @@ const SignIn = () => {
               <label>Email</label>
               <Input ref={emailRef} className="w-full mb-4" type="email" />
               <label>Password</label>
-              <div className="relative mb-5">
+              <div className="relative">
                 <Input
                   ref={passwordRef}
                   className="w-full"
