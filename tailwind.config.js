@@ -82,8 +82,17 @@ module.exports = {
     extend: {
       opacity: ['disabled'],
       fontSize: ['group-hover'],
-      margin: ['first', 'last', ],
+      margin: ['first', 'last'],
+      textColor: ['after'],
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwindcss-pseudo-elements')({
+      customPseudoClasses: ['foo'],
+      customPseudoElements: ['bar'],
+      contentUtilities: true,
+      emptyContent: false,
+      classNameReplacer: {},
+    }),
+  ],
 };
