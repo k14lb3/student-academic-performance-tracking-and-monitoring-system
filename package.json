@@ -53,6 +53,7 @@
     "autoprefixer": "^9",
     "postcss": "^7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
+    "tailwindcss-important": "^1.0.0",
     "tailwindcss-pseudo-elements": "^2.0.0"
   }
 }

@@ -3,6 +3,7 @@ import { Switch, Route, Link, useLocation } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import { useUser } from 'contexts/UserContext';
 import { useSubject } from 'contexts/SubjectContext';
+import Subject from 'components/Subject';
 import Loader from 'components/Loader';
 import ArchivedSubjects from './ArchivedSubjects';
 import CreateSubjectModal from './CreateSubjectModal';
@@ -34,7 +35,7 @@ const Subjects = () => {
         <h1 className="text-5xl xs:text-3xl">Subjects</h1>
       </div>
       <div
-        className={`${loading ? "" : "pt-5"} ${
+        className={`${loading ? '' : 'pt-5'} ${
           location.pathname === '/subjects/archived' ? ' archivedSubjects' : ''
         }`}
       >
@@ -89,6 +90,11 @@ const Subjects = () => {
                           grade={grade}
                         />
                       ))}
+                  <Subject
+                    subject={{ type: { instructor: { students: '69' } } }}
+                    code="oGAY3pP"
+                    title="Integral Calculus"
+                  />
                 </>
               )}
             />
