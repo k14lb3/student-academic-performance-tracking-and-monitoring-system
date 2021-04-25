@@ -43,7 +43,7 @@ const SignIn = () => {
             </h2>
             <form onSubmit={handleSubmit}>
               <label>Email</label>
-              <Input ref={emailRef} className="w-full mb-4" type="email" />
+              <Input ref={emailRef} className="w-full mb-3" type="email" />
               <label>Password</label>
               <div className="relative">
                 <Input
