@@ -82,7 +82,8 @@ module.exports = {
     extend: {
       opacity: ['disabled'],
       fontSize: ['group-hover'],
-      margin: ['first', 'last'],
+      margin: ['first', 'last', 'important'],
+      padding: ['important'],
       textColor: ['after'],
     },
   },
@@ -94,5 +95,6 @@ module.exports = {
       emptyContent: false,
       classNameReplacer: {},
     }),
+    require('tailwindcss-important')(),
   ],
 };
