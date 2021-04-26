@@ -1,13 +1,15 @@
+import { Link } from 'react-router-dom';
 import Loader from 'components/Loader';
 
 const VARIATIONS = {
   DEFAULT:
     'bg-yellow-500 text-gray-500 hover:bg-yellow-400 hover:border-yellow-400 ',
-  OUTLINED:
-    'bg-transparent text-white hover:bg-yellow-500 hover:bg-opacity-5 ',
+  OUTLINED: 'bg-transparent text-white hover:bg-yellow-500 hover:bg-opacity-5 ',
 };
 
 const Button = ({
+  link,
+  to,
   disabled,
   className,
   hasLoader,
@@ -16,22 +18,35 @@ const Button = ({
   children,
 }) => {
   return (
-    <button
-      disabled={disabled}
-      className={`disabled:opacity-80 ${
-        hasLoader ? 'relative flex justify-center items-center ' : ''
-      }py-2 px-5 border-solid border border-orange-500 rounded font-roboto font-medium xs:text-xs duration-200 ${
-        outlined ? VARIATIONS.OUTLINED : VARIATIONS.DEFAULT
-      }${className ? className : ''}`}
-      onClick={onClick}
-    >
-      {children}
-      {hasLoader && hasLoader.loading && (
-        <Loader
-          inButton={{ outlined: outlined, width: hasLoader.width || 'w-7' }}
-        />
+    <>
+      {link ? (
+        <Link
+          to={to}
+          className={`disabled:opacity-80 py-2 px-5 border-solid border border-orange-500 rounded font-roboto font-medium xs:text-xs text-center duration-200 ${
+            outlined ? VARIATIONS.OUTLINED : VARIATIONS.DEFAULT
+          }${className ? className : ''}`}
+        >
+          {children}
+        </Link>
+      ) : (
+        <button
+          disabled={disabled}
+          className={`disabled:opacity-80 ${
+            hasLoader ? 'relative flex justify-center items-center ' : ''
+          }py-2 px-5 border-solid border border-orange-500 rounded font-roboto font-medium xs:text-xs duration-200 ${
+            outlined ? VARIATIONS.OUTLINED : VARIATIONS.DEFAULT
+          }${className ? className : ''}`}
+          onClick={onClick}
+        >
+          {children}
+          {hasLoader && hasLoader.loading && (
+            <Loader
+              inButton={{ outlined: outlined, width: hasLoader.width || 'w-7' }}
+            />
+          )}
+        </button>
       )}
-    </button>
+    </>
   );
 };
 
