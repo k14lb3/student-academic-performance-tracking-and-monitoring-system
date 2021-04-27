@@ -2,7 +2,7 @@ const Loader = ({ className, inButton }) => {
   return (
     <svg
       className={`${inButton ? 'absolute ' : ''}${
-        inButton?.width || 'w-16'
+        inButton?.width || 'w-12 xs:w-8'
       } stroke-current ${
         inButton
           ? inButton.outlined
