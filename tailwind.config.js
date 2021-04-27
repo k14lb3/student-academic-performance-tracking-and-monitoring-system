@@ -80,6 +80,7 @@ module.exports = {
   },
   variants: {
     extend: {
+      display: ['group-hover', 'after'],
       opacity: ['disabled'],
       fontSize: ['group-hover'],
       margin: ['first', 'last', 'important'],
