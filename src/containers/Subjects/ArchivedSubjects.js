@@ -41,7 +41,7 @@ const ArchivedSubjects = () => {
         <h2 className="archivedSubjects__title">Archived Subjects</h2>
       </div>
       {loading ? (
-        <Loader />
+        <Loader className="mx-auto mt-5" />
       ) : (
         <>
           {archivedSubjects.map((subject) => {
