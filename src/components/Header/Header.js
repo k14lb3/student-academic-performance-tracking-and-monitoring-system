@@ -16,7 +16,7 @@ const Header = () => {
       <Route
         path={['/home', '/subjects', '/settings']}
         component={() => (
-          <header className="py-5 xs:py-1.5 bg-gray xs:fixed xs:bottom-0 xs:w-full xs:border-t xs:border-orange-500">
+          <header className="py-5 xs:py-1.5 bg-gray xs:fixed xs:bottom-0 xs:w-full xs:border-t xs:border-orange-500 z-50">
             <div className="h-full px-5 border-r xs:border-r-0 border-orange">
               {XS && (
                 <Link className="flex justify-start pt-5 pb-5 pl-3" to="/home">
