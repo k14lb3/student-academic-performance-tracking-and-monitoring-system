@@ -22,7 +22,7 @@ const Button = ({
       {link ? (
         <Link
           to={to}
-          className={`disabled:opacity-80 py-2 px-5 border-solid border border-orange-500 rounded font-roboto font-medium xs:text-xs text-center duration-200 ${
+          className={`disabled:opacity-80 py-2 px-5 border-solid border border-orange-500 rounded font-roboto font-medium xs:text-xs text-center focus:border-black duration-200 ${
             outlined ? VARIATIONS.OUTLINED : VARIATIONS.DEFAULT
           }${className ? className : ''}`}
         >
@@ -33,7 +33,7 @@ const Button = ({
           disabled={disabled}
           className={`disabled:opacity-80 ${
             hasLoader ? 'relative flex justify-center items-center ' : ''
-          }py-2 px-5 border-solid border border-orange-500 rounded font-roboto font-medium xs:text-xs duration-200 ${
+          }py-2 px-5 border-solid border border-orange-500 rounded font-roboto font-medium xs:text-xs focus:border-black duration-200 ${
             outlined ? VARIATIONS.OUTLINED : VARIATIONS.DEFAULT
           }${className ? className : ''}`}
           onClick={onClick}
