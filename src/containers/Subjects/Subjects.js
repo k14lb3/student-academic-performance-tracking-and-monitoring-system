@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Switch, Route, Link, useLocation } from 'react-router-dom';
+import { Switch, Route, useLocation } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import { useUser } from 'contexts/UserContext';
 import { useSubject } from 'contexts/SubjectContext';
+import Button from 'components/Button/Button';
 import Subject from 'components/Subject';
 import Loader from 'components/Loader';
 import ArchivedSubjects from './ArchivedSubjects';
 import CreateSubjectModal from './CreateSubjectModal';
 import JoinSubjectModal from './JoinSubjectModal';
-import InstructorSubject from './InstructorSubject';
-import StudentSubject from './StudentSubject';
 
 const Subjects = () => {
   const { userInfo } = useUser();
@@ -55,14 +54,15 @@ const Subjects = () => {
                       <JoinSubjectModal setSubjectModal={setSubjectModal} />
                     ))}
                   <div className="flex xxx:flex-col mb-5 justify-between">
-                    <Link
+                    <Button
                       to="/subjects/archived"
-                      className="button button--outline xxx:mb-3"
+                      className="xxx:mb-3"
+                      link
+                      outlined
                     >
                       Archived Subjects
-                    </Link>
-                    <button
-                      className="button"
+                    </Button>
+                    <Button
                       onClick={() => {
                         setSubjectModal(true);
                       }}
@@ -70,31 +70,29 @@ const Subjects = () => {
                       {userInfo.type === 'Instructor'
                         ? 'Create subject'
                         : 'Join subject'}
-                    </button>
+                    </Button>
                   </div>
-                  {userInfo.type === 'Instructor'
-                    ? subjects.map(({ code, title, students }) => (
-                        <InstructorSubject
-                          key={uuid()}
-                          code={code}
-                          title={title}
-                          students={students}
-                        />
-                      ))
-                    : subjects.map(({ code, title, instructor, grade }) => (
-                        <StudentSubject
-                          key={uuid()}
-                          code={code}
-                          title={title}
-                          instructor={instructor}
-                          grade={grade}
-                        />
-                      ))}
-                  <Subject
-                    subject={{ type: { instructor: { students: '69' } } }}
-                    code="oGAY3pP"
-                    title="Integral Calculus"
-                  />
+                  {subjects.map((subject) => {
+                    return (
+                      <Subject
+                        key={uuid()}
+                        type={
+                          userInfo.type === 'Instructor'
+                            ? {
+                                instructor: { students: subject.students },
+                              }
+                            : {
+                                student: {
+                                  instructor: subject.instructor,
+                                  grade: subject.grade,
+                                },
+                              }
+                        }
+                        code={subject.code}
+                        title={subject.title}
+                      />
+                    );
+                  })}
                 </>
               )}
             />

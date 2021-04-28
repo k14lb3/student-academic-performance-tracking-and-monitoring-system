@@ -6,9 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useUser } from 'contexts/UserContext';
 import { useSubject } from 'contexts/SubjectContext';
+import Subject from 'components/Subject';
 import Loader from 'components/Loader';
-import InstructorSubject from './InstructorSubject';
-import StudentSubject from './StudentSubject';
 
 const ArchivedSubjects = () => {
   const history = useHistory();
@@ -44,29 +43,24 @@ const ArchivedSubjects = () => {
         <Loader className="mx-auto mt-5" />
       ) : (
         <>
-          {archivedSubjects.map((subject) => {
-            if (subject.type === 'Instructor') {
-              return (
-                <InstructorSubject
-                  archived
-                  key={uuid()}
-                  code={subject.code}
-                  title={subject.title}
-                  students={subject.students}
-                />
-              );
-            }
-            return (
-              <StudentSubject
-                archived
-                key={uuid()}
-                code={subject.code}
-                title={subject.title}
-                instructor={subject.instructor}
-                grade={subject.grade}
-              />
-            );
-          })}
+          {archivedSubjects.map((subject) => (
+            <Subject
+              key={uuid()}
+              archived
+              type={
+                subject.type === 'Instructor'
+                  ? {
+                      instructor: { students: subject.students },
+                    }
+                  : {
+                      student: {
+                        instructor: subject.instructor,
+                        grade: subject.grade,
+                      },
+                    }
+              }
+            />
+          ))}
         </>
       )}
     </>
