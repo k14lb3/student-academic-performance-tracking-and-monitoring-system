@@ -1,7 +1,8 @@
-import './ChangePassword.scss';
 import React, { useState, useRef } from 'react';
 import { useAuth } from 'contexts/AuthContext';
-import Loader from 'components/Loader';
+import Input from 'components/Input';
+import Button from 'components/Button/Button';
+import Error from 'components/Error';
 
 const errors = [
   'Your password needs to be at least 8 characters. Please enter a long one.',
@@ -10,14 +11,13 @@ const errors = [
   'The password you entered was incorrect.',
 ];
 
-const ChangePassword = () => {
+const ChangePassword = ({ setPopup }) => {
   const { reauthenticateWithCredential, updatePassword } = useAuth();
   const currentPasswordRef = useRef();
   const newPasswordRef = useRef();
   const confirmNewPasswordRef = useRef();
   const [changeButton, setChangeButton] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [popup, setPopup] = useState(false);
   const [error, setError] = useState();
 
   const handleSubmit = async (e) => {
@@ -45,13 +45,10 @@ const ChangePassword = () => {
       await reauthenticateWithCredential(currentPasswordRef.current.value);
       await updatePassword(newPasswordRef.current.value);
       setLoading(false);
-      setPopup(true);
       currentPasswordRef.current.value = '';
       newPasswordRef.current.value = '';
       confirmNewPasswordRef.current.value = '';
-      setTimeout(() => {
-        setPopup(false);
-      }, 5000);
+      setPopup({ up: true, message: 'Password changed' });
     } catch {
       setLoading(false);
       setError(3);
@@ -70,47 +67,46 @@ const ChangePassword = () => {
   };
 
   return (
-    <div className="changePassword">
-      <div className={`popup${popup ? ' popup--active' : ''}`}>
-        Your password has been successfully updated
-      </div>
+    <div>
       <form onSubmit={handleSubmit}>
-        <div>
-          <div className="input">
-            <label>Current password</label>
-            <input
-              ref={currentPasswordRef}
-              type="password"
-              onChange={handleChange}
-            />
-          </div>
-          {error === 3 && <div className="error"> {errors[error]}</div>}
+        <div className="p-5 xs:p-3 mb-5 xs:mb-3 border border-orange-500 rounded">
+          <label>Current password</label>
+          <Input
+            ref={currentPasswordRef}
+            className="w-full"
+            type="password"
+            autoComplete="new-password"
+            onChange={handleChange}
+          />
+          {error === 3 && <Error error={errors[error]} />}
         </div>
-        <div>
-          <div className="input">
-            <label>New password</label>
-            <input ref={newPasswordRef} type="password" onChange={handleChange} />
-          </div>
-          {(error === 0 || error === 2) && (
-            <div className="error"> {errors[error]}</div>
-          )}
-          <div className="input">
-            <label>Confirm new password</label>
-            <input
-              ref={confirmNewPasswordRef}
-              type="password"
-              onChange={handleChange}
-            />
-          </div>
+        <div className="p-5 xs:p-3 border border-orange-500 rounded">
+          <label>New password</label>
+          <Input
+            ref={newPasswordRef}
+            className="w-full"
+            type="password"
+            autoComplete="new-password"
+            onChange={handleChange}
+          />
+          {(error === 0 || error === 2) && <Error error={errors[error]} />}
+          <label className="mt-5 xs:mt-3">Confirm new password</label>
+          <Input
+            ref={confirmNewPasswordRef}
+            className="w-full"
+            type="password"
+            autoComplete="new-password"
+            onChange={handleChange}
+          />
           {error === 1 && <div className="error"> {errors[error]}</div>}
         </div>
-        <button
-          disabled={loading || !changeButton}
-          className="changePassword__changeButton button"
+        <Button
+          disabled={!changeButton}
+          className="mt-5 xs:mt-3 ml-auto"
+          hasLoader={{ loading: loading }}
         >
-          <span className={loading ? 'hidden' : ''}>Change</span>
-          {loading && <Loader />}
-        </button>
+          <span className={loading ? 'invisible' : ''}>Change</span>
+        </Button>
       </form>
     </div>
   );

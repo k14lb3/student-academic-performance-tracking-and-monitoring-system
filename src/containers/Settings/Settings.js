@@ -17,9 +17,11 @@ import Name from './AccountInformation/Name';
 import Email from './AccountInformation/Email';
 import Gender from './AccountInformation/Gender';
 import DeleteAccount from './DeleteAccount';
+import PopupNotification from 'components/PopupNotification';
 
 const Settings = () => {
   const { signOut } = useAuth();
+  const [popup, setPopup] = useState({ up: false, message: '' });
   const [width, setWidth] = useState(window.innerWidth);
   const history = useHistory();
 
@@ -37,6 +39,9 @@ const Settings = () => {
 
   return (
     <div className="settings w-full">
+      {popup.up && (
+        <PopupNotification popupState={{ popup: popup, setPopup: setPopup }} />
+      )}
       <div className="flex items-center py-5 xs:pt-0 xs:pb-3 border-solid border-b border-orange-500">
         <h1 className="text-5xl xs:text-3xl">Settings</h1>
       </div>
@@ -146,7 +151,10 @@ const Settings = () => {
             path="/settings/account-information"
             component={AccountInformation}
           />
-          <Route path="/settings/change-password" component={ChangePassword} />
+          <Route
+            path="/settings/change-password"
+            render={() => <ChangePassword setPopup={setPopup} />}
+          />
           <Route path="/settings/delete-account" component={DeleteAccount} />
         </Switch>
       </div>
