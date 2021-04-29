@@ -1,4 +1,3 @@
-import './ArchivedSubjects.scss';
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
@@ -28,16 +27,16 @@ const ArchivedSubjects = ({ setToDelete, setDeleteModal }) => {
 
   return (
     <>
-      <div className="archivedSubjects__navigation">
+      <div className="flex items-center mb-5 xs:mb-3">
         <div
-          className="archivedSubjects__backButton"
+          className="text-orange-500 px-2.5 py-1 mr-3 rounded-full text-lg cursor-pointer duration-200 hover:bg-orange-500 hover:bg-opacity-5"
           onClick={() => {
             history.goBack();
           }}
         >
           <FontAwesomeIcon icon={faArrowLeft} />
         </div>
-        <h2 className="archivedSubjects__title">Archived Subjects</h2>
+        <h2 className="text-2xl xs:text-lg">Archived Subjects</h2>
       </div>
       {loading ? (
         <Loader className="mx-auto mt-5" />
