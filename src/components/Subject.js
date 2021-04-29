@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArchive, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import Button from 'components/Button/Button';
 
-const Subject = ({ type, code, title, archived, setModal }) => {
+const Subject = ({ type, code, title, archived, deleteSubject, setPopup }) => {
   return (
     <div className="w-full p-5 xs:p-3 my-5 xs:my-3 first:mt-0 last:mt-0 border border-orange-500 rounded">
       <div className="flex justify-between pb-5 xs:pb-3 mb-5 xs:mb-3 border-b border-orange-500">
@@ -12,7 +12,7 @@ const Subject = ({ type, code, title, archived, setModal }) => {
           <FontAwesomeIcon
             icon={type?.instructor && !archived ? faArchive : faTrashAlt}
             onClick={() => {
-              setModal(false);
+              deleteSubject({ archived: archived, code: code });
             }}
           />
         </div>
@@ -46,7 +46,12 @@ const Subject = ({ type, code, title, archived, setModal }) => {
             </>
           )}
           {archived || (
-            <CopyToClipboard text={code}>
+            <CopyToClipboard
+              text={code}
+              onCopy={() => {
+                setPopup({ up: true, message: 'Link copied' });
+              }}
+            >
               <Button
                 className="group relative flex self-start xm:self-center"
                 outlined

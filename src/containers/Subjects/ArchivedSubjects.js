@@ -9,7 +9,7 @@ import { useSubject } from 'contexts/SubjectContext';
 import Subject from 'components/Subject';
 import Loader from 'components/Loader';
 
-const ArchivedSubjects = () => {
+const ArchivedSubjects = ({ setToDelete, setDeleteModal }) => {
   const history = useHistory();
   const { userInfo } = useUser();
   const { archivedSubjects, getArchivedSubjects } = useSubject();
@@ -59,6 +59,12 @@ const ArchivedSubjects = () => {
                       },
                     }
               }
+              code={subject.code}
+              title={subject.title}
+              deleteSubject={({ archived, code }) => {
+                setToDelete({ archived, code });
+                setDeleteModal(true);
+              }}
             />
           ))}
         </>
