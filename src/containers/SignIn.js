@@ -71,10 +71,12 @@ const SignIn = () => {
                 <span className={loading ? 'invisible' : ''}>Sign in</span>
               </Button>
             </form>
-            Need an account?
-            <Link to="/register" className="ml-1 text-orange-500">
-              Register
-            </Link>
+            <div className="xs:text-xs">
+              Need an account?
+              <Link to="/register" className="ml-1 text-orange-500">
+                Register
+              </Link>
+            </div>
           </div>
         </div>
       )}
