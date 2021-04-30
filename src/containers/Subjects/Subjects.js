@@ -124,7 +124,7 @@ const Subjects = () => {
         <h1 className="text-5xl xs:text-3xl">Subjects</h1>
       </div>
       <div
-        className={`${loading ? '' : 'pt-5'} ${
+        className={`${loading ? '' : 'py-5'} ${
           location.pathname === '/subjects/archived' ? ' archivedSubjects' : ''
         }`}
       >
