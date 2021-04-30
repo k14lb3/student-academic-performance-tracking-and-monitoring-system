@@ -149,7 +149,7 @@ const SignIn = () => {
                 <span className={loading ? 'invisible' : ''}>Register</span>
               </Button>
             </form>
-            <Link to="/sign-in" className="text-orange hover:underline">
+            <Link to="/sign-in" className="text-orange xs:text-xs hover:underline">
               Already have an account?
             </Link>
           </div>
