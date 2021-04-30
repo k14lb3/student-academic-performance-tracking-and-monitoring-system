@@ -11,7 +11,7 @@ const PopupNotification = ({ popupState: { popup, setPopup }, timeout }) => {
 
   return (
     <div
-      className={`fixed bottom-5 py-3 px-8 bg-orange rounded text-gray${
+      className={`fixed bottom-5 xs:bottom-20 py-3 px-8 bg-orange rounded text-gray${
         popup ? ' block' : ' hidden '
       }`}
     >
