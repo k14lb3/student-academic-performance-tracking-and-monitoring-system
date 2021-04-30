@@ -73,7 +73,7 @@ const SignIn = () => {
             </form>
             <div className="xs:text-xs">
               Need an account?
-              <Link to="/register" className="ml-1 text-orange-500">
+              <Link to="/register" className="ml-1 text-orange-500 hover:underline">
                 Register
               </Link>
             </div>
