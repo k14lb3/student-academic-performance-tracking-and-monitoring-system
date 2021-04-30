@@ -139,13 +139,19 @@ const Settings = () => {
           />
           <Route
             path="/settings/account-information/account-type"
-            component={AccountType}
+            render={() => <AccountType setPopup={setPopup} />}
           />
-          <Route path="/settings/account-information/name" component={Name} />
-          <Route path="/settings/account-information/email" component={Email} />
+          <Route
+            path="/settings/account-information/name"
+            render={() => <Name setPopup={setPopup} />}
+          />
+          <Route
+            path="/settings/account-information/email"
+            render={() => <Email setPopup={setPopup} />}
+          />
           <Route
             path="/settings/account-information/gender"
-            component={Gender}
+            render={() => <Gender setPopup={setPopup} />}
           />
           <Route
             path="/settings/account-information"

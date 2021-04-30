@@ -4,16 +4,14 @@ import Loader from 'components/Loader';
 import Button from 'components/Button/Button';
 import Label from 'components/Label';
 import Select from 'components/Select';
-import PopupNotification from 'components/PopupNotification';
 import Error from 'components/Error';
 
-const Gender = () => {
+const Gender = ({setPopup}) => {
   const { userInfo, updateType, hasSubjects } = useUser();
   const typeRef = useRef();
   const [updateButton, setUpdateButton] = useState(false);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
-  const [popup, setPopup] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -43,7 +41,7 @@ const Gender = () => {
         return;
       }
       await updateType(type);
-      setPopup(true);
+      setPopup({ up: true, message: 'Account type updated' });
       setUpdating(false);
       setUpdateButton(false);
     }
@@ -55,10 +53,6 @@ const Gender = () => {
         <Loader className="mx-auto mt-5" />
       ) : (
         <>
-          <PopupNotification
-            popupState={{ popup: popup, setPopup: setPopup }}
-            message="Account type updated"
-          />
           <form onSubmit={handleSubmit}>
             <div className="p-5 xs:p-3 border border-orange-500 rounded">
               <Label>Account type</Label>
