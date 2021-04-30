@@ -11,11 +11,11 @@ const PopupNotification = ({ popupState: { popup, setPopup }, timeout }) => {
 
   return (
     <div
-      className={`fixed bottom-5 xs:bottom-20 py-3 px-8 bg-orange rounded text-gray z-50${
+      className={`fixed bottom-5 xs:bottom-20 py-3 xs:py-2 px-8 xs:px-5 bg-orange rounded text-gray z-50${
         popup ? ' block' : ' hidden '
       }`}
     >
-      <p className="text-xl">{popup.message}</p>
+      <p className="text-xl xs:text-sm">{popup.message}</p>
     </div>
   );
 };
