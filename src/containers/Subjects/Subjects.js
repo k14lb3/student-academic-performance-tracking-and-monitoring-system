@@ -82,7 +82,7 @@ const Subjects = () => {
   }, [userInfo]);
 
   return (
-    <div className="w-full">
+    <>
         {popup.up && (
           <PopupNotification
             popupState={{ popup: popup, setPopup: setPopup }}
@@ -247,7 +247,7 @@ const Subjects = () => {
           </Switch>
         )}
       </div>
-    </div>
+    </>
   );
 };
 
