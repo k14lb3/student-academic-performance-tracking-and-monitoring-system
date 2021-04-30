@@ -27,11 +27,11 @@ const Subject = ({ type, code, title, archived, deleteSubject, setPopup }) => {
                 ? 'w-3/5 '
                 : 'w-3/4 '
               : 'flex-col w-3/5 xm:items-center '
-          }xm:w-full pr-5 ${
+          }xm:w-full pr-5 xs:pr-3 ${
             archived && type.instructor
               ? ''
               : 'xm:pr-0 xm:pb-5 xm:mr-0 xm:mb-5 xm:border-r-0 xm:border-b xs:!pb-3 xs:!mb-3 '
-          }justify-center mr-5 border-r border-orange-500`}
+          }justify-center mr-5 xs:mr-3 border-r border-orange-500`}
         >
           {type?.student && (
             <>
