@@ -4,6 +4,7 @@ import Loader from 'components/Loader';
 import Button from 'components/Button/Button';
 import Select from 'components/Select';
 import PopupNotification from 'components/PopupNotification';
+import Error from 'components/Error';
 
 const Gender = () => {
   const { userInfo, updateType, hasSubjects } = useUser();
@@ -69,7 +70,7 @@ const Gender = () => {
                 <option value="Instructor">Instructor</option>
                 <option value="Student">Student</option>
               </Select>
-              {error && <div className="error">{error}</div>}
+              {error && <Error error={error} />}
             </div>
             <Button
               disabled={updating || !updateButton}
