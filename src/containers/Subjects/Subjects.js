@@ -11,6 +11,9 @@ import Input from 'components/Input';
 import Error from 'components/Error';
 import Loader from 'components/Loader';
 import PopupNotification from 'components/PopupNotification';
+import CreateSubjectModal from './Modal/CreateSubjectModal';
+import JoinSubjectModal from './Modal/JoinSubjectModal';
+import DeleteSubjectModal from './Modal/DeleteSubjectModal';
 
 const Subjects = () => {
   const { userInfo } = useUser();
@@ -83,42 +86,17 @@ const Subjects = () => {
 
   return (
     <>
-        {popup.up && (
-          <PopupNotification
-            popupState={{ popup: popup, setPopup: setPopup }}
-          />
-        )}
+      {popup.up && (
+        <PopupNotification popupState={{ popup: popup, setPopup: setPopup }} />
+      )}
       {deleteModal && (
-        <Modal
-          title={
-            toDelete.archived || userInfo.type === 'Student'
-              ? 'Delete subject'
-              : 'Archive subject'
-          }
-          message={
-            toDelete.archived || userInfo.type === 'Student'
-              ? 'Do you really want to delete this subject?'
-              : 'Do you really want to archive this subject?'
-          }
-          button={{
-            yes: {
-              label: (
-                <span className={modalLoading ? 'invisible' : ''}>Yes</span>
-              ),
-              onClick: modalDeleteSubject,
-              hasLoader: { loading: modalLoading },
-            },
-            no: {
-              label: 'No',
-              onClick: () => {
-                setDeleteModal(false);
-              },
-            },
-          }}
-          closeModal={() => {
-            setDeleteModal(false);
-          }}
-        ></Modal>
+        <DeleteSubjectModal
+          userInfo={userInfo}
+          setDeleteModal={setDeleteModal}
+          modalLoading={modalLoading}
+          modalDeleteSubject={modalDeleteSubject}
+          toDelete={toDelete}
+        />
       )}
       <div className="flex items-center py-5 xs:pt-0 xs:pb-3 border-solid border-b border-orange-500">
         <h1 className="text-5xl xs:text-3xl">Subjects</h1>
@@ -139,52 +117,20 @@ const Subjects = () => {
                 <>
                   {modal &&
                     (userInfo.type === 'Instructor' ? (
-                      <Modal
-                        title="Create subject"
-                        message="Enter subject title"
-                        button={{
-                          yes: {
-                            label: (
-                              <span className={modalLoading ? 'invisible' : ''}>
-                                Create
-                              </span>
-                            ),
-                            onClick: modalCreateSubject,
-                            hasLoader: { loading: modalLoading },
-                          },
-                        }}
-                        closeModal={() => {
-                          setModal(false);
-                        }}
-                      >
-                        <Input ref={titleRef} className="w-full mt-3" />
-                      </Modal>
+                      <CreateSubjectModal
+                        titleRef={titleRef}
+                        setModal={setModal}
+                        modalLoading={modalLoading}
+                        modalCreateSubject={modalCreateSubject}
+                      />
                     ) : (
-                      <Modal
-                        title="Join subject"
-                        message="Enter subject code"
-                        button={{
-                          yes: {
-                            label: (
-                              <span className={modalLoading ? 'invisible' : ''}>
-                                Join
-                              </span>
-                            ),
-                            onClick: modalJoinSubject,
-                            hasLoader: { loading: modalLoading },
-                          },
-                        }}
-                        closeModal={() => {
-                          setModal(false);
-                        }}
-                      >
-                        <Input
-                          ref={codeRef}
-                          className="w-full mt-3"
-                          maxLength="7"
-                        />
-                        <Error error={modalError} />
-                      </Modal>
+                      <JoinSubjectModal
+                        codeRef={codeRef}
+                        setModal={setModal}
+                        modalLoading={modalLoading}
+                        modalJoinSubject={modalJoinSubject}
+                        modalErorr={modalError}
+                      />
                     ))}
                   <div className="flex xxx:flex-col mb-5 justify-between">
                     <Button
