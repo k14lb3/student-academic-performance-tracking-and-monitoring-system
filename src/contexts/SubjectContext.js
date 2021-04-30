@@ -160,7 +160,7 @@ const SubjectProvider = ({ children }) => {
         type: 'Student',
         title: title,
         instructor: instructor,
-        grade: grade,
+        grade: grade || "inc",
       });
 
       const userSubjectRef = userRef.collection('subjects').doc(code);
