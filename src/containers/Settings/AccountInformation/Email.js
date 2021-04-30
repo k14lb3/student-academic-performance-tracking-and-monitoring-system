@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useAuth } from 'contexts/AuthContext';
 import Loader from 'components/Loader';
 import Button from 'components/Button/Button';
+import Label from 'components/Label';
 import Input from 'components/Input';
 import PopupNotification from 'components/PopupNotification';
 import Error from 'components/Error';
@@ -56,7 +57,7 @@ const Email = () => {
           />
           <form onSubmit={handleSubmit}>
             <div className="p-5 xs:p-3 border border-orange-500 rounded">
-              <label>Email</label>
+              <Label>Email</Label>
               <Input
                 ref={emailRef}
                 className="w-full"

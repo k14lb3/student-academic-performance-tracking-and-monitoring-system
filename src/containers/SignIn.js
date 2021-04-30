@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from 'contexts/AuthContext';
 import Button from 'components/Button/Button';
+import Label from 'components/Label';
 import Input from 'components/Input';
 import Error from 'components/Error';
 
@@ -43,9 +44,9 @@ const SignIn = () => {
               Sign In
             </h2>
             <form onSubmit={handleSubmit}>
-              <label>Email</label>
+              <Label>Email</Label>
               <Input ref={emailRef} className="w-full mb-3" type="email" />
-              <label>Password</label>
+              <Label>Password</Label>
               <div className="relative">
                 <Input
                   ref={passwordRef}

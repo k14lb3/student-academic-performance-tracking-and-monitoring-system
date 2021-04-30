@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useUser } from 'contexts/UserContext';
 import Loader from 'components/Loader';
 import Button from 'components/Button/Button';
+import Label from 'components/Label';
 import Input from 'components/Input';
 import PopupNotification from 'components/PopupNotification';
 
@@ -64,7 +65,7 @@ const Name = () => {
           />
           <form onSubmit={handleSubmit}>
             <div className="p-5 xs:p-3 border border-orange-500 rounded">
-              <label>First Name</label>
+              <Label>First Name</Label>
               <Input
                 ref={firstNameRef}
                 className="w-full mb-3"
@@ -72,7 +73,7 @@ const Name = () => {
                 type="text"
                 onChange={handleChange}
               />
-              <label>Last Name</label>
+              <Label>Last Name</Label>
               <Input
                 ref={lastNameRef}
                 className="w-full mb-3"
@@ -80,7 +81,7 @@ const Name = () => {
                 type="text"
                 onChange={handleChange}
               />
-              <label>Middle Name</label>
+              <Label>Middle Name</Label>
               <Input
                 ref={middleNameRef}
                 className="w-full"

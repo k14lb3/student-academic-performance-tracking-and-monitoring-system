@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useAuth } from 'contexts/AuthContext';
+import Label from 'components/Label';
 import Input from 'components/Input';
 import Button from 'components/Button/Button';
 import Error from 'components/Error';
@@ -70,7 +71,7 @@ const ChangePassword = ({ setPopup }) => {
     <div>
       <form onSubmit={handleSubmit}>
         <div className="p-5 xs:p-3 mb-5 xs:mb-3 border border-orange-500 rounded">
-          <label>Current password</label>
+          <Label>Current password</Label>
           <Input
             ref={currentPasswordRef}
             className="w-full"
@@ -81,26 +82,24 @@ const ChangePassword = ({ setPopup }) => {
           {error === 3 && <Error error={errors[error]} />}
         </div>
         <div className="p-5 xs:p-3 border border-orange-500 rounded">
-          <label>New password</label>
+          <Label>New password</Label>
           <Input
             ref={newPasswordRef}
-            className="w-full"
+            className="w-full mb-5 xs:mb-3"
             type="password"
             autoComplete="new-password"
             onChange={handleChange}
           />
           {(error === 0 || error === 2) && <Error error={errors[error]} />}
-          <div className="mt-5 xs:mt-3">
-            <label>Confirm new password</label>
-            <Input
-              ref={confirmNewPasswordRef}
-              className="w-full"
-              type="password"
-              autoComplete="new-password"
-              onChange={handleChange}
-            />
-            {error === 1 && <div className="error"> {errors[error]}</div>}
-          </div>
+          <Label>Confirm new password</Label>
+          <Input
+            ref={confirmNewPasswordRef}
+            className="w-full"
+            type="password"
+            autoComplete="new-password"
+            onChange={handleChange}
+          />
+          {error === 1 && <div className="error"> {errors[error]}</div>}
         </div>
         <Button
           disabled={!changeButton}

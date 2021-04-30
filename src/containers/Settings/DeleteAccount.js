@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { useAuth } from 'contexts/AuthContext';
 import { useUser } from 'contexts/UserContext';
 import Button from 'components/Button/Button';
+import Label from 'components/Label';
 import Input from 'components/Input';
 import Modal from 'components/Modal';
 import Error from 'components/Error';
@@ -71,7 +72,7 @@ const DeleteAccount = () => {
             Complete the deletion of your account by entering the password
             associated with your account.
           </p>
-          <label>Password</label>
+          <Label>Password</Label>
           <Input
             className="w-full"
             ref={passwordRef}

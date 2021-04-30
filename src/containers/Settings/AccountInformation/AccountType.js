@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useUser } from 'contexts/UserContext';
 import Loader from 'components/Loader';
 import Button from 'components/Button/Button';
+import Label from 'components/Label';
 import Select from 'components/Select';
 import PopupNotification from 'components/PopupNotification';
 import Error from 'components/Error';
@@ -60,7 +61,7 @@ const Gender = () => {
           />
           <form onSubmit={handleSubmit}>
             <div className="p-5 xs:p-3 border border-orange-500 rounded">
-              <label>Account type</label>
+              <Label>Account type</Label>
               <Select
                 ref={typeRef}
                 className="w-32 xs:w-28"

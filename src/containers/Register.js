@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { useAuth } from 'contexts/AuthContext';
 import Button from 'components/Button/Button';
+import Label from 'components/Label';
 import Input from 'components/Input';
 import Select from 'components/Select';
 import Error from 'components/Error';
@@ -61,37 +62,37 @@ const SignIn = () => {
           </div>
           <div className="register__body">
             <form onSubmit={handleSubmit}>
-              <label
+              <Label
                 tw-content-after=" *"
                 className="content-after after:text-orange"
               >
                 First Name
-              </label>
+              </Label>
               <Input ref={firstNameRef} className="w-full mb-3" />
-              <label
+              <Label
                 tw-content-after=" *"
                 className="content-after after:text-orange"
               >
                 Last Name
-              </label>
+              </Label>
               <Input ref={lastNameRef} className="w-full mb-3" />
-              <label>Middle Name</label>
+              <Label>Middle Name</Label>
               <Input ref={middleNameRef} className="w-full mb-3" />
-              <label
+              <Label
                 tw-content-after=" *"
                 className="content-after after:text-orange"
               >
                 Email
-              </label>
+              </Label>
               <Input ref={emailRef} className="w-full mb-3" />
               <div className="grid grid-cols-2 gap-5 mb-3">
                 <div>
-                  <label
+                  <Label
                     tw-content-after=" *"
                     className="content-after after:text-orange"
                   >
                     Password
-                  </label>
+                  </Label>
                   <Input
                     ref={passwordRef}
                     className="w-full"
@@ -100,12 +101,12 @@ const SignIn = () => {
                   />
                 </div>
                 <div>
-                  <label
+                  <Label
                     tw-content-after=" *"
                     className="content-after after:text-orange"
                   >
                     Confirm Password
-                  </label>
+                  </Label>
                   <Input
                     ref={confirmPasswordRef}
                     className="w-full"
@@ -115,24 +116,24 @@ const SignIn = () => {
               </div>
               <div className="grid grid-cols-2 gap-5">
                 <div>
-                  <label
+                  <Label
                     tw-content-after=" *"
                     className="content-after after:text-orange"
                   >
                     Account type
-                  </label>
+                  </Label>
                   <Select ref={typeRef} className="w-full">
                     <option value="Instructor">Instructor</option>
                     <option value="Student">Student</option>
                   </Select>
                 </div>
                 <div>
-                  <label
+                  <Label
                     tw-content-after=" *"
                     className="content-after after:text-orange"
                   >
                     Gender
-                  </label>
+                  </Label>
                   <Select ref={genderRef} className="w-full">
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
