@@ -1,13 +1,15 @@
-import './DeleteAccount.scss';
 import { useState, useRef } from 'react';
 import { useAuth } from 'contexts/AuthContext';
 import { useUser } from 'contexts/UserContext';
-import DeleteAccountModal from './DeleteAccountModal';
+import Button from 'components/Button/Button';
+import Input from 'components/Input';
+import Modal from 'components/Modal';
+import Error from 'components/Error';
 
 const DeleteAccount = () => {
   const { deleteAccount } = useAuth();
   const { userInfo } = useUser();
-  const [deleteAccountModal, setDeleteAccountModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState(false);
   const passwordRef = useRef();
   const [deleting, setDeleting] = useState(false);
@@ -24,7 +26,7 @@ const DeleteAccount = () => {
         setError(err.message);
       }
       setDeleting(false);
-      setDeleteAccountModal(false);
+      setDeleteModal(false);
     }
   };
 
@@ -38,38 +40,58 @@ const DeleteAccount = () => {
 
   return (
     <div className="deleteAccount">
-      {deleteAccountModal && (
-        <DeleteAccountModal
-          setDeleteAccountModal={setDeleteAccountModal}
-          handleDelete={handleDelete}
-          deleting={deleting}
+      {deleteModal && (
+        <Modal
+          title="Delete account"
+          message="Do you really want to delete your account?"
+          button={{
+            yes: {
+              label: <span className={deleting ? 'invisible' : ''}>Yes</span>,
+              onClick: handleDelete,
+              hasLoader: { loading: deleting },
+            },
+            no: {
+              label: 'No',
+              onClick: () => {
+                setDeleteModal(false);
+              },
+            },
+          }}
+          closeModal={() => {
+            setDeleteModal(false);
+          }}
         />
       )}
       {confirmPassword ? (
-        <div className="deleteAccount__confirmPassword">
-          <div>
-            <h3>Confirm your password</h3>
-            <p>
-              Complete the deletion of your account by entering the password
-              associated with your account.
-            </p>
-            <div className="input">
-              <label>Password</label>
-              <input
-                ref={passwordRef}
-                type="password"
-                onChange={handleChange}
-              />
-            </div>
-            {error && <span className="error">{error}</span>}
+        <div className="p-5 xs:p-3 mb-5 xs:mb-3 border border-orange-500 rounded">
+          <div className="mb-5 pb-5 border-b border-orange">
+            <h3 className="text-xl">Confirm your password</h3>
           </div>
+          <p className="mb-5 xs:mb-3">
+            Complete the deletion of your account by entering the password
+            associated with your account.
+          </p>
+          <label>Password</label>
+          <Input
+            className="w-full"
+            ref={passwordRef}
+            type="password"
+            onChange={handleChange}
+          />
+          {error && <Error error={error} />}
         </div>
       ) : (
-        <div className="deleteAccount__warning">
-          <h3>This will delete your account</h3>
-          <p>You’re about to start the process of deleting your account.</p>
-          <h3>What else you should know</h3>
-          <ul>
+        <div className="p-5 xs:p-3 mb-5 xs:mb-3 border border-orange-500 rounded">
+          <div className="mb-5 pb-5 border-b border-orange">
+            <h3 className="text-xl">This will delete your account</h3>
+          </div>
+          <p className="mb-5 xs:mb-3 ml-5 xs:ml-3">
+            You’re about to start the process of deleting your account.
+          </p>
+          <div className="mb-5 pb-5 border-b border-orange">
+            <h3 className="text-xl">What else you should know</h3>
+          </div>
+          <ul class="ml-5 list-disc">
             <li>You cannot restore your account.</li>
             <li>
               Your information, e.g., name, grades, exams, etc, will not be
@@ -78,20 +100,22 @@ const DeleteAccount = () => {
           </ul>
         </div>
       )}
-      <button
-        disabled={!deleteButton}
-        className="button"
-        onClick={() => {
-          if (confirmPassword) {
-            setDeleteAccountModal(true);
-          } else {
-            setConfirmPassword(true);
-            setDeleteButton(false);
-          }
-        }}
-      >
-        Delete
-      </button>
+      <div className="w-full">
+        <Button
+          className="m-auto px-16"
+          disabled={!deleteButton}
+          onClick={() => {
+            if (confirmPassword) {
+              setDeleteModal(true);
+            } else {
+              setConfirmPassword(true);
+              setDeleteButton(false);
+            }
+          }}
+        >
+          Delete
+        </Button>
+      </div>
     </div>
   );
 };
