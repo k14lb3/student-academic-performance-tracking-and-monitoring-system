@@ -92,7 +92,7 @@ const DeleteAccount = () => {
           <div className="mb-5 pb-5 border-b border-orange">
             <h3 className="text-xl">What else you should know</h3>
           </div>
-          <ul class="ml-5 list-disc">
+          <ul className="ml-5 list-disc">
             <li>You cannot restore your account.</li>
             <li>
               Your information, e.g., name, grades, exams, etc, will not be
