@@ -90,15 +90,17 @@ const ChangePassword = ({ setPopup }) => {
             onChange={handleChange}
           />
           {(error === 0 || error === 2) && <Error error={errors[error]} />}
-          <label className="mt-5 xs:mt-3">Confirm new password</label>
-          <Input
-            ref={confirmNewPasswordRef}
-            className="w-full"
-            type="password"
-            autoComplete="new-password"
-            onChange={handleChange}
-          />
-          {error === 1 && <div className="error"> {errors[error]}</div>}
+          <div className="mt-5 xs:mt-3">
+            <label>Confirm new password</label>
+            <Input
+              ref={confirmNewPasswordRef}
+              className="w-full"
+              type="password"
+              autoComplete="new-password"
+              onChange={handleChange}
+            />
+            {error === 1 && <div className="error"> {errors[error]}</div>}
+          </div>
         </div>
         <Button
           disabled={!changeButton}
