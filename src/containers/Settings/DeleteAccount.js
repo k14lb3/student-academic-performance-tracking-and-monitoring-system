@@ -100,22 +100,20 @@ const DeleteAccount = () => {
           </ul>
         </div>
       )}
-      <div className="w-full">
-        <Button
-          className="m-auto px-16"
-          disabled={!deleteButton}
-          onClick={() => {
-            if (confirmPassword) {
-              setDeleteModal(true);
-            } else {
-              setConfirmPassword(true);
-              setDeleteButton(false);
-            }
-          }}
-        >
-          Delete
-        </Button>
-      </div>
+      <Button
+        className="block m-auto px-20"
+        disabled={!deleteButton}
+        onClick={() => {
+          if (confirmPassword) {
+            setDeleteModal(true);
+          } else {
+            setConfirmPassword(true);
+            setDeleteButton(false);
+          }
+        }}
+      >
+        Delete
+      </Button>
     </div>
   );
 };
