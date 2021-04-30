@@ -4,6 +4,7 @@ import Loader from 'components/Loader';
 import Button from 'components/Button/Button';
 import Input from 'components/Input';
 import PopupNotification from 'components/PopupNotification';
+import Error from 'components/Error';
 
 const Email = () => {
   const { user, updateEmail } = useAuth();
@@ -63,7 +64,7 @@ const Email = () => {
                 type="text"
                 onChange={handleChange}
               />
-              {error && <div className="error">{error}</div>}
+              {error && <Error error={error} />}
             </div>
             <Button
               disabled={updating || !updateButton}
