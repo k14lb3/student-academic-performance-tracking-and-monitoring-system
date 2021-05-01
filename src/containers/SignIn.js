@@ -33,7 +33,7 @@ const SignIn = () => {
       {user ? (
         <Redirect to="/home" />
       ) : (
-        <div className="flex sm:flex-col w-11/12 xs:w-full p-5 xs:p-0 m-auto bg-gray rounded shadow-xl xs:shadow-none">
+        <div className="flex sm:flex-col w-11/12 xs:w-full p-5 xs:p-0 m-auto bg-gray rounded">
           <div className="flex items-center w-5/12 sm:w-full p-5 pr-10 sm:pr-5 sm:pb-0 xs:px3 border-r sm:border-none border-orange-500 text-orange-500">
             <h1 className="text-4xl xs:text-2xl leading-snug sm:text-center">
               Student Academic Performance Tracking and Monitoring System
