@@ -3,7 +3,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArchive, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import Button from 'components/Button/Button';
 
-const Subject = ({ type, code, title, archived, deleteSubject, setPopup }) => {
+const Subject = ({
+  type,
+  code,
+  title,
+  archived,
+  deleteSubject,
+  setPopup,
+  openSubject,
+}) => {
   return (
     <div className="w-full p-5 xs:p-3 my-5 xs:my-3 first:mt-0 last:mt-0 border border-orange-500 rounded">
       <div className="flex justify-between pb-5 xs:pb-3 mb-5 xs:mb-3 border-b border-orange-500">
@@ -65,7 +73,12 @@ const Subject = ({ type, code, title, archived, deleteSubject, setPopup }) => {
             </CopyToClipboard>
           )}
           {type?.instructor && (
-            <Button className={`${archived ? '' : 'ml-5'} flex-grow`}>
+            <Button
+              className={`${archived ? '' : 'ml-5'} flex-grow`}
+              onClick={() => {
+                openSubject({ code, title });
+              }}
+            >
               Open
             </Button>
           )}

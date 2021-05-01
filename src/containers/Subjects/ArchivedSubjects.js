@@ -7,11 +7,15 @@ import { useUser } from 'contexts/UserContext';
 import { useSubject } from 'contexts/SubjectContext';
 import Subject from 'components/Subject';
 import Loader from 'components/Loader';
+import ArchivedSubjectModal from './Modal/ArchivedSubjectModal';
 
 const ArchivedSubjects = ({ setToDelete, setDeleteModal }) => {
   const history = useHistory();
   const { userInfo } = useUser();
+  const { getArchivedSubjectStudents } = useSubject();
   const { archivedSubjects, getArchivedSubjects } = useSubject();
+  const [students, setStudents] = useState();
+  const [modal, setModal] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,8 +29,25 @@ const ArchivedSubjects = ({ setToDelete, setDeleteModal }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo]);
 
+  useEffect(() => {
+    if (modal) {
+      const fetchStudents = async () => {
+        setStudents(await getArchivedSubjectStudents(modal.code));
+      };
+      fetchStudents();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modal]);
+
   return (
     <>
+      {modal && (
+        <ArchivedSubjectModal
+          title={modal?.title}
+          studentsState={{ students: students, setStudents: setStudents }}
+          setModal={setModal}
+        />
+      )}
       <div className="flex items-center mb-5 xs:mb-3">
         <div
           className="text-orange-500 px-2.5 py-1 mr-3 rounded-full text-lg cursor-pointer duration-200 hover:bg-orange-500 hover:bg-opacity-5"
@@ -64,6 +85,7 @@ const ArchivedSubjects = ({ setToDelete, setDeleteModal }) => {
                 setToDelete({ archived, code });
                 setDeleteModal(true);
               }}
+              openSubject={setModal}
             />
           ))}
         </>

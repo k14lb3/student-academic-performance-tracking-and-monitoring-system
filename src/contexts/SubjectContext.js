@@ -337,6 +337,18 @@ const SubjectProvider = ({ children }) => {
     });
   };
 
+  const getArchivedSubjectStudents = async (code) => {
+    const usersRef = db.collection('accounts');
+    const userRef = usersRef.doc(user.uid);
+    const archivedSubjectsRef = userRef.collection('archived_subjects');
+    const archivedSubjectRef = archivedSubjectsRef.doc(code);
+    const archivedSubjectsStudentsRef = archivedSubjectRef.collection(
+      'students'
+    );
+    const archivedSubjectsStudents = await archivedSubjectsStudentsRef.orderBy('name', 'asc').get();
+    return archivedSubjectsStudents.docs.map((student) => student.data());
+  };
+
   useEffect(() => {
     if (!user) {
       subjectsDispatch({ type: ACTIONS.RESET_SUBJECTS });
@@ -365,6 +377,7 @@ const SubjectProvider = ({ children }) => {
     archivedSubjects,
     getSubjects,
     getArchivedSubjects,
+    getArchivedSubjectStudents,
     createSubject,
     joinSubject,
     archiveSubject,
