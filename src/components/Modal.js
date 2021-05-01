@@ -17,19 +17,21 @@ const Modal = ({ title, message, button, closeModal, children }) => {
             <p className="xs:text-sm">{message}</p>
             {children}
           </div>
-          <div className="flex justify-end mt-5 xs:mt-3">
-            {button?.no && (
-              <Button outlined className="mr-3" onClick={button?.no.onClick}>
-                {button.no.label}
+          {button && (
+            <div className="flex justify-end mt-5 xs:mt-3">
+              {button.no && (
+                <Button outlined className="mr-3" onClick={button.no.onClick}>
+                  {button.no.label}
+                </Button>
+              )}
+              <Button
+                hasLoader={button.yes.hasLoader}
+                onClick={button.yes.onClick}
+              >
+                {button?.yes.label}
               </Button>
-            )}
-            <Button
-              hasLoader={button?.yes.hasLoader}
-              onClick={button?.yes.onClick}
-            >
-              {button?.yes.label}
-            </Button>
-          </div>
+            </div>
+          )}
         </div>
       </div>
       <div
@@ -38,6 +40,10 @@ const Modal = ({ title, message, button, closeModal, children }) => {
       ></div>
     </div>
   );
+};
+
+Modal.defaultProps = {
+  title: 'Modal',
 };
 
 export default Modal;
