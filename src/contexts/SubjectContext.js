@@ -145,25 +145,60 @@ const SubjectProvider = ({ children }) => {
   };
 
   const archiveSubject = async (code) => {
+    const usersRef = db.collection('accounts');
+
+    const userRef = usersRef.doc(user.uid);
+
     const subjectRef = db.collection('subjects').doc(code);
 
     const subject = await subjectRef.get();
 
     const { title, instructor, students } = subject.data();
 
+    const userInstructorArchivedSubjectsRef = userRef.collection(
+      'archived_subjects'
+    );
+
+    const userInstructorArchivedSubjectRef = await userInstructorArchivedSubjectsRef.add(
+      {
+        type: 'Instructor',
+        title: title,
+        students: students,
+      }
+    );
+
     const archive = async (id, grade) => {
-      const userRef = db.collection('accounts').doc(id);
+      const userStudentRef = usersRef.doc(id);
 
-      const userArchivedSubjectRef = userRef.collection('archived_subjects');
+      const userStudent = await userStudentRef.get();
 
-      await userArchivedSubjectRef.add({
+      const { firstName, lastName, middleName } = userStudent.data();
+
+      const name = `${lastName}, ${firstName} ${middleName}`;
+
+      const finalGrade = grade || 'inc';
+
+      const userStudentArchivedSubjectRef = userStudentRef.collection(
+        'archived_subjects'
+      );
+
+      await userStudentArchivedSubjectRef.add({
         type: 'Student',
         title: title,
         instructor: instructor,
-        grade: grade || "inc",
+        grade: finalGrade,
       });
 
-      const userSubjectRef = userRef.collection('subjects').doc(code);
+      const userInstructorArchivedSubjectStudentsRef = userInstructorArchivedSubjectsRef
+        .doc(userInstructorArchivedSubjectRef.id)
+        .collection('students');
+
+      userInstructorArchivedSubjectStudentsRef.doc(id).set({
+        name: name,
+        grade: finalGrade,
+      });
+
+      const userSubjectRef = userStudentRef.collection('subjects').doc(code);
 
       await userSubjectRef.delete();
 
@@ -178,16 +213,6 @@ const SubjectProvider = ({ children }) => {
 
     studentsCol.forEach(async (student) => {
       await archive(student.id, student.data().grade);
-    });
-
-    const userRef = db.collection('accounts').doc(user.uid);
-
-    const userArchivedSubjectRef = userRef.collection('archived_subjects');
-
-    await userArchivedSubjectRef.add({
-      type: 'Instructor',
-      title: title,
-      students: students,
     });
 
     const userSubjectRef = userRef.collection('subjects').doc(code);
