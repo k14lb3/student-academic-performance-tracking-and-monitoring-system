@@ -1,12 +1,28 @@
+import { useState } from 'react';
+import { useUser } from 'contexts/UserContext';
+import { useSubject } from 'contexts/SubjectContext';
 import Modal from 'components/Modal';
 
-const DeleteSubjectModal = ({
-  userInfo,
-  setDeleteModal,
-  modalLoading,
-  modalDeleteSubject,
-  toDelete,
-}) => {
+const DeleteSubjectModal = ({ toDelete, setModal }) => {
+  const { userInfo } = useUser();
+  const { archiveSubject, deleteSubject } = useSubject();
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    const { archived, code } = toDelete;
+    setDeleting(true);
+    if (archived) {
+      await deleteSubject({ archived: archived, code: code });
+    } else {
+      if (userInfo.type === 'Instructor') {
+        await archiveSubject(code);
+      } else {
+        deleteSubject({ code: code });
+      }
+    }
+    setDeleting(false);
+    setModal(false);
+  };
   return (
     <Modal
       title={
@@ -21,19 +37,19 @@ const DeleteSubjectModal = ({
       }
       button={{
         yes: {
-          label: <span className={modalLoading ? 'invisible' : ''}>Yes</span>,
-          onClick: modalDeleteSubject,
-          hasLoader: { loading: modalLoading },
+          label: <span className={deleting ? 'invisible' : ''}>Yes</span>,
+          onClick: handleDelete,
+          hasLoader: { loading: deleting },
         },
         no: {
           label: 'No',
           onClick: () => {
-            setDeleteModal(false);
+            setModal(false);
           },
         },
       }}
       closeModal={() => {
-        setDeleteModal(false);
+        setModal(false);
       }}
     />
   );

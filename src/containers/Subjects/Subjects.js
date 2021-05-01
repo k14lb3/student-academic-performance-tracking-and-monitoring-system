@@ -14,61 +14,13 @@ import DeleteSubjectModal from './Modal/DeleteSubjectModal';
 
 const Subjects = () => {
   const { userInfo } = useUser();
-  const {
-    subjects,
-    getSubjects,
-    createSubject,
-    joinSubject,
-    deleteSubject,
-    archiveSubject,
-  } = useSubject();
-  const titleRef = useRef();
-  const codeRef = useRef();
+  const { subjects, getSubjects } = useSubject();
   const [toDelete, setToDelete] = useState({ archived: false, code: '' });
   const [modal, setModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-  const [modalLoading, setModalLoading] = useState(false);
-  const [modalError, setModalError] = useState('');
   const [popup, setPopup] = useState({ up: false, message: '' });
   const [loading, setLoading] = useState(true);
   const location = useLocation();
-
-  const modalCreateSubject = async () => {
-    setModalLoading(true);
-    await createSubject(titleRef.current.value.trim());
-    setModalLoading(false);
-    setModal(false);
-  };
-
-  const modalJoinSubject = async () => {
-    setModalError('');
-
-    try {
-      setModalLoading(true);
-      await joinSubject(codeRef.current.value.trim());
-      setModalLoading(false);
-      setModal(false);
-    } catch (err) {
-      setModalError(err.message);
-      setModalLoading(false);
-    }
-  };
-
-  const modalDeleteSubject = async () => {
-    const { archived, code } = toDelete;
-    setModalLoading(true);
-    if (archived) {
-      await deleteSubject({ archived: archived, code: code });
-    } else {
-      if (userInfo.type === 'Instructor') {
-        await archiveSubject(code);
-      } else {
-        deleteSubject({ code: code });
-      }
-    }
-    setModalLoading(false);
-    setDeleteModal(false);
-  };
 
   useEffect(() => {
     if (userInfo) {
@@ -87,13 +39,7 @@ const Subjects = () => {
         <PopupNotification popupState={{ popup: popup, setPopup: setPopup }} />
       )}
       {deleteModal && (
-        <DeleteSubjectModal
-          userInfo={userInfo}
-          setDeleteModal={setDeleteModal}
-          modalLoading={modalLoading}
-          modalDeleteSubject={modalDeleteSubject}
-          toDelete={toDelete}
-        />
+        <DeleteSubjectModal toDelete={toDelete} setModal={setDeleteModal} />
       )}
       <div className="flex items-center py-5 xs:pt-0 xs:pb-3 border-solid border-b border-orange-500">
         <h1 className="text-5xl xs:text-3xl">Subjects</h1>
@@ -114,20 +60,9 @@ const Subjects = () => {
                 <>
                   {modal &&
                     (userInfo.type === 'Instructor' ? (
-                      <CreateSubjectModal
-                        titleRef={titleRef}
-                        setModal={setModal}
-                        modalLoading={modalLoading}
-                        modalCreateSubject={modalCreateSubject}
-                      />
+                      <CreateSubjectModal setModal={setModal} />
                     ) : (
-                      <JoinSubjectModal
-                        codeRef={codeRef}
-                        setModal={setModal}
-                        modalLoading={modalLoading}
-                        modalJoinSubject={modalJoinSubject}
-                        modalErorr={modalError}
-                      />
+                      <JoinSubjectModal setModal={setModal} />
                     ))}
                   <div className="flex xxx:flex-col mb-5 justify-between">
                     <Button
@@ -140,7 +75,6 @@ const Subjects = () => {
                     </Button>
                     <Button
                       onClick={() => {
-                        setModalError('');
                         setModal(true);
                       }}
                     >
