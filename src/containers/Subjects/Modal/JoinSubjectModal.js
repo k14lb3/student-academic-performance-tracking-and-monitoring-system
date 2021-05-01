@@ -3,13 +3,10 @@ import Modal from 'components/Modal';
 import Input from 'components/Input';
 import Error from 'components/Error';
 
-const JoinSubjectModal = ({
-  codeRef,
-  setModal,
-  modalLoading,
-  modalJoinSubject,
-  modalError,
-}) => {
+const JoinSubjectModal = (
+  { setModal, modalLoading, modalJoinSubject, modalError },
+  codeRef
+) => {
   return (
     <Modal
       title="Join subject"

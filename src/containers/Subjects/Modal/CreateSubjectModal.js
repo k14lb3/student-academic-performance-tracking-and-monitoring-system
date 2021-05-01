@@ -3,11 +3,10 @@ import Modal from 'components/Modal';
 import Input from 'components/Input';
 
 const CreateSubjectModal = ({
-  titleRef,
   setModal,
   modalLoading,
   modalCreateSubject,
-}) => {
+}, titleRef) => {
   return (
     <Modal
       title="Create subject"
