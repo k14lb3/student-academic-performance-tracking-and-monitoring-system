@@ -56,7 +56,7 @@ const SignIn = () => {
       {user ? (
         <Redirect to="/home" />
       ) : (
-        <div className="p-10 xs:p-6 bg-gray shadow-xl xs:shadow-none">
+        <div className="p-10 xs:p-6 bg-gray">
           <div className="pb-5 xs:pb-3 mb-5 xs:mb-3 border-b border-orange">
             <h2 className="text-3xl">Create an account</h2>
           </div>
