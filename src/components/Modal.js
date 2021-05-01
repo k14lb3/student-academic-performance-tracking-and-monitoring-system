@@ -12,11 +12,13 @@ const Modal = ({ title, message, button, closeModal, children }) => {
             <FontAwesomeIcon icon={faTimes} />
           </Button>
         </div>
-        <div className="flex flex-col justify-between">
-          <div>
-            <p className="xs:text-sm">{message}</p>
-            {children}
-          </div>
+        <div className={`${button ? 'flex flex-col justify-between' : ''}`}>
+          {message && (
+            <div>
+              <p className="xs:text-sm">{message}</p>
+            </div>
+          )}
+          {children}
           {button && (
             <div className="flex justify-end mt-5 xs:mt-3">
               {button.no && (
