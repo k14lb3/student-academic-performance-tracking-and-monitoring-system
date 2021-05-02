@@ -22,11 +22,17 @@ const Modal = ({ title, message, button, closeModal, children }) => {
           {button && (
             <div className="flex justify-end mt-5 xs:mt-3">
               {button.no && (
-                <Button outlined className="mr-3" onClick={button.no.onClick}>
+                <Button
+                  disabled={button.no.disabled}
+                  outlined
+                  className="mr-3"
+                  onClick={button.no.onClick}
+                >
                   {button.no.label}
                 </Button>
               )}
               <Button
+                disabled={button.yes.disabled}
                 hasLoader={button.yes.hasLoader}
                 onClick={button.yes.onClick}
               >
