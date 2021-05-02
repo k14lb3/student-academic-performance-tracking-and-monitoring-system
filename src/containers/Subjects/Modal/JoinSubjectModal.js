@@ -30,13 +30,20 @@ const JoinSubjectModal = ({ setModal }) => {
       message="Enter subject code"
       button={{
         yes: {
+          disabled: joining,
           label: <span className={joining ? 'invisible' : ''}>Join</span>,
-          onClick: handleJoin,
+          onClick: () => {
+            if (!joining) {
+              handleJoin();
+            }
+          },
           hasLoader: { loading: joining },
         },
       }}
       closeModal={() => {
-        setModal(false);
+        if (!joining) {
+          setModal(false);
+        }
       }}
     >
       <Input ref={codeRef} className="w-full mt-3" maxLength="7" />

@@ -3,7 +3,7 @@ import { useSubject } from 'contexts/SubjectContext';
 import Modal from 'components/Modal';
 import Input from 'components/Input';
 
-const CreateSubjectModal = ({setModal}) => {
+const CreateSubjectModal = ({ setModal }) => {
   const { createSubject } = useSubject();
   const titleRef = useRef();
   const [creating, setCreating] = useState(false);
@@ -21,13 +21,20 @@ const CreateSubjectModal = ({setModal}) => {
       message="Enter subject title"
       button={{
         yes: {
+          disabled: creating,
           label: <span className={creating ? 'invisible' : ''}>Create</span>,
-          onClick: handleCreate,
+          onClick: () => {
+            if (!creating) {
+              handleCreate();
+            }
+          },
           hasLoader: { loading: creating },
         },
       }}
       closeModal={() => {
-        setModal(false);
+        if (!creating) {
+          setModal(false);
+        }
       }}
     >
       <Input ref={titleRef} className="w-full mt-3" />

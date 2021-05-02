@@ -37,19 +37,29 @@ const DeleteSubjectModal = ({ toDelete, setModal }) => {
       }
       button={{
         yes: {
+          disabled: deleting,
           label: <span className={deleting ? 'invisible' : ''}>Yes</span>,
-          onClick: handleDelete,
+          onClick: () => {
+            if (!deleting) {
+              handleDelete();
+            }
+          },
           hasLoader: { loading: deleting },
         },
         no: {
+          disabled: deleting,
           label: 'No',
           onClick: () => {
-            setModal(false);
+            if (!deleting) {
+              setModal(false);
+            }
           },
         },
       }}
       closeModal={() => {
-        setModal(false);
+        if (!deleting) {
+          setModal(false);
+        }
       }}
     />
   );
