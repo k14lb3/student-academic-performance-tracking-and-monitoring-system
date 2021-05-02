@@ -108,6 +108,9 @@ const Subjects = () => {
                           setToDelete({ archived, code });
                           setDeleteModal(true);
                         }}
+                        openSubject={(code) => {
+                          setOpenSubjectCode(code)
+                        }}
                       />
                     );
                   })}
