@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArchive, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import Button from 'components/Button/Button';
 
-const Subject = ({
+const SubjectItem = ({
   type,
   code,
   title,
@@ -115,10 +115,10 @@ const Subject = ({
   );
 };
 
-Subject.defaultProps = {
+SubjectItem.defaultProps = {
   title: 'Subject',
   code: 'lololol',
   type: { instructor: { students: '0' } },
 };
 
-export default Subject;
+export default SubjectItem;

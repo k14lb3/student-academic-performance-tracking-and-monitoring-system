@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useUser } from 'contexts/UserContext';
 import { useSubject } from 'contexts/SubjectContext';
-import Subject from 'components/Subject';
+import SubjectItem from 'components/SubjectItem';
 import Loader from 'components/Loader';
 import ArchivedSubjectModal from './Modal/ArchivedSubjectModal';
 
@@ -64,7 +64,7 @@ const ArchivedSubjects = ({ setToDelete, setDeleteModal }) => {
       ) : (
         <>
           {archivedSubjects.map((subject) => (
-            <Subject
+            <SubjectItem
               key={uuid()}
               archived
               type={

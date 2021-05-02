@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
 import { useUser } from 'contexts/UserContext';
 import { useSubject } from 'contexts/SubjectContext';
 import Button from 'components/Button/Button';
-import Subject from 'components/Subject';
+import SubjectItem from 'components/SubjectItem';
 import Loader from 'components/Loader';
 import PopupNotification from 'components/PopupNotification';
 import ArchivedSubjects from './ArchivedSubjects';
@@ -85,7 +85,7 @@ const Subjects = () => {
                   </div>
                   {subjects.map((subject) => {
                     return (
-                      <Subject
+                      <SubjectItem
                         key={uuid()}
                         setPopup={setPopup}
                         type={
