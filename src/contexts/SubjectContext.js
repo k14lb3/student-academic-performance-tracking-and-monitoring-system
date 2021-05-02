@@ -319,6 +319,13 @@ const SubjectProvider = ({ children }) => {
     });
   };
 
+  const getSubject = async (code) => {
+    const subjectsRef = db.collection('subjects');
+    const subjectRef = subjectsRef.doc(code);
+    const subject = await subjectRef.get();
+    return subject.data();
+ };
+
   const getArchivedSubjects = async () => {
     const userSubjectsRef = db
       .collection('accounts')
@@ -345,7 +352,9 @@ const SubjectProvider = ({ children }) => {
     const archivedSubjectsStudentsRef = archivedSubjectRef.collection(
       'students'
     );
-    const archivedSubjectsStudents = await archivedSubjectsStudentsRef.orderBy('name', 'asc').get();
+    const archivedSubjectsStudents = await archivedSubjectsStudentsRef
+      .orderBy('name', 'asc')
+      .get();
     return archivedSubjectsStudents.docs.map((student) => student.data());
   };
 
@@ -376,6 +385,7 @@ const SubjectProvider = ({ children }) => {
     subjects,
     archivedSubjects,
     getSubjects,
+    getSubject,
     getArchivedSubjects,
     getArchivedSubjectStudents,
     createSubject,
