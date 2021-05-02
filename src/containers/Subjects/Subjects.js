@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Switch, Route, useLocation } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import { useUser } from 'contexts/UserContext';
