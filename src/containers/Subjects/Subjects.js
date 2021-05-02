@@ -11,11 +11,13 @@ import ArchivedSubjects from './ArchivedSubjects';
 import CreateSubjectModal from './Modal/CreateSubjectModal';
 import JoinSubjectModal from './Modal/JoinSubjectModal';
 import DeleteSubjectModal from './Modal/DeleteSubjectModal';
+import Subject from './Subject/Subject';
 
 const Subjects = () => {
   const { userInfo } = useUser();
   const { subjects, getSubjects } = useSubject();
   const [toDelete, setToDelete] = useState({ archived: false, code: '' });
+  const [openSubjectCode, setOpenSubjectCode] = useState('');
   const [modal, setModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [popup, setPopup] = useState({ up: false, message: '' });
@@ -120,6 +122,11 @@ const Subjects = () => {
                   setDeleteModal={setDeleteModal}
                 />
               )}
+            />
+            <Route
+            exact
+              path={`/subjects/${openSubjectCode}`}
+              render={() => <Subject code={openSubjectCode} />}
             />
           </Switch>
         )}
