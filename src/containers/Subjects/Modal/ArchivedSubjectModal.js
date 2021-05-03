@@ -53,7 +53,7 @@ const ArchivedSubjectModal = ({ codeState: { code, setCode } }) => {
                 {subject.students.map((student) => (
                   <div key={uuid()}>
                     <div className="inline-block w-4/5">{student.name}</div>
-                    <div className="inline-block w-1/5 text-center border-l border-orange">
+                    <div className="inline-block w-1/5 align-top text-center border-l border-orange">
                       {student.grade}
                     </div>
                   </div>
