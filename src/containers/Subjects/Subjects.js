@@ -4,7 +4,6 @@ import { v4 as uuid } from 'uuid';
 import { useUser } from 'contexts/UserContext';
 import { useSubject } from 'contexts/SubjectContext';
 import Button from 'components/Button/Button';
-import SubjectItem from 'components/SubjectItem';
 import Loader from 'components/Loader';
 import PopupNotification from 'components/PopupNotification';
 import ArchivedSubjects from './ArchivedSubjects';
@@ -12,6 +11,7 @@ import CreateSubjectModal from './Modal/CreateSubjectModal';
 import JoinSubjectModal from './Modal/JoinSubjectModal';
 import DeleteSubjectModal from './Modal/DeleteSubjectModal';
 import Subject from './Subject/Subject';
+import SubjectItem from './SubjectItem';
 
 const Subjects = () => {
   const { userInfo } = useUser();

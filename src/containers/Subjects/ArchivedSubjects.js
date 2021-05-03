@@ -5,9 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useUser } from 'contexts/UserContext';
 import { useSubject } from 'contexts/SubjectContext';
-import SubjectItem from 'components/SubjectItem';
 import Loader from 'components/Loader';
 import ArchivedSubjectModal from './Modal/ArchivedSubjectModal';
+import SubjectItem from './SubjectItem';
 
 const ArchivedSubjects = ({ setToDelete, setDeleteModal }) => {
   const history = useHistory();
