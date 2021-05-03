@@ -50,8 +50,4 @@ const Modal = ({ title, message, button, closeModal, children }) => {
   );
 };
 
-Modal.defaultProps = {
-  title: 'Modal',
-};
-
 export default Modal;
