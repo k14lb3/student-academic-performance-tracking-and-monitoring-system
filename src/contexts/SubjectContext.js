@@ -324,10 +324,22 @@ const SubjectProvider = ({ children }) => {
     const subjectRef = subjectsRef.doc(code);
     const subjectStudentsRef = subjectRef.collection('students');
     const subjectStudents = await subjectStudentsRef.get();
+    const usersRef = db.collection('accounts');
+    const students = subjectStudents.docs.map(async (student) => {
+      const userRef = usersRef.doc(student.id);
+      const user = await userRef.get();
+      const { firstName, lastName, middleName } = user.data();
+      const name = `${lastName}, ${firstName} ${middleName}`;
+      return {
+        id: student.id,
+        name: name,
+        grade: student.data().grade,
+      };
+    });
     const subject = await subjectRef.get();
     return {
       ...subject.data(),
-      students: subjectStudents.docs.map((student) => student.data()),
+      students: await Promise.all(students),
     };
   };
 
