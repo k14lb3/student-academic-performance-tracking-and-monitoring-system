@@ -349,8 +349,17 @@ const SubjectProvider = ({ children }) => {
     const userRef = usersRef.doc(user.uid);
     const userArchivedSubjectsRef = userRef.collection('archived_subjects');
     const userArchivedSubjectRef = userArchivedSubjectsRef.doc(code);
+    const userArchivedSubjectStudentsRef = userArchivedSubjectRef.collection(
+      'students'
+    );
     const userArchivedSubject = await userArchivedSubjectRef.get();
-    return userArchivedSubject.data();
+    const userArchivedSubjectsStudents = await userArchivedSubjectStudentsRef.get();
+    return {
+      title : userArchivedSubject.data().title,
+      students: userArchivedSubjectsStudents.docs.map((students) =>
+        students.data()
+      ),
+    };
   };
 
   useEffect(() => {
