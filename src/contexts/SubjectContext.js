@@ -322,8 +322,13 @@ const SubjectProvider = ({ children }) => {
   const getSubject = async (code) => {
     const subjectsRef = db.collection('subjects');
     const subjectRef = subjectsRef.doc(code);
+    const subjectStudentsRef = subjectRef.collection('students');
+    const subjectStudents = await subjectStudentsRef.get();
     const subject = await subjectRef.get();
-    return subject.data();
+    return {
+      ...subject.data(),
+      students: subjectStudents.docs.map((student) => student.data()),
+    };
   };
 
   const getArchivedSubjects = async () => {
@@ -355,7 +360,7 @@ const SubjectProvider = ({ children }) => {
     const userArchivedSubject = await userArchivedSubjectRef.get();
     const userArchivedSubjectsStudents = await userArchivedSubjectStudentsRef.get();
     return {
-      title : userArchivedSubject.data().title,
+      title: userArchivedSubject.data().title,
       students: userArchivedSubjectsStudents.docs.map((students) =>
         students.data()
       ),
