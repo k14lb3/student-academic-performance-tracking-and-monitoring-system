@@ -324,7 +324,7 @@ const SubjectProvider = ({ children }) => {
     const subjectRef = subjectsRef.doc(code);
     const subject = await subjectRef.get();
     return subject.data();
- };
+  };
 
   const getArchivedSubjects = async () => {
     const userSubjectsRef = db
@@ -342,6 +342,15 @@ const SubjectProvider = ({ children }) => {
       type: ACTIONS.SET_SUBJECTS,
       payload: { subjects: archivedSubjects },
     });
+  };
+
+  const getArchivedSubject = async (code) => {
+    const usersRef = db.collection('accounts');
+    const userRef = usersRef.doc(user.uid);
+    const userArchivedSubjectsRef = userRef.collection('archived_subjects');
+    const userArchivedSubjectRef = userArchivedSubjectsRef.doc(code);
+    const userArchivedSubject = await userArchivedSubjectRef.get();
+    return userArchivedSubject.data();
   };
 
   useEffect(() => {
@@ -373,6 +382,7 @@ const SubjectProvider = ({ children }) => {
     getSubjects,
     getSubject,
     getArchivedSubjects,
+    getArchivedSubject,
     createSubject,
     joinSubject,
     archiveSubject,
