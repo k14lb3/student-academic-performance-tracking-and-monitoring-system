@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { v4 as uuid } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useSubject } from 'contexts/SubjectContext';
+import Select from 'components/Select';
 import Loader from 'components/Loader';
 
 const Subject = ({ code }) => {
@@ -17,7 +19,7 @@ const Subject = ({ code }) => {
       setSubject(subject);
     };
     fetchSubject();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -41,6 +43,19 @@ const Subject = ({ code }) => {
               <FontAwesomeIcon icon={faArrowLeft} />
             </div>
             <h2 className="text-2xl xs:text-lg">{subject.title}</h2>
+          </div>
+          <div>
+            {subject.students.length > 0 ? (
+              <Select>
+                {subject.students.map((student) => (
+                  <option key={uuid()} value={student.name}>
+                    {student.name}
+                  </option>
+                ))}
+              </Select>
+            ) : (
+              <div className="text-xl text-center">No students</div>
+            )}
           </div>
         </>
       )}
