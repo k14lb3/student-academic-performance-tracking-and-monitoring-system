@@ -12,10 +12,8 @@ import ArchivedSubjectModal from './Modal/ArchivedSubjectModal';
 const ArchivedSubjects = ({ setToDelete, setDeleteModal }) => {
   const history = useHistory();
   const { userInfo } = useUser();
-  const { getArchivedSubjectStudents } = useSubject();
   const { archivedSubjects, getArchivedSubjects } = useSubject();
-  const [students, setStudents] = useState();
-  const [modal, setModal] = useState('');
+  const [code, setCode] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -29,24 +27,10 @@ const ArchivedSubjects = ({ setToDelete, setDeleteModal }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo]);
 
-  useEffect(() => {
-    if (modal) {
-      const fetchStudents = async () => {
-        setStudents(await getArchivedSubjectStudents(modal.code));
-      };
-      fetchStudents();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modal]);
-
   return (
     <>
-      {modal && (
-        <ArchivedSubjectModal
-          title={modal?.title}
-          studentsState={{ students: students, setStudents: setStudents }}
-          setModal={setModal}
-        />
+      {code && (
+        <ArchivedSubjectModal codeState={{ code: code, setCode: setCode }} />
       )}
       <div className="flex items-center mb-5 xs:mb-3">
         <div
@@ -85,7 +69,7 @@ const ArchivedSubjects = ({ setToDelete, setDeleteModal }) => {
                 setToDelete({ archived, code });
                 setDeleteModal(true);
               }}
-              openSubject={setModal}
+              openSubject={setCode}
             />
           ))}
         </>

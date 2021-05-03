@@ -79,10 +79,8 @@ const SubjectItem = ({
             <Button
               className={`${archived ? '' : 'ml-5'} flex-grow`}
               onClick={() => {
-                if (archived) {
-                  openSubject({ code, title });
-                } else {
-                  openSubject(code);
+                openSubject(code);
+                if (!archived) {
                   history.push(`subjects/${code}`);
                 }
               }}
