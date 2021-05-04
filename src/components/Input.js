@@ -8,7 +8,7 @@ const Input = (
     <input
       ref={ref}
       className={`bg-gray-50 px-3 py-2 text-black xs:text-xs border border-gray-50 focus:border-black rounded${
-        ` ${className}` || ''
+        className ? className : ''
       }`}
       defaultValue={defaultValue}
       type={type}
