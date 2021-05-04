@@ -64,9 +64,9 @@ const DeleteAccount = () => {
         />
       )}
       {confirmPassword ? (
-        <div className="p-5 xs:p-3 mb-5 xs:mb-3 border border-orange-500 rounded">
+        <div className="p-5 xs:p-3 mb-5 xs:mb-3 border border-orange-500 rounded xs:text-sm">
           <div className="mb-5 pb-5 border-b border-orange">
-            <h3 className="text-xl">Confirm your password</h3>
+            <h3 className="text-xl xs:text-base">Confirm your password</h3>
           </div>
           <p className="mb-5 xs:mb-3">
             Complete the deletion of your account by entering the password
@@ -82,15 +82,15 @@ const DeleteAccount = () => {
           {error && <Error error={error} />}
         </div>
       ) : (
-        <div className="p-5 xs:p-3 mb-5 xs:mb-3 border border-orange-500 rounded">
-          <div className="mb-5 pb-5 border-b border-orange">
-            <h3 className="text-xl">This will delete your account</h3>
+        <div className="p-5 xs:p-3 mb-5 xs:mb-3 border border-orange-500 rounded xs:text-sm">
+          <div className="mb-5 xs:mb-3 pb-5 xs:pb-3 border-b border-orange">
+            <h3 className="text-xl xs:text-base">This will delete your account</h3>
           </div>
           <p className="mb-5 xs:mb-3 ml-5 xs:ml-3">
             You’re about to start the process of deleting your account.
           </p>
-          <div className="mb-5 pb-5 border-b border-orange">
-            <h3 className="text-xl">What else you should know</h3>
+          <div className="mb-5 xs:mb-3 pb-5 xs:pb-3 border-b border-orange">
+            <h3 className="text-xl xs:text-base">What else you should know</h3>
           </div>
           <ul className="ml-5 list-disc">
             <li>You cannot restore your account.</li>
