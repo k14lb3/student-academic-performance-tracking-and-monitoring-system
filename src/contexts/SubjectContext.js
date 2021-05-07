@@ -35,7 +35,7 @@ const subjectsReducer = (subjects, action) => {
 const SubjectProvider = ({ children }) => {
   const { user } = useAuth();
   const { userInfo } = useUser();
-  const [subjects, subjectsDispatch] = useReducer(subjectsReducer, []);
+  const [subjects, subjectsDispatch] = useReducer(subjectsReducer);
   const [archivedSubjects, archivedSubjectsDispatch] = useReducer(
     subjectsReducer,
     []
@@ -385,22 +385,12 @@ const SubjectProvider = ({ children }) => {
     }
   }, [user]);
 
-  useEffect(() => {
-    if (subjects) {
-      subjects.sort((a, b) => {
-        const sA = a.title.toLowerCase();
-        const sB = b.title.toLowerCase();
-        if (sA < sB) {
-          return -1;
-        }
-        if (sA > sB) {
-          return 1;
-        }
-        return 0;
-      });
-    } else {
-    }
-  }, [subjects]);
+  const updateTitle = async (code, title) => {
+    const subjectsRef = db.collection('subjects');
+    const subjectRef = subjectsRef.doc(code);
+    subjectRef.update({ title: title });
+    console.log('hi');
+  };
 
   const value = {
     subjects,
@@ -413,6 +403,7 @@ const SubjectProvider = ({ children }) => {
     joinSubject,
     archiveSubject,
     deleteSubject,
+    updateTitle,
   };
 
   return (
