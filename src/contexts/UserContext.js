@@ -48,7 +48,7 @@ const UserProvider = ({ children }) => {
 
   const hasSubjects = async () => {
     const userSubjectsRef = db
-      .collection('accounts')
+      .collection('users')
       .doc(user.uid)
       .collection('subjects');
 
@@ -58,7 +58,7 @@ const UserProvider = ({ children }) => {
   };
 
   const updateType = async (type) => {
-    const userRef = db.collection('accounts').doc(user.uid);
+    const userRef = db.collection('users').doc(user.uid);
     await userRef.set({
       ...userInfo,
       type: type,
@@ -67,7 +67,7 @@ const UserProvider = ({ children }) => {
   };
 
   const updateName = async (firstName, lastName, middleName) => {
-    const userRef = db.collection('accounts').doc(user.uid);
+    const userRef = db.collection('users').doc(user.uid);
     await userRef.set({
       ...userInfo,
       firstName: firstName,
@@ -85,7 +85,7 @@ const UserProvider = ({ children }) => {
   };
 
   const updateGender = (gender) => {
-    const userRef = db.collection('accounts').doc(user.uid);
+    const userRef = db.collection('users').doc(user.uid);
     return userRef.set({
       ...userInfo,
       gender: gender,
@@ -95,11 +95,12 @@ const UserProvider = ({ children }) => {
   useEffect(() => {
     if (user) {
       const getUserInfo = async () => {
-        const accountRef = db.collection('accounts').doc(user.uid);
-        const account = await accountRef.get();
+        const usersRef = db.collection('users');
+        const userRef = usersRef.doc(user.uid);
+        const currentUser = await userRef.get();
         userInfoDispatch({
           type: ACTIONS.SET_INFO,
-          payload: { data: account.data() },
+          payload: { data: currentUser.data() },
         });
       };
 
