@@ -66,7 +66,7 @@ const SubjectProvider = ({ children }) => {
     const code = await generateCode();
 
     await db
-      .collection('accounts')
+      .collection('users')
       .doc(user.uid)
       .collection('subjects')
       .doc(code)
@@ -111,7 +111,7 @@ const SubjectProvider = ({ children }) => {
     }
 
     await db
-      .collection('accounts')
+      .collection('users')
       .doc(user.uid)
       .collection('subjects')
       .doc(code)
@@ -145,7 +145,7 @@ const SubjectProvider = ({ children }) => {
   };
 
   const archiveSubject = async (code) => {
-    const usersRef = db.collection('accounts');
+    const usersRef = db.collection('users');
 
     const userRef = usersRef.doc(user.uid);
 
@@ -232,7 +232,7 @@ const SubjectProvider = ({ children }) => {
   const deleteSubject = async ({ archived, code }) => {
     if (archived) {
       await db
-        .collection('accounts')
+        .collection('users')
         .doc(user.uid)
         .collection('archived_subjects')
         .doc(code)
@@ -244,7 +244,7 @@ const SubjectProvider = ({ children }) => {
       });
     } else {
       await db
-        .collection('accounts')
+        .collection('users')
         .doc(user.uid)
         .collection('subjects')
         .doc(code)
@@ -268,23 +268,19 @@ const SubjectProvider = ({ children }) => {
   };
 
   const getSubjects = async () => {
-    const userSubjectsRef = db
-      .collection('accounts')
-      .doc(user.uid)
-      .collection('subjects');
-    const userSubjectsCol = await userSubjectsRef.get();
-
-    const userSubjects = userSubjectsCol.docs.map((doc) => doc.id);
+    const usersRef = db.collection('users');
+    const userRef = usersRef.doc(user.uid);
+    const userSubjectsRef = userRef.collection('subjects');
+    const userSubjectsSnapshot = await userSubjectsRef.get();
+    const userSubjects = userSubjectsSnapshot.docs.map((doc) => doc.id);
 
     const subjectsRef = db.collection('subjects');
-    const subjectsCol = await subjectsRef.get();
-
-    const joinedSubjects = subjectsCol.docs.filter((doc) =>
+    const subjectsSnapshot = await subjectsRef.get();
+    const joinedSubjects = subjectsSnapshot.docs.filter((doc) =>
       userSubjects.includes(doc.id)
     );
-
+    
     let subjects;
-
     if (userInfo.type === 'Instructor') {
       subjects = joinedSubjects.map((subject) => ({
         code: subject.id,
@@ -324,7 +320,7 @@ const SubjectProvider = ({ children }) => {
     const subjectRef = subjectsRef.doc(code);
     const subjectStudentsRef = subjectRef.collection('students');
     const subjectStudents = await subjectStudentsRef.get();
-    const usersRef = db.collection('accounts');
+    const usersRef = db.collection('users');
     const students = subjectStudents.docs.map(async (student) => {
       const userRef = usersRef.doc(student.id);
       const user = await userRef.get();
@@ -345,7 +341,7 @@ const SubjectProvider = ({ children }) => {
 
   const getArchivedSubjects = async () => {
     const userSubjectsRef = db
-      .collection('accounts')
+      .collection('users')
       .doc(user.uid)
       .collection('archived_subjects');
     const userSubjectsCol = await userSubjectsRef.get();
@@ -362,7 +358,7 @@ const SubjectProvider = ({ children }) => {
   };
 
   const getArchivedSubject = async (code) => {
-    const usersRef = db.collection('accounts');
+    const usersRef = db.collection('users');
     const userRef = usersRef.doc(user.uid);
     const userArchivedSubjectsRef = userRef.collection('archived_subjects');
     const userArchivedSubjectRef = userArchivedSubjectsRef.doc(code);
