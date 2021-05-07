@@ -47,14 +47,11 @@ const UserProvider = ({ children }) => {
   const [userInfo, userInfoDispatch] = useReducer(userInfoReducer, null);
 
   const hasSubjects = async () => {
-    const userSubjectsRef = db
-      .collection('users')
-      .doc(user.uid)
-      .collection('subjects');
-
-    const subjectsCol = await userSubjectsRef.get();
-
-    return subjectsCol.docs.length > 0;
+    const usersRef = db.collection('users');
+    const userRef = usersRef.doc(user.uid);
+    const userSubjectsRef = userRef.collection('subjects');
+    const subjects = await userSubjectsRef.get();
+    return subjects.docs.length > 0;
   };
 
   const updateType = async (type) => {
