@@ -47,8 +47,8 @@ const AuthProvider = ({ children }) => {
 
       const user = register.user;
 
-      const accountsRef = db.collection('accounts');
-      await accountsRef.doc(user.uid).set({
+      const usersRef = db.collection('users');
+      await usersRef.doc(user.uid).set({
         type: type,
         firstName: firstName,
         lastName: lastName,
@@ -64,14 +64,14 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  const deleteAccount = async (type, password) => {
+  const deleteUser = async (type, password) => {
     try {
       await reauthenticateWithCredential(password);
     } catch (err) {
       throw new Error('The password you entered was incorrect.');
     }
 
-    const usersRef = db.collection('accounts');
+    const usersRef = db.collection('users');
 
     const userRef = usersRef.doc(user.uid);
 
@@ -193,7 +193,7 @@ const AuthProvider = ({ children }) => {
   const value = {
     user,
     register,
-    deleteAccount,
+    deleteUser,
     signIn,
     signOut,
     reauthenticateWithCredential,
