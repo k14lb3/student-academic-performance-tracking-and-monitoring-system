@@ -55,9 +55,9 @@ const UserProvider = ({ children }) => {
   };
 
   const updateType = async (type) => {
-    const userRef = db.collection('users').doc(user.uid);
-    await userRef.set({
-      ...userInfo,
+    const usersRef = db.collection('users');
+    const userRef = usersRef.doc(user.uid);
+    await userRef.update({
       type: type,
     });
     userInfoDispatch({ type: ACTIONS.UPDATE_TYPE, payload: { type: type } });
