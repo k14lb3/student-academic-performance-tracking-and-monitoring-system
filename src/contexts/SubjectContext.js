@@ -30,9 +30,8 @@ const subjectsReducer = (subjects, action) => {
 };
 
 const generateCode = async () => {
-
-const characters =
-  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+  const characters =
+    '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
   let code, duplicate;
   do {
@@ -66,24 +65,21 @@ const SubjectProvider = ({ children }) => {
 
   const createSubject = async (title) => {
     const code = await generateCode();
+    const usersRef = db.collection('users');
+    const userRef = usersRef.doc(user.uid);
+    const userSubjectsRef = userRef.collection('subjects');
+    const userSubjectRef = userSubjectsRef.doc(code);
+    await userSubjectRef.set({});
 
-    await db
-      .collection('users')
-      .doc(user.uid)
-      .collection('subjects')
-      .doc(code)
-      .set({});
-
-    await db
-      .collection('subjects')
-      .doc(code)
-      .set({
-        title: title,
-        instructor: `${userInfo.lastName}, ${userInfo.firstName}${
-          userInfo.middleName && ` ${userInfo.middleName[0]}.`
-        }`,
-        students: 0,
-      });
+    const subjectsRef = db.collection('subjects');
+    const subjectRef = subjectsRef.doc(code);
+    await subjectRef.set({
+      title: title,
+      instructor: `${userInfo.lastName}, ${userInfo.firstName}${
+        userInfo.middleName && ` ${userInfo.middleName[0]}.`
+      }`,
+      students: 0,
+    });
 
     subjectsDispatch({
       type: ACTIONS.ADD_SUBJECT,
