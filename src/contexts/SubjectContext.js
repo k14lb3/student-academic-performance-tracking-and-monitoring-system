@@ -32,6 +32,13 @@ const subjectsReducer = (subjects, action) => {
   }
 };
 
+const doesSubjectExists = async (code) => {
+  const subjectsRef = db.collection('subjects');
+  const subjectRef = subjectsRef.doc(code);
+  const subject = await subjectRef.get();
+  return subject.exists;
+};
+
 const SubjectProvider = ({ children }) => {
   const { user } = useAuth();
   const { userInfo } = useUser();
@@ -40,12 +47,6 @@ const SubjectProvider = ({ children }) => {
     subjectsReducer,
     []
   );
-
-  const doesExist = async (code) => {
-    const subjectRef = db.collection('subjects').doc(code);
-    const subject = await subjectRef.get();
-    return subject.exists;
-  };
 
   const createSubject = async (title) => {
     const generateCode = async () => {
@@ -57,7 +58,7 @@ const SubjectProvider = ({ children }) => {
           code += characters[Math.floor(Math.random() * characters.length)];
         }
 
-        duplicate = await doesExist(code);
+        duplicate = await doesSubjectExists(code);
       } while (duplicate);
 
       return code;
@@ -106,7 +107,7 @@ const SubjectProvider = ({ children }) => {
       throw new Error('You are already in the class with that key.');
     }
 
-    if (!(await doesExist(code))) {
+    if (!(await doesSubjectExists(code))) {
       throw new Error('Subject with that code does not exist.');
     }
 
@@ -279,7 +280,7 @@ const SubjectProvider = ({ children }) => {
     const joinedSubjects = subjectsSnapshot.docs.filter((doc) =>
       userSubjects.includes(doc.id)
     );
-    
+
     let subjects;
     if (userInfo.type === 'Instructor') {
       subjects = joinedSubjects.map((subject) => ({
