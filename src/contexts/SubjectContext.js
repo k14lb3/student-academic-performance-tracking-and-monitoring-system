@@ -32,6 +32,21 @@ const subjectsReducer = (subjects, action) => {
   }
 };
 
+const generateCode = async () => {
+  let code, duplicate;
+  do {
+    code = '';
+
+    for (let i = 0; i < 7; i++) {
+      code += characters[Math.floor(Math.random() * characters.length)];
+    }
+
+    duplicate = await doesSubjectExists(code);
+  } while (duplicate);
+
+  return code;
+};
+
 const doesSubjectExists = async (code) => {
   const subjectsRef = db.collection('subjects');
   const subjectRef = subjectsRef.doc(code);
@@ -49,21 +64,6 @@ const SubjectProvider = ({ children }) => {
   );
 
   const createSubject = async (title) => {
-    const generateCode = async () => {
-      let code, duplicate;
-      do {
-        code = '';
-
-        for (let i = 0; i < 7; i++) {
-          code += characters[Math.floor(Math.random() * characters.length)];
-        }
-
-        duplicate = await doesSubjectExists(code);
-      } while (duplicate);
-
-      return code;
-    };
-
     const code = await generateCode();
 
     await db
