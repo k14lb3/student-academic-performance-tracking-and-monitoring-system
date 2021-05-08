@@ -50,8 +50,8 @@ const UserProvider = ({ children }) => {
     const usersRef = db.collection('users');
     const userRef = usersRef.doc(user.uid);
     const userSubjectsRef = userRef.collection('subjects');
-    const subjects = await userSubjectsRef.get();
-    return subjects.docs.length > 0;
+    const subjectsSnapshot = await userSubjectsRef.get();
+    return subjectsSnapshot.docs.length > 0;
   };
 
   const updateType = async (type) => {
