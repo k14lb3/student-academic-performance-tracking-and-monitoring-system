@@ -221,28 +221,22 @@ const SubjectProvider = ({ children }) => {
   };
 
   const deleteSubject = async ({ archived, code }) => {
-    if (archived) {
-      await db
-        .collection('users')
-        .doc(user.uid)
-        .collection('archived_subjects')
-        .doc(code)
-        .delete();
+    const usersRef = db.collection('users');
+    const userRef = usersRef.doc(user.uid);
 
+    if (archived) {
+      const userArchivedSubjectsRef = userRef.collection('archived_subjects');
+      await userArchivedSubjectsRef.doc(code).delete();
       archivedSubjectsDispatch({
         type: ACTIONS.DELETE_SUBJECT,
         payload: { code: code },
       });
     } else {
-      await db
-        .collection('users')
-        .doc(user.uid)
-        .collection('subjects')
-        .doc(code)
-        .delete();
+      const userSubjectsRef = userRef.collection('subjects');
+      const userSubjectRef = userSubjectsRef.doc(code);
+      await userSubjectRef.delete();
 
       const subjectRef = db.collection('subjects').doc(code);
-
       if (userInfo.type === 'Instructor') {
         await subjectRef.delete();
       } else {
