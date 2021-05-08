@@ -7,9 +7,6 @@ const SubjectContext = createContext();
 
 export const useSubject = () => useContext(SubjectContext);
 
-const characters =
-  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-
 export const ACTIONS = {
   RESET_SUBJECTS: 'reset_subjects',
   SET_SUBJECTS: 'set_subjects',
@@ -33,6 +30,10 @@ const subjectsReducer = (subjects, action) => {
 };
 
 const generateCode = async () => {
+
+const characters =
+  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
   let code, duplicate;
   do {
     code = '';
