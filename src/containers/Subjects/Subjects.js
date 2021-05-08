@@ -109,7 +109,7 @@ const Subjects = () => {
                           setDeleteModal(true);
                         }}
                         openSubject={(code) => {
-                          setOpenSubjectCode(code)
+                          setOpenSubjectCode(code);
                         }}
                       />
                     );
@@ -127,7 +127,7 @@ const Subjects = () => {
               )}
             />
             <Route
-            exact
+              exact
               path={`/subjects/${openSubjectCode}`}
               render={() => <Subject code={openSubjectCode} />}
             />
