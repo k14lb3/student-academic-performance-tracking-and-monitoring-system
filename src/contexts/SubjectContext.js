@@ -108,19 +108,19 @@ const SubjectProvider = ({ children }) => {
       throw new Error('Subject with that code does not exist.');
     }
 
-    await db
-      .collection('users')
-      .doc(user.uid)
-      .collection('subjects')
-      .doc(code)
-      .set({});
+    const usersRef = db.collection('users');
+    const userRef = usersRef.doc(user.uid);
+    const userSubjectsRef = userRef.collection('subjects');
+    const userSubjectRef = userSubjectsRef.doc(code);
+    await userSubjectRef.set({});
 
-    const subjectRef = db.collection('subjects').doc(code);
-
-    await subjectRef.collection('students').doc(user.uid).set({ grade: '' });
+    const subjectsRef = db.collection('subjects')
+    const subjectRef = subjectsRef.doc(code);
+    const subjectStudentsRef = subjectRef.collection('students')
+    const subjectStudentRef = subjectStudentsRef.doc(user.uid)
+    await subjectStudentRef.set({ grade: '' });
 
     const subject = await subjectRef.get();
-
     const { instructor, title, students } = subject.data();
 
     await subjectRef.set({
