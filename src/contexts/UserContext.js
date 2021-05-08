@@ -50,8 +50,8 @@ const UserProvider = ({ children }) => {
     const usersRef = db.collection('users');
     const userRef = usersRef.doc(user.uid);
     const userSubjectsRef = userRef.collection('subjects');
-    const subjectsSnapshot = await userSubjectsRef.get();
-    return subjectsSnapshot.docs.length > 0;
+    const subjects = await userSubjectsRef.get();
+    return subjects.docs.length > 0;
   };
 
   const updateType = async (type) => {
@@ -98,10 +98,10 @@ const UserProvider = ({ children }) => {
       const getUserInfo = async () => {
         const usersRef = db.collection('users');
         const userRef = usersRef.doc(user.uid);
-        const userSnapshot = await userRef.get();
+        const currentUser = await userRef.get();
         userInfoDispatch({
           type: ACTIONS.SET_INFO,
-          payload: { data: userSnapshot.data() },
+          payload: { data: currentUser.data() },
         });
       };
 
