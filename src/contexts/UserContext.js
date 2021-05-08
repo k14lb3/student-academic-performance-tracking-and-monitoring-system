@@ -81,12 +81,15 @@ const UserProvider = ({ children }) => {
     });
   };
 
-  const updateGender = (gender) => {
+  const updateGender = async (gender) => {
     const usersRef = db.collection('users');
     const userRef = usersRef.doc(user.uid);
-    return userRef.set({
-      ...userInfo,
+    await userRef.update({
       gender: gender,
+    });
+    userInfoDispatch({
+      type: ACTIONS.UPDATE_GENDER,
+      payload: { gender: gender },
     });
   };
 

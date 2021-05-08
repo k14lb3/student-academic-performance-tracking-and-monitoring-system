@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
-import { useUser, ACTIONS } from 'contexts/UserContext';
+import { useUser } from 'contexts/UserContext';
 import Loader from 'components/Loader';
 import Button from 'components/Button/Button';
 import Label from 'components/Label';
 import Select from 'components/Select';
 
 const Gender = ({ setPopup }) => {
-  const { userInfo, userInfoDispatch, updateGender } = useUser();
+  const { userInfo, updateGender } = useUser();
   const genderRef = useRef();
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
@@ -29,13 +29,8 @@ const Gender = ({ setPopup }) => {
 
     if (updateButton) {
       const gender = genderRef.current.value;
-
       setUpdating(true);
       await updateGender(gender);
-      userInfoDispatch({
-        type: ACTIONS.UPDATE_GENDER,
-        payload: { gender: gender },
-      });
       setPopup({ up: true, message: 'Gender updated' });
       setUpdating(false);
       setUpdateButton(false);
