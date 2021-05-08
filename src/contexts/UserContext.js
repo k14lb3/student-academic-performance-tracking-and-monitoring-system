@@ -82,7 +82,8 @@ const UserProvider = ({ children }) => {
   };
 
   const updateGender = (gender) => {
-    const userRef = db.collection('users').doc(user.uid);
+    const usersRef = db.collection('users');
+    const userRef = usersRef.doc(user.uid);
     return userRef.set({
       ...userInfo,
       gender: gender,
