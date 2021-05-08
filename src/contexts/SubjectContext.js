@@ -114,10 +114,10 @@ const SubjectProvider = ({ children }) => {
     const userSubjectRef = userSubjectsRef.doc(code);
     await userSubjectRef.set({});
 
-    const subjectsRef = db.collection('subjects')
+    const subjectsRef = db.collection('subjects');
     const subjectRef = subjectsRef.doc(code);
-    const subjectStudentsRef = subjectRef.collection('students')
-    const subjectStudentRef = subjectStudentsRef.doc(user.uid)
+    const subjectStudentsRef = subjectRef.collection('students');
+    const subjectStudentRef = subjectStudentsRef.doc(user.uid);
     await subjectStudentRef.set({ grade: '' });
 
     const subject = await subjectRef.get();
@@ -144,20 +144,17 @@ const SubjectProvider = ({ children }) => {
 
   const archiveSubject = async (code) => {
     const usersRef = db.collection('users');
-
     const userRef = usersRef.doc(user.uid);
 
-    const subjectRef = db.collection('subjects').doc(code);
+    const subjectsRef = db.collection('subjects');
+    const subjectRef = subjectsRef.doc(code);
+    const subjectSnapshot = await subjectRef.get();
+    const { title, instructor, students } = subjectSnapshot.data();
 
-    const subject = await subjectRef.get();
-
-    const { title, instructor, students } = subject.data();
-
-    const userInstructorArchivedSubjectsRef = userRef.collection(
+    const userArchivedSubjectsRef_instructor = userRef.collection(
       'archived_subjects'
     );
-
-    const userInstructorArchivedSubjectRef = await userInstructorArchivedSubjectsRef.add(
+    const userArchivedSubjectRef_instructor = await userArchivedSubjectsRef_instructor.add(
       {
         type: 'Instructor',
         title: title,
@@ -166,55 +163,51 @@ const SubjectProvider = ({ children }) => {
     );
 
     const archive = async (id, grade) => {
-      const userStudentRef = usersRef.doc(id);
-
-      const userStudent = await userStudentRef.get();
-
-      const { firstName, lastName, middleName } = userStudent.data();
+      const userRef_student = usersRef.doc(id);
+      const user_studentSnapshot = await userRef_student.get();
+      const { firstName, lastName, middleName } = user_studentSnapshot.data();
 
       const name = `${lastName}, ${firstName} ${middleName}`;
 
       const finalGrade = grade || 'inc';
 
-      const userStudentArchivedSubjectRef = userStudentRef.collection(
+      const userArchivedSubjectRef_student = userRef_student.collection(
         'archived_subjects'
       );
-
-      await userStudentArchivedSubjectRef.add({
+      await userArchivedSubjectRef_student.add({
         type: 'Student',
         title: title,
         instructor: instructor,
         grade: finalGrade,
       });
 
-      const userInstructorArchivedSubjectStudentsRef = userInstructorArchivedSubjectsRef
-        .doc(userInstructorArchivedSubjectRef.id)
+      const userArchivedSubjectStudentsRef_instructor = userArchivedSubjectsRef_instructor
+        .doc(userArchivedSubjectRef_instructor.id)
         .collection('students');
 
-      userInstructorArchivedSubjectStudentsRef.doc(id).set({
+      userArchivedSubjectStudentsRef_instructor.doc(id).set({
         name: name,
         grade: finalGrade,
       });
 
-      const userSubjectRef = userStudentRef.collection('subjects').doc(code);
+      const userSubjectRef_student = userRef_student
+        .collection('subjects')
+        .doc(code);
+      await userSubjectRef_student.delete();
 
-      await userSubjectRef.delete();
-
-      const subjectStudentRef = subjectRef.collection('students').doc(id);
-
+      const subjectStudentsRef = subjectRef.collection('students');
+      const subjectStudentRef = subjectStudentsRef.doc(id);
       await subjectStudentRef.delete();
     };
 
-    const studentsRef = subjectRef.collection('students');
-
-    const studentsCol = await studentsRef.get();
-
-    studentsCol.forEach(async (student) => {
+    const subjectStudentsRef = subjectRef.collection('students');
+    const subjectStudentsSnapshot = await subjectStudentsRef.get();
+    subjectStudentsSnapshot.forEach(async (student) => {
       await archive(student.id, student.data().grade);
     });
 
-    const userSubjectRef = userRef.collection('subjects').doc(code);
-
+    const userSubjectsRef = userRef.collection('subjects');
+    const userSubjectRef = userSubjectsRef.doc(code);
     await userSubjectRef.delete();
 
     await subjectRef.delete();
@@ -223,7 +216,7 @@ const SubjectProvider = ({ children }) => {
 
     archivedSubjectsDispatch({
       type: ACTIONS.ADD_SUBJECT,
-      payload: { subject: subject.data() },
+      payload: { subject: subjectSnapshot.data() },
     });
   };
 
