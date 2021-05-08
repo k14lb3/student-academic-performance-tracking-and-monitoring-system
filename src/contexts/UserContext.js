@@ -98,10 +98,10 @@ const UserProvider = ({ children }) => {
       const getUserInfo = async () => {
         const usersRef = db.collection('users');
         const userRef = usersRef.doc(user.uid);
-        const currentUser = await userRef.get();
+        const userSnapshot = await userRef.get();
         userInfoDispatch({
           type: ACTIONS.SET_INFO,
-          payload: { data: currentUser.data() },
+          payload: { data: userSnapshot.data() },
         });
       };
 
