@@ -64,9 +64,9 @@ const UserProvider = ({ children }) => {
   };
 
   const updateName = async (firstName, lastName, middleName) => {
-    const userRef = db.collection('users').doc(user.uid);
-    await userRef.set({
-      ...userInfo,
+    const usersRef = db.collection('users');
+    const userRef = usersRef.doc(user.uid);
+    await userRef.update({
       firstName: firstName,
       middleName: middleName,
       lastName: lastName,
