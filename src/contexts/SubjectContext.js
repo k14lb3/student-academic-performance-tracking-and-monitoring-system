@@ -370,7 +370,6 @@ const SubjectProvider = ({ children }) => {
     const subjectsRef = db.collection('subjects');
     const subjectRef = subjectsRef.doc(code);
     subjectRef.update({ title: title });
-    console.log('hi');
   };
 
   const value = {
