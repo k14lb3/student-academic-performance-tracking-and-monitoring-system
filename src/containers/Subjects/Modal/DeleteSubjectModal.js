@@ -17,7 +17,7 @@ const DeleteSubjectModal = ({ toDelete, setModal }) => {
       if (userInfo.type === 'Instructor') {
         await archiveSubject(code);
       } else {
-        deleteSubject({ code: code });
+        await deleteSubject({ archived: archived, code: code });
       }
     }
     setDeleting(false);
