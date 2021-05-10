@@ -1,6 +1,7 @@
 import React, { useReducer, useEffect, useContext, createContext } from 'react';
 import { db } from 'firebase.js';
 import { useAuth } from './AuthContext';
+import { REF } from 'refs';
 
 const UserContext = createContext();
 
@@ -47,26 +48,21 @@ const UserProvider = ({ children }) => {
   const [userInfo, userInfoDispatch] = useReducer(userInfoReducer, null);
 
   const hasSubjects = async () => {
-    const usersRef = db.collection('users');
-    const userRef = usersRef.doc(user.uid);
-    const userSubjectsRef = userRef.collection('subjects');
-    const subjects = await userSubjectsRef.get();
-    return subjects.docs.length > 0;
+    const subjectsSnapshot = await REF.USER_SUBJECTS({
+      user_uid: user.uid,
+    }).get();
+    return subjectsSnapshot.docs.length > 0;
   };
 
   const updateType = async (type) => {
-    const usersRef = db.collection('users');
-    const userRef = usersRef.doc(user.uid);
-    await userRef.update({
+    await REF.USER({ user_uid: user.uid }).update({
       type: type,
     });
     userInfoDispatch({ type: ACTIONS.UPDATE_TYPE, payload: { type: type } });
   };
 
   const updateName = async (firstName, lastName, middleName) => {
-    const usersRef = db.collection('users');
-    const userRef = usersRef.doc(user.uid);
-    await userRef.update({
+    await REF.USER({ user_uid: user.uid }).update({
       firstName: firstName,
       middleName: middleName,
       lastName: lastName,
@@ -82,9 +78,7 @@ const UserProvider = ({ children }) => {
   };
 
   const updateGender = async (gender) => {
-    const usersRef = db.collection('users');
-    const userRef = usersRef.doc(user.uid);
-    await userRef.update({
+    await REF.USER({ user_uid: user.uid }).update({
       gender: gender,
     });
     userInfoDispatch({
@@ -96,12 +90,10 @@ const UserProvider = ({ children }) => {
   useEffect(() => {
     if (user) {
       const getUserInfo = async () => {
-        const usersRef = db.collection('users');
-        const userRef = usersRef.doc(user.uid);
-        const currentUser = await userRef.get();
+        const userSnapshot = await REF.USER({ user_uid: user.uid }).get();
         userInfoDispatch({
           type: ACTIONS.SET_INFO,
-          payload: { data: currentUser.data() },
+          payload: { data: userSnapshot.data() },
         });
       };
 
