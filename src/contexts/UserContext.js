@@ -1,5 +1,4 @@
 import React, { useReducer, useEffect, useContext, createContext } from 'react';
-import { db } from 'firebase.js';
 import { useAuth } from './AuthContext';
 import { REF } from 'refs';
 
