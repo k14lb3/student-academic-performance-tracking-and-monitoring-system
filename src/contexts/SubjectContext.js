@@ -1,6 +1,5 @@
 import React, { useReducer, useEffect, useContext, createContext } from 'react';
 import { REF } from 'refs';
-import { db } from 'firebase.js';
 import { useAuth } from './AuthContext';
 import { useUser } from './UserContext';
 
@@ -11,23 +10,11 @@ export const useSubject = () => useContext(SubjectContext);
 export const ACTIONS = {
   RESET_SUBJECTS: 'reset_subjects',
   SET_SUBJECTS: 'set_subjects',
+  SET_ARCHIVED_SUBJECTS: 'set_archived_subjects',
   ADD_SUBJECT: 'add_subject',
-  DELETE_SUBJECT: 'delete_subject',
-};
-
-const subjectsReducer = (subjects, action) => {
-  switch (action.type) {
-    case 'reset_subjects':
-      return null;
-    case 'set_subjects':
-      return action.payload.subjects;
-    case 'add_subject':
-      return [...subjects, action.payload.subject];
-    case 'delete_subject':
-      return subjects.filter((subject) => subject.code !== action.payload.code);
-    default:
-      return subjects;
-  }
+  ARCHIVE_SUBJECT: 'archive_subject',
+  DELETE_CURRENT_SUBJECT: 'delete_current_subject',
+  DELETE_ARCHIVED_SUBJECT: 'delete_archived_subject',
 };
 
 const doesSubjectExists = async (code) => {
@@ -53,13 +40,62 @@ const generateCode = async () => {
   return code;
 };
 
+const subjectsInitialState = {
+  current: [],
+  archived: [],
+};
+
+const subjectsReducer = (subjects, action) => {
+  switch (action.type) {
+    case 'reset_subjects':
+      return subjectsInitialState;
+    case 'set_subjects':
+      return {
+        current: action.payload.subjects,
+        archived: [...subjects.archived],
+      };
+    case 'set_archived_subjects':
+      return {
+        current: [...subjects.current],
+        archived: action.payload.subjects,
+      };
+    case 'add_subject':
+      return {
+        current: [...subjects.current, action.payload.subject],
+        archived: [...subjects.archived],
+      };
+    case 'archive_subject':
+      return {
+        current: subjects.current.filter(
+          (subject) => subject.code !== action.payload.code
+        ),
+        archived: [...subjects.archived, action.payload.subject],
+      };
+    case 'delete_current_subject':
+      return {
+        current: subjects.current.filter(
+          (subject) => subject.code !== action.payload.code
+        ),
+        archived: [...subjects.archived],
+      };
+    case 'delete_archived_subject':
+      return {
+        current: [...subjects.current],
+        archived: subjects.archived.filter(
+          (subject) => subject.code !== action.payload.code
+        ),
+      };
+    default:
+      return subjects;
+  }
+};
+
 const SubjectProvider = ({ children }) => {
   const { user } = useAuth();
   const { userInfo } = useUser();
-  const [subjects, subjectsDispatch] = useReducer(subjectsReducer);
-  const [archivedSubjects, archivedSubjectsDispatch] = useReducer(
+  const [subjects, subjectsDispatch] = useReducer(
     subjectsReducer,
-    []
+    subjectsInitialState
   );
 
   const createSubject = async (title) => {
@@ -94,7 +130,7 @@ const SubjectProvider = ({ children }) => {
       );
     }
 
-    if (subjects.some((subject) => subject.code === code)) {
+    if (subjects.current.some((subject) => subject.code === code)) {
       throw new Error('You are already in the class with that key.');
     }
 
@@ -184,11 +220,9 @@ const SubjectProvider = ({ children }) => {
     await REF.USER_SUBJECT({ user_uid: user.uid, subject_code: code }).delete();
     await REF.SUBJECT({ subject_code: code }).delete();
 
-    subjectsDispatch({ type: ACTIONS.DELETE_SUBJECT, payload: { code: code } });
-
-    archivedSubjectsDispatch({
-      type: ACTIONS.ADD_SUBJECT,
-      payload: { subject: subjectSnapshot.data() },
+    subjectsDispatch({
+      type: ACTIONS.ARCHIVE_SUBJECT,
+      payload: { code: code, subject: subjectSnapshot.data() },
     });
   };
 
@@ -198,8 +232,8 @@ const SubjectProvider = ({ children }) => {
         user_uid: user.uid,
         subject_code: code,
       }).delete();
-      archivedSubjectsDispatch({
-        type: ACTIONS.DELETE_SUBJECT,
+      subjectsDispatch({
+        type: ACTIONS.DELETE_ARCHIVED_SUBJECT,
         payload: { code: code },
       });
     } else {
@@ -207,7 +241,6 @@ const SubjectProvider = ({ children }) => {
         user_uid: user.uid,
         subject_code: code,
       }).delete();
-
       if (userInfo.type === 'Instructor') {
         await archiveSubject(code);
         await REF.SUBJECT({ subject_code: code }).delete();
@@ -220,10 +253,12 @@ const SubjectProvider = ({ children }) => {
         await REF.SUBJECT({ subject_code: code }).update({
           students: parseInt(subjectSnapshot.data().students) - 1,
         });
+        subjectsDispatch({
+          type: ACTIONS.DELETE_CURRENT_SUBJECT,
+          payload: { code: code },
+        });
       }
     }
-
-    subjectsDispatch({ type: ACTIONS.DELETE_SUBJECT, payload: { code: code } });
   };
 
   const getSubjects = async () => {
@@ -301,8 +336,8 @@ const SubjectProvider = ({ children }) => {
       ...doc.data(),
     }));
 
-    archivedSubjectsDispatch({
-      type: ACTIONS.SET_SUBJECTS,
+    subjectsDispatch({
+      type: ACTIONS.SET_ARCHIVED_SUBJECTS,
       payload: { subjects: archivedSubjects },
     });
   };
@@ -337,7 +372,6 @@ const SubjectProvider = ({ children }) => {
 
   const value = {
     subjects,
-    archivedSubjects,
     getSubjects,
     getSubject,
     getArchivedSubjects,

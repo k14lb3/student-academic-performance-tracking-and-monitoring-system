@@ -12,7 +12,7 @@ import SubjectItem from './SubjectItem';
 const ArchivedSubjects = ({ setToDelete, deleteSubject }) => {
   const history = useHistory();
   const { userInfo } = useUser();
-  const { archivedSubjects, getArchivedSubjects } = useSubject();
+  const { subjects, getArchivedSubjects } = useSubject();
   const [code, setCode] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -47,7 +47,7 @@ const ArchivedSubjects = ({ setToDelete, deleteSubject }) => {
         <Loader className="mx-auto mt-5" />
       ) : (
         <>
-          {archivedSubjects.map((subject) => (
+          {subjects.archived.map((subject) => (
             <SubjectItem
               key={uuid()}
               archived

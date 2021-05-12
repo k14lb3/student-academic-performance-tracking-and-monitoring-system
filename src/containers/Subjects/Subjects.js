@@ -105,7 +105,7 @@ const Subjects = () => {
                         : 'Join subject'}
                     </Button>
                   </div>
-                  {subjects.map((subject) => {
+                  {subjects.current.map((subject) => {
                     return (
                       <SubjectItem
                         key={uuid()}
