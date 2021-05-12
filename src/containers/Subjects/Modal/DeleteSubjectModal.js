@@ -3,7 +3,7 @@ import { useUser } from 'contexts/UserContext';
 import { useSubject } from 'contexts/SubjectContext';
 import Modal from 'components/Modal';
 
-const DeleteSubjectModal = ({ toDelete, setModal }) => {
+const DeleteSubjectModal = ({ toDelete, closeModal }) => {
   const { userInfo } = useUser();
   const { deleteSubject } = useSubject();
   const [deleting, setDeleting] = useState(false);
@@ -13,7 +13,7 @@ const DeleteSubjectModal = ({ toDelete, setModal }) => {
     setDeleting(true);
     await deleteSubject({ archived: archived, code: code });
     setDeleting(false);
-    setModal(false);
+    closeModal();
   };
   return (
     <Modal
@@ -43,14 +43,14 @@ const DeleteSubjectModal = ({ toDelete, setModal }) => {
           label: 'No',
           onClick: () => {
             if (!deleting) {
-              setModal(false);
+              closeModal();
             }
           },
         },
       }}
       closeModal={() => {
         if (!deleting) {
-          setModal(false);
+          closeModal();
         }
       }}
     />

@@ -13,13 +13,18 @@ import DeleteSubjectModal from './Modal/DeleteSubjectModal';
 import Subject from './Subject/Subject';
 import SubjectItem from './SubjectItem';
 
+const MODAL = {
+  JOIN_SUBJECT: 'join_subject',
+  CREATE_SUBJECT: 'join_subject',
+  DELETE_SUBJECT: 'delete_subject',
+};
+
 const Subjects = () => {
   const { userInfo } = useUser();
   const { subjects, getSubjects } = useSubject();
   const [toDelete, setToDelete] = useState({ archived: false, code: '' });
   const [openSubjectCode, setOpenSubjectCode] = useState('');
-  const [modal, setModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
+  const [modal, setModal] = useState('');
   const [popup, setPopup] = useState({ up: false, message: '' });
   const [loading, setLoading] = useState(true);
   const location = useLocation();
@@ -35,14 +40,31 @@ const Subjects = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo]);
 
+  const showModal = () => {
+    const closeModal = () => {
+      setModal('');
+    };
+
+    switch (modal) {
+      case MODAL.CREATE_SUBJECT:
+        return <CreateSubjectModal closeModal={closeModal} />;
+      case MODAL.JOIN_SUBJECT:
+        return <JoinSubjectModal closeModal={closeModal} />;
+      case MODAL.DELETE_SUBJECT:
+        return (
+          <DeleteSubjectModal toDelete={toDelete} closeModal={closeModal} />
+        );
+      default:
+        return <></>;
+    }
+  };
+
   return (
     <>
       {popup.up && (
         <PopupNotification popupState={{ popup: popup, setPopup: setPopup }} />
       )}
-      {deleteModal && (
-        <DeleteSubjectModal toDelete={toDelete} setModal={setDeleteModal} />
-      )}
+      {modal && showModal()}
       <div className="flex items-center py-5 xs:pt-0 xs:pb-3 border-solid border-b border-orange-500">
         <h1 className="text-5xl xs:text-3xl">Subjects</h1>
       </div>
@@ -60,12 +82,6 @@ const Subjects = () => {
               path="/subjects"
               component={() => (
                 <>
-                  {modal &&
-                    (userInfo.type === 'Instructor' ? (
-                      <CreateSubjectModal setModal={setModal} />
-                    ) : (
-                      <JoinSubjectModal setModal={setModal} />
-                    ))}
                   <div className="flex xxx:flex-col mb-5 justify-between">
                     <Button
                       to="/subjects/archived"
@@ -77,7 +93,11 @@ const Subjects = () => {
                     </Button>
                     <Button
                       onClick={() => {
-                        setModal(true);
+                        setModal(
+                          userInfo.type === 'Instructor'
+                            ? MODAL.CREATE_SUBJECT
+                            : MODAL.JOIN_SUBJECT
+                        );
                       }}
                     >
                       {userInfo.type === 'Instructor'
@@ -106,7 +126,7 @@ const Subjects = () => {
                         title={subject.title}
                         deleteSubject={({ archived, code }) => {
                           setToDelete({ archived, code });
-                          setDeleteModal(true);
+                          setModal(MODAL.DELETE_SUBJECT);
                         }}
                         openSubject={(code) => {
                           setOpenSubjectCode(code);
@@ -122,7 +142,9 @@ const Subjects = () => {
               render={() => (
                 <ArchivedSubjects
                   setToDelete={setToDelete}
-                  setDeleteModal={setDeleteModal}
+                  deleteSubject={() => {
+                    setModal(MODAL.DELETE_SUBJECT);
+                  }}
                 />
               )}
             />

@@ -3,7 +3,7 @@ import { useSubject } from 'contexts/SubjectContext';
 import Modal from 'components/Modal';
 import Input from 'components/Input';
 
-const CreateSubjectModal = ({ setModal }) => {
+const CreateSubjectModal = ({ closeModal }) => {
   const { createSubject } = useSubject();
   const titleRef = useRef();
   const [creating, setCreating] = useState(false);
@@ -12,7 +12,7 @@ const CreateSubjectModal = ({ setModal }) => {
     setCreating(true);
     await createSubject(titleRef.current.value.trim());
     setCreating(false);
-    setModal(false);
+    closeModal()
   };
 
   return (
@@ -33,7 +33,7 @@ const CreateSubjectModal = ({ setModal }) => {
       }}
       closeModal={() => {
         if (!creating) {
-          setModal(false);
+          closeModal()
         }
       }}
     >

@@ -4,7 +4,7 @@ import Modal from 'components/Modal';
 import Input from 'components/Input';
 import Error from 'components/Error';
 
-const JoinSubjectModal = ({ setModal }) => {
+const JoinSubjectModal = ({ closeModal }) => {
   const { joinSubject } = useSubject();
   const codeRef = useRef();
   const [joining, setJoining] = useState(false);
@@ -17,7 +17,7 @@ const JoinSubjectModal = ({ setModal }) => {
       setJoining(true);
       await joinSubject(codeRef.current.value.trim());
       setJoining(false);
-      setModal(false);
+      closeModal();
     } catch (err) {
       setError(err.message);
       setJoining(false);
@@ -42,7 +42,7 @@ const JoinSubjectModal = ({ setModal }) => {
       }}
       closeModal={() => {
         if (!joining) {
-          setModal(false);
+          closeModal();
         }
       }}
     >
