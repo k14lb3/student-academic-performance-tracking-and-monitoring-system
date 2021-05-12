@@ -15,7 +15,7 @@ import SubjectItem from './SubjectItem';
 
 const MODAL = {
   JOIN_SUBJECT: 'join_subject',
-  CREATE_SUBJECT: 'join_subject',
+  CREATE_SUBJECT: 'create_subject',
   DELETE_SUBJECT: 'delete_subject',
 };
 
