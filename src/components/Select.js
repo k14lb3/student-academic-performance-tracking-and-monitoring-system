@@ -1,6 +1,9 @@
 import { forwardRef } from 'react';
 
-const Select = ({ className, defaultValue, onChange, children }, ref) => {
+const Select = (
+  { className, defaultValue, value, onChange, children },
+  ref
+) => {
   return (
     <select
       ref={ref}
@@ -8,6 +11,7 @@ const Select = ({ className, defaultValue, onChange, children }, ref) => {
         className ? className : ''
       }`}
       defaultValue={defaultValue}
+      value={value}
       onChange={onChange}
     >
       {children}
