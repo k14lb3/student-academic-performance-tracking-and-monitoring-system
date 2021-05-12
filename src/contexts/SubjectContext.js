@@ -30,6 +30,11 @@ const subjectsReducer = (subjects, action) => {
   }
 };
 
+const doesSubjectExists = async (code) => {
+  const subjectSnapshot = await REF.SUBJECT({ subject_code: code }).get();
+  return subjectSnapshot.exists;
+};
+
 const generateCode = async () => {
   const characters =
     '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -46,11 +51,6 @@ const generateCode = async () => {
   } while (duplicate);
 
   return code;
-};
-
-const doesSubjectExists = async (code) => {
-  const subjectSnapshot = await REF.SUBJECT({ subject_code: code }).get();
-  return subjectSnapshot.exists;
 };
 
 const SubjectProvider = ({ children }) => {
