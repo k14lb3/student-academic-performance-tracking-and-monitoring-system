@@ -92,7 +92,7 @@ const Subject = ({ code }) => {
                   <Label>Lectures Attended</Label>
                   <div className="flex">
                     <Input className="w-14 text-center" />
-                    <div className="flex items-center ml-3 text-lg">/ 50</div>
+                    <div className="flex items-center ml-3 text-lg">/ {subject.lectures}</div>
                   </div>
                 </div>
               </div>
