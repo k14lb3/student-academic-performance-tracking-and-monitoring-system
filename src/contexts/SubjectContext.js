@@ -109,6 +109,7 @@ const SubjectProvider = ({ children }) => {
         userInfo.middleName && ` ${userInfo.middleName[0]}.`
       }`,
       students: 0,
+      lectures: 40,
     });
 
     subjectsDispatch({
@@ -143,15 +144,13 @@ const SubjectProvider = ({ children }) => {
     await REF.SUBJECT_STUDENT({
       subject_code: code,
       student_uid: user.uid,
-    }).set({ grade: '' });
+    }).set({ grade: '', lectures: 0 });
 
     const subjectSnapshot = await REF.SUBJECT({ subject_code: code }).get();
     const { instructor, title, students } = subjectSnapshot.data();
 
-    await REF.SUBJECT({ subject_code: code }).set({
-      title: title,
-      instructor: instructor,
-      students: parseInt(students) + 1,
+    await REF.SUBJECT({ subject_code: code }).update({
+      students: students + 1,
     });
 
     subjectsDispatch({
@@ -316,7 +315,7 @@ const SubjectProvider = ({ children }) => {
       return {
         id: student.id,
         name: name,
-        grade: student.data().grade,
+        ...student.data(),
       };
     });
     const subjectSnapshot = await REF.SUBJECT({ subject_code: code }).get();
