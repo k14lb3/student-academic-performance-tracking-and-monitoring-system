@@ -209,6 +209,7 @@ const SubjectProvider = ({ children }) => {
       }).delete();
 
       if (userInfo.type === 'Instructor') {
+        await archiveSubject(code);
         await REF.SUBJECT({ subject_code: code }).delete();
       } else {
         await REF.SUBJECT_STUDENT({
@@ -311,12 +312,11 @@ const SubjectProvider = ({ children }) => {
       user_uid: user.uid,
       subject_code: code,
     }).get();
-    const userArchivedSubjectsStudents = await REF.USER_ARCHIVED_SUBJECT_STUDENTS(
-      {
+    const userArchivedSubjectsStudents =
+      await REF.USER_ARCHIVED_SUBJECT_STUDENTS({
         user_uid: user.uid,
         subject_code: code,
-      }
-    ).get();
+      }).get();
     return {
       title: userArchivedSubject.data().title,
       students: userArchivedSubjectsStudents.docs.map((students) =>
@@ -344,7 +344,6 @@ const SubjectProvider = ({ children }) => {
     getArchivedSubject,
     createSubject,
     joinSubject,
-    archiveSubject,
     deleteSubject,
     updateTitle,
   };

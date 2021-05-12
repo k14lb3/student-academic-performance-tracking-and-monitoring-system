@@ -5,21 +5,13 @@ import Modal from 'components/Modal';
 
 const DeleteSubjectModal = ({ toDelete, setModal }) => {
   const { userInfo } = useUser();
-  const { archiveSubject, deleteSubject } = useSubject();
+  const { deleteSubject } = useSubject();
   const [deleting, setDeleting] = useState(false);
 
   const handleDelete = async () => {
     const { archived, code } = toDelete;
     setDeleting(true);
-    if (archived) {
-      await deleteSubject({ archived: archived, code: code });
-    } else {
-      if (userInfo.type === 'Instructor') {
-        await archiveSubject(code);
-      } else {
-        await deleteSubject({ archived: archived, code: code });
-      }
-    }
+    await deleteSubject({ archived: archived, code: code });
     setDeleting(false);
     setModal(false);
   };
