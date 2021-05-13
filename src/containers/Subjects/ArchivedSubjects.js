@@ -69,7 +69,9 @@ const ArchivedSubjects = ({ setToDelete, deleteSubject }) => {
                 setToDelete({ archived, code });
                 deleteSubject();
               }}
-              openSubject={setCode}
+              openSubjectModal={(code) => {
+                setCode(code);
+              }}
             />
           ))}
         </>

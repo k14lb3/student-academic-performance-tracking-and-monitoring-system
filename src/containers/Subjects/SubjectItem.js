@@ -11,7 +11,7 @@ const SubjectItem = ({
   archived,
   deleteSubject,
   setPopup,
-  openSubject,
+  openSubjectModal,
 }) => {
   const history = useHistory();
 
@@ -79,9 +79,10 @@ const SubjectItem = ({
             <Button
               className={`${archived ? '' : 'ml-5'} flex-grow`}
               onClick={() => {
-                openSubject(code);
                 if (!archived) {
                   history.push(`subjects/${code}`);
+                } else {
+                  openSubjectModal(code);
                 }
               }}
             >

@@ -23,7 +23,6 @@ const Subjects = () => {
   const { userInfo } = useUser();
   const { subjects, getSubjects } = useSubject();
   const [toDelete, setToDelete] = useState({ archived: false, code: '' });
-  const [openSubjectCode, setOpenSubjectCode] = useState('');
   const [modal, setModal] = useState('');
   const [popup, setPopup] = useState({ up: false, message: '' });
   const [loading, setLoading] = useState(true);
@@ -128,9 +127,6 @@ const Subjects = () => {
                           setToDelete({ archived, code });
                           setModal(MODAL.DELETE_SUBJECT);
                         }}
-                        openSubject={(code) => {
-                          setOpenSubjectCode(code);
-                        }}
                       />
                     );
                   })}
@@ -148,11 +144,14 @@ const Subjects = () => {
                 />
               )}
             />
-            <Route
-              exact
-              path={`/subjects/${openSubjectCode}`}
-              render={() => <Subject code={openSubjectCode} />}
-            />
+            {subjects.current.map((subject) => (
+              <Route
+                key={uuid()}
+                exact
+                path={`/subjects/${subject.code}`}
+                render={() => <Subject code={subject.code} />}
+              />
+            ))}
           </Switch>
         )}
       </div>
