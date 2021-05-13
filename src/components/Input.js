@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 
 const Input = (
-  { className, defaultValue, value, type, maxLength, autoComplete, onChange },
+  { className, defaultValue, value, type, maxLength, autoComplete, onChange , readOnly},
   ref
 ) => {
   return (
@@ -16,6 +16,7 @@ const Input = (
       autoComplete={autoComplete}
       onChange={onChange}
       maxLength={maxLength}
+      readOnly={readOnly}
     ></input>
   );
 };
