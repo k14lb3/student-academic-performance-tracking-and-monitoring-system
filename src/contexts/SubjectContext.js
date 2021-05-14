@@ -321,7 +321,11 @@ const SubjectProvider = ({ children }) => {
     const subjectSnapshot = await REF.SUBJECT({ subject_code: code }).get();
     return {
       ...subjectSnapshot.data(),
-      students: await Promise.all(students),
+      students: (await Promise.all(students)).sort((sa, sb) => {
+        const studentA = sa.name.toLowerCase();
+        const studentB = sb.name.toLowerCase();
+        return studentA < studentB ? -1 : studentA > studentB ? 1 : 0;
+      }),
     };
   };
 
