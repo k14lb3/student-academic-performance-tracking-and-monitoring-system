@@ -86,6 +86,7 @@ module.exports = {
       margin: ['first', 'last', 'important'],
       padding: ['important'],
       textColor: ['after'],
+      borderRadius: ['important'],
     },
   },
   plugins: [
