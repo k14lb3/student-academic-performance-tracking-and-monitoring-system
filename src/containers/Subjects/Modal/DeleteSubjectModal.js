@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useUser } from 'contexts/UserContext';
-import { useSubject } from 'contexts/SubjectContext';
+import { useSubjects } from 'contexts/SubjectsContext';
 import Modal from 'components/Modal';
 
 const DeleteSubjectModal = ({ toDelete, closeModal }) => {
   const { userInfo } = useUser();
-  const { deleteSubject } = useSubject();
+  const { deleteSubject } = useSubjects();
   const [deleting, setDeleting] = useState(false);
 
   const handleDelete = async () => {

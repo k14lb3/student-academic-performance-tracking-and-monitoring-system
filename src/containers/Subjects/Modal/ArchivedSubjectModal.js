@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
-import { useSubject } from 'contexts/SubjectContext';
+import { useSubjects } from 'contexts/SubjectsContext';
 import Modal from 'components/Modal';
 import Loader from 'components/Loader';
 
 const ArchivedSubjectModal = ({ codeState: { code, setCode } }) => {
-  const { getArchivedSubject } = useSubject();
+  const { getArchivedSubject } = useSubjects();
   const [subject, setSubject] = useState();
   const [loading, setLoading] = useState(true);
 

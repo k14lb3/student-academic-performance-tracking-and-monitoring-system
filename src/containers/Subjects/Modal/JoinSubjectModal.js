@@ -1,11 +1,11 @@
 import { useState, useRef } from 'react';
-import { useSubject } from 'contexts/SubjectContext';
+import { useSubjects } from 'contexts/SubjectsContext';
 import Modal from 'components/Modal';
 import Input from 'components/Input';
 import Error from 'components/Error';
 
 const JoinSubjectModal = ({ closeModal }) => {
-  const { joinSubject } = useSubject();
+  const { joinSubject } = useSubjects();
   const codeRef = useRef();
   const [joining, setJoining] = useState(false);
   const [error, setError] = useState('');

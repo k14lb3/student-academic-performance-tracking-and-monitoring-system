@@ -1,10 +1,10 @@
 import { useState, useRef } from 'react';
-import { useSubject } from 'contexts/SubjectContext';
+import { useSubjects } from 'contexts/SubjectsContext';
 import Modal from 'components/Modal';
 import Input from 'components/Input';
 
 const CreateSubjectModal = ({ closeModal }) => {
-  const { createSubject } = useSubject();
+  const { createSubject } = useSubjects();
   const titleRef = useRef();
   const [creating, setCreating] = useState(false);
 
