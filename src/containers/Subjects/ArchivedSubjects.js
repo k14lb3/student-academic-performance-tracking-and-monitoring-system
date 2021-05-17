@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useUser } from 'contexts/UserContext';
-import { useSubject } from 'contexts/SubjectContext';
+import { useSubjects } from 'contexts/SubjectsContext';
 import Loader from 'components/Loader';
 import ArchivedSubjectModal from './Modal/ArchivedSubjectModal';
 import SubjectItem from './SubjectItem';
@@ -12,7 +12,7 @@ import SubjectItem from './SubjectItem';
 const ArchivedSubjects = ({ setToDelete, deleteSubject }) => {
   const history = useHistory();
   const { userInfo } = useUser();
-  const { subjects, getArchivedSubjects } = useSubject();
+  const { subjects, getArchivedSubjects } = useSubjects();
   const [code, setCode] = useState(false);
   const [loading, setLoading] = useState(true);
 

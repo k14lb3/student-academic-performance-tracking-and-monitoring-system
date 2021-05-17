@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { Switch, Route, useLocation } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import { useUser } from 'contexts/UserContext';
-import { useSubject } from 'contexts/SubjectContext';
+import { useSubjects } from 'contexts/SubjectsContext';
+import SubjectProvider from 'contexts/SubjectContext';
 import Button from 'components/Button/Button';
 import Loader from 'components/Loader';
 import PopupNotification from 'components/PopupNotification';
@@ -21,7 +22,7 @@ const MODAL = {
 
 const Subjects = () => {
   const { userInfo } = useUser();
-  const { subjects, getSubjects } = useSubject();
+  const { subjects, getSubjects } = useSubjects();
   const [toDelete, setToDelete] = useState({ archived: false, code: '' });
   const [modal, setModal] = useState('');
   const [popup, setPopup] = useState({ up: false, message: '' });
@@ -149,7 +150,11 @@ const Subjects = () => {
                 key={uuid()}
                 exact
                 path={`/subjects/${subject.code}`}
-                render={() => <Subject code={subject.code} />}
+                render={() => (
+                  <SubjectProvider>
+                    <Subject code={subject.code} />
+                  </SubjectProvider>
+                )}
               />
             ))}
           </Switch>
