@@ -24,9 +24,7 @@ const Gender = ({ setPopup }) => {
     return setUpdateButton(true);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleUpdate = async () => {
     if (updateButton) {
       const gender = genderRef.current.value;
       setUpdating(true);
@@ -42,7 +40,7 @@ const Gender = ({ setPopup }) => {
       {loading ? (
         <Loader className="mx-auto mt-5" />
       ) : (
-        <form onSubmit={handleSubmit}>
+        <>
           <div className="p-5 xs:p-3 border border-orange-500 rounded">
             <Label>Gender</Label>
             <Select
@@ -57,13 +55,14 @@ const Gender = ({ setPopup }) => {
             </Select>
           </div>
           <Button
-            disabled={updating || !updateButton}
+            disabled={!updateButton}
             className="mt-5 ml-auto"
             hasLoader={{ loading: updating }}
+            onClick={handleUpdate}
           >
             <span className={updating ? 'invisible' : ''}>Update</span>
           </Button>
-        </form>
+        </>
       )}
     </>
   );
