@@ -6,7 +6,7 @@ import Label from 'components/Label';
 import Select from 'components/Select';
 import Error from 'components/Error';
 
-const Gender = ({setPopup}) => {
+const Gender = ({ setPopup }) => {
   const { userInfo, updateType, hasSubjects } = useUser();
   const typeRef = useRef();
   const [updateButton, setUpdateButton] = useState(false);
@@ -25,9 +25,7 @@ const Gender = ({setPopup}) => {
     return setUpdateButton(true);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleUpdate = async () => {
     if (updateButton) {
       const type = typeRef.current.value;
 
@@ -53,28 +51,27 @@ const Gender = ({setPopup}) => {
         <Loader className="mx-auto mt-5" />
       ) : (
         <>
-          <form onSubmit={handleSubmit}>
-            <div className="p-5 xs:p-3 border border-orange-500 rounded">
-              <Label>Account type</Label>
-              <Select
-                ref={typeRef}
-                className="w-32 xs:w-28"
-                defaultValue={userInfo.type}
-                onChange={handleChange}
-              >
-                <option value="Instructor">Instructor</option>
-                <option value="Student">Student</option>
-              </Select>
-              {error && <Error error={error} />}
-            </div>
-            <Button
-              disabled={updating || !updateButton}
-              className="mt-5 ml-auto"
-              hasLoader={{ loading: updating }}
+          <div className="p-5 xs:p-3 border border-orange-500 rounded">
+            <Label>Account type</Label>
+            <Select
+              ref={typeRef}
+              className="w-32 xs:w-28"
+              defaultValue={userInfo.type}
+              onChange={handleChange}
             >
-              <span className={updating ? 'invisible' : ''}>Update</span>
-            </Button>
-          </form>
+              <option value="Instructor">Instructor</option>
+              <option value="Student">Student</option>
+            </Select>
+            {error && <Error error={error} />}
+          </div>
+          <Button
+            disabled={!updateButton}
+            className="mt-5 ml-auto"
+            hasLoader={{ loading: updating }}
+            onClick={handleUpdate}
+          >
+            <span className={updating ? 'invisible' : ''}>Update</span>
+          </Button>
         </>
       )}
     </>
