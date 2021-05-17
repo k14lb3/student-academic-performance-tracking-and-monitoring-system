@@ -30,7 +30,7 @@ const Button = ({
         </Link>
       ) : (
         <button
-          disabled={disabled}
+          disabled={disabled || hasLoader?.loading}
           className={`disabled:opacity-80 ${
             hasLoader ? 'relative flex justify-center items-center ' : ''
           }py-2 px-5 border-solid border border-orange-500 rounded font-roboto font-medium xs:text-xs focus:border-black duration-200 ${
