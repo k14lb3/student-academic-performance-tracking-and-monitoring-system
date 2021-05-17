@@ -82,11 +82,12 @@ module.exports = {
     extend: {
       display: ['group-hover', 'after'],
       opacity: ['disabled'],
-      fontSize: ['group-hover'],
+      fontSize: ['group-hover', 'important'],
       margin: ['first', 'last', 'important'],
       padding: ['important'],
       textColor: ['after'],
       borderRadius: ['important'],
+      backgroundColor: ['important'],
     },
   },
   plugins: [
