@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from 'react';
+import { useSubjects } from 'contexts/SubjectsContext';
 import { REF } from 'refs';
 
 const SubjectContext = createContext();
@@ -6,6 +7,7 @@ const SubjectContext = createContext();
 export const useSubject = () => useContext(SubjectContext);
 
 const SubjectProvider = ({ children }) => {
+  const { updateTitle } = useSubjects();
   const [subject, setSubject] = useState();
 
   const getSubject = async (code) => {
@@ -186,12 +188,6 @@ const SubjectProvider = ({ children }) => {
     }));
   };
 
-  console.log(
-    subject?.students.find(
-      (student) => student.id === 'IbNeqTf5y0h2vl98TTNT22tq4Vb2'
-    )
-  );
-
   const changeExerciseTotalScore = async (i, totalScore) => {
     let highestScore = 0;
 
@@ -279,9 +275,20 @@ const SubjectProvider = ({ children }) => {
     });
   };
 
+  const updateSubjectSettings = async (settings) => {
+    updateTitle(subject.code, settings.title);
+    subject.students.forEach((student) => {
+      if (settings.lectures < student.lectures) {
+        settings.lectures = student.lectures;
+      }
+    });
+    REF.SUBJECT({ subject_code: subject.code }).update(settings);
+  };
+
   const value = {
     subject,
     getSubject,
+    updateSubjectSettings,
     updateStudent,
     changeAttendance,
     addExercise,
