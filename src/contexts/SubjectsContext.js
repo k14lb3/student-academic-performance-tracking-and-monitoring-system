@@ -157,7 +157,19 @@ const SubjectsProvider = ({ children }) => {
     await REF.SUBJECT_STUDENT({
       subject_code: code,
       student_uid: user.uid,
-    }).set({ grade: '', lectures: 0 });
+    }).set({
+      grade: '',
+      lectures: 0,
+      exercises: [],
+      assignments: [],
+      quizzes: [],
+      majorExamination: {
+        prelim: { score: 0 },
+        midterm: { score: 0 },
+        semiFinals: { score: 0 },
+        finals: { score: 0 },
+      },
+    });
 
     const subjectSnapshot = await REF.SUBJECT({ subject_code: code }).get();
     const { instructor, title, students } = subjectSnapshot.data();
