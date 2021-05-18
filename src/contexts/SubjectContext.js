@@ -45,6 +45,16 @@ const SubjectProvider = ({ children }) => {
     return students[0];
   };
 
+  const updateSubjectSettings = async (settings) => {
+    updateTitle(subject.code, settings.title);
+    subject.students.forEach((student) => {
+      if (settings.lectures < student.lectures) {
+        settings.lectures = student.lectures;
+      }
+    });
+    REF.SUBJECT({ subject_code: subject.code }).update(settings);
+  };
+
   const updateStudent = async (studentId) => {
     const student = subject.students.find(
       (student) => student.id === studentId
@@ -76,6 +86,57 @@ const SubjectProvider = ({ children }) => {
         }),
       }));
     }
+  };
+
+  const changeMajorExaminationScore = async (id, exam, score, totalScore) => {
+    setSubject((prevSubject) => ({
+      ...prevSubject,
+      students: prevSubject.students.map((student) => {
+        if (student.id === id) {
+          return {
+            ...student,
+            majorExamination: {
+              ...student.majorExamination,
+              [exam]: { score: score > totalScore ? totalScore : score },
+            },
+          };
+        }
+        return student;
+      }),
+    }));
+  };
+
+  const changeMajorExaminationTotalScore = async (exam, totalScore) => {
+    let highestScore = 0;
+
+    subject.students.forEach((student, index) => {
+      if (index === 0) {
+        highestScore = student.majorExamination[exam].score;
+      }
+      if (student.majorExamination[exam].score > highestScore) {
+        highestScore = student.majorExamination[exam].score;
+      }
+    });
+
+    if (totalScore < highestScore) {
+      totalScore = highestScore;
+    }
+
+    const majorExamination = {
+      ...subject.majorExamination,
+      [exam]: {
+        totalScore: totalScore,
+      },
+    };
+
+    setSubject((prevSubject) => ({
+      ...prevSubject,
+      majorExamination: majorExamination,
+    }));
+
+    await REF.SUBJECT({ subject_code: subject.code }).update({
+      majorExamination: majorExamination,
+    });
   };
 
   const addExercise = async () => {
@@ -224,17 +285,109 @@ const SubjectProvider = ({ children }) => {
     });
   };
 
-  const changeMajorExaminationScore = async (id, exam, score, totalScore) => {
+  const addAssignment = async () => {
+    const assignments = [
+      ...subject.assignments,
+      { title: 'Assignment', totalScore: 20 },
+    ];
+
     setSubject((prevSubject) => ({
       ...prevSubject,
+      assignments: assignments,
       students: prevSubject.students.map((student) => {
+        return {
+          ...student,
+          assignments: [...student.assignments, { score: 0 }],
+        };
+      }),
+    }));
+
+    REF.SUBJECT({ subject_code: subject.code }).update({
+      assignments: assignments,
+    });
+
+    subject.students.forEach(async (student) => {
+      await REF.SUBJECT_STUDENT({
+        subject_code: subject.code,
+        student_uid: student.id,
+      }).update({
+        assignments: [...student.assignments, { score: 0 }],
+      });
+    });
+  };
+
+  const deleteAssignment = (i) => {
+    const assignments = subject.assignments.filter((_, index) => index !== i);
+
+    setSubject((prevSubject) => ({
+      ...prevSubject,
+      assignments: assignments,
+      students: prevSubject.students.map((student) => ({
+        ...student,
+        assignments: student.assignments.filter((_, index) => index !== i),
+      })),
+    }));
+
+    REF.SUBJECT({ subject_code: subject.code }).update({
+      assignments: assignments,
+    });
+
+    subject.students.forEach(async (student) => {
+      await REF.SUBJECT_STUDENT({
+        subject_code: subject.code,
+        student_uid: student.id,
+      }).update({
+        assignments: student.assignments.filter((_, index) => index !== i),
+      });
+    });
+  };
+
+  const changeAssignmentTitle = async (i, title) => {
+    const assignments = subject.assignments.map((exercise, index) => {
+      if (index === i) {
+        return {
+          ...exercise,
+          title: title,
+        };
+      }
+      return exercise;
+    });
+
+    setSubject((prevSubject) => ({
+      ...prevSubject,
+      assignments: assignments,
+    }));
+
+    REF.SUBJECT({ subject_code: subject.code }).update({
+      assignments: assignments,
+    });
+  };
+
+  const changeAssignmentScore = async (id, i, score, totalScore) => {
+    if (score > totalScore) {
+      score = totalScore;
+    }
+
+    setSubject();
+
+    const student = subject.students.find((student) => student.id === id);
+
+    const assignments = student.assignments.map((exercise, index) => {
+      if (index === i) {
+        return {
+          score: score,
+        };
+      }
+      return exercise;
+    });
+
+    setSubject(() => ({
+      ...subject,
+      students: subject.students.map((student) => {
         if (student.id === id) {
           return {
             ...student,
-            majorExamination: {
-              ...student.majorExamination,
-              [exam]: { score: score > totalScore ? totalScore : score },
-            },
+            assignments: assignments,
           };
         }
         return student;
@@ -242,15 +395,15 @@ const SubjectProvider = ({ children }) => {
     }));
   };
 
-  const changeMajorExaminationTotalScore = async (exam, totalScore) => {
+  const changeAssignmentTotalScore = async (i, totalScore) => {
     let highestScore = 0;
 
     subject.students.forEach((student, index) => {
       if (index === 0) {
-        highestScore = student.majorExamination[exam].score;
+        highestScore = student.assignments[i].score;
       }
-      if (student.majorExamination[exam].score > highestScore) {
-        highestScore = student.majorExamination[exam].score;
+      if (student.assignments[i].score > highestScore) {
+        highestScore = student.assignments[i].score;
       }
     });
 
@@ -258,46 +411,43 @@ const SubjectProvider = ({ children }) => {
       totalScore = highestScore;
     }
 
-    const majorExamination = {
-      ...subject.majorExamination,
-      [exam]: {
-        totalScore: totalScore,
-      },
-    };
+    const assignments = subject.assignments.map((exercise, index) => {
+      if (index === i) {
+        return {
+          ...exercise,
+          totalScore: totalScore,
+        };
+      }
+      return exercise;
+    });
 
     setSubject((prevSubject) => ({
       ...prevSubject,
-      majorExamination: majorExamination,
+      assignments: assignments,
     }));
 
-    await REF.SUBJECT({ subject_code: subject.code }).update({
-      majorExamination: majorExamination,
+    REF.SUBJECT({ subject_code: subject.code }).update({
+      assignments: assignments,
     });
   };
-
-  const updateSubjectSettings = async (settings) => {
-    updateTitle(subject.code, settings.title);
-    subject.students.forEach((student) => {
-      if (settings.lectures < student.lectures) {
-        settings.lectures = student.lectures;
-      }
-    });
-    REF.SUBJECT({ subject_code: subject.code }).update(settings);
-  };
-
   const value = {
     subject,
     getSubject,
     updateSubjectSettings,
     updateStudent,
     changeAttendance,
+    changeMajorExaminationScore,
+    changeMajorExaminationTotalScore,
     addExercise,
     deleteExercise,
     changeExerciseTitle,
-    changeExerciseTotalScore,
     changeExerciseScore,
-    changeMajorExaminationScore,
-    changeMajorExaminationTotalScore,
+    changeExerciseTotalScore,
+    addAssignment,
+    deleteAssignment,
+    changeAssignmentTitle,
+    changeAssignmentScore,
+    changeAssignmentTotalScore,
   };
 
   return (
