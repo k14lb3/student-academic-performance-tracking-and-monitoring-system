@@ -16,6 +16,7 @@ import Loader from 'components/Loader';
 import Button from 'components/Button/Button';
 import SettingsModal from './Modal/SettingsModal';
 import ExercisesModal from './Modal/ExercisesModal';
+import AssignmenstModal from './Modal/AssignmentsModal';
 
 const MODAL = {
   SETTINGS: 'settings',
@@ -50,6 +51,13 @@ const Subject = ({ code }) => {
       case MODAL.EXERCISES:
         return (
           <ExercisesModal
+            currentStudent={currentStudent}
+            closeModal={closeModal}
+          />
+        );
+      case MODAL.ASSIGNMENTS:
+        return (
+          <AssignmenstModal
             currentStudent={currentStudent}
             closeModal={closeModal}
           />
