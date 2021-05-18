@@ -206,7 +206,7 @@ const Subject = ({ code }) => {
                       setModal(MODAL.QUIZES);
                     }}
                   >
-                    Quizes
+                    Quizzes
                   </Button>
                 </div>
                 <div key={uuid()} className="w-3/5">
