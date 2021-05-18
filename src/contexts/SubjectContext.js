@@ -47,7 +47,9 @@ const SubjectProvider = ({ children }) => {
     const student = subject.students.find(
       (student) => student.id === studentId
     );
+
     const { id, name, ...rest } = student;
+
     await REF.SUBJECT_STUDENT({
       subject_code: subject.code,
       student_uid: id,
@@ -74,6 +76,63 @@ const SubjectProvider = ({ children }) => {
     }
   };
 
+  const addExercise = async () => {
+    const subjectExercises = [
+      ...subject.exercises,
+      { title: 'Exercise', totalScore: 20 },
+    ];
+
+    setSubject((prevSubject) => ({
+      ...prevSubject,
+      exercises: subjectExercises,
+      students: prevSubject.students.map((student) => ({
+        ...student,
+        exercises: [...student.exercises, { score: 0 }],
+      })),
+    }));
+
+    REF.SUBJECT({ subject_code: subject.code }).update({
+      exercises: subjectExercises,
+    });
+
+    subject.students.forEach(async (student) => {
+      await REF.SUBJECT_STUDENT({
+        subject_code: subject.code,
+        student_uid: student.id,
+      }).update({
+        exercises: [...student.exercises, { score: 0 }],
+      });
+    });
+  };
+
+  const deleteExercise = (i) => {
+    const subjectExercises = subject.exercises.filter(
+      (_, index) => index !== i
+    );
+
+    setSubject((prevSubject) => ({
+      ...prevSubject,
+      exercises: subjectExercises,
+      students: prevSubject.students.map((student) => ({
+        ...student,
+        exercises: student.exercises.filter((_, index) => index !== i),
+      })),
+    }));
+
+    REF.SUBJECT({ subject_code: subject.code }).update({
+      exercises: subjectExercises,
+    });
+
+    subject.students.forEach(async (student) => {
+      await REF.SUBJECT_STUDENT({
+        subject_code: subject.code,
+        student_uid: student.id,
+      }).update({
+        exercises: student.exercises.filter((_, index) => index !== i),
+      });
+    });
+  };
+
   const changeExerciseTitle = async (i, title) => {
     const exercises = subject.exercises.map((exercise, index) => {
       if (index === i) {
@@ -95,16 +154,16 @@ const SubjectProvider = ({ children }) => {
     });
   };
 
-  const changeExerciseScore = async (
-    { currentStudent, setCurrentStudent },
-    i,
-    score,
-    totalScore
-  ) => {
+  const changeExerciseScore = async (id, i, score, totalScore) => {
     if (score > totalScore) {
       score = totalScore;
     }
-    const exercises = currentStudent.exercises.map((exercise, index) => {
+
+    setSubject();
+
+    const student = subject.students.find((student) => student.id === id);
+
+    const exercises = student.exercises.map((exercise, index) => {
       if (index === i) {
         return {
           score: score,
@@ -113,18 +172,25 @@ const SubjectProvider = ({ children }) => {
       return exercise;
     });
 
-    setCurrentStudent((prevStudent) => ({
-      ...prevStudent,
-      exercises: exercises,
+    setSubject(() => ({
+      ...subject,
+      students: subject.students.map((student) => {
+        if (student.id === id) {
+          return {
+            ...student,
+            exercises: exercises,
+          };
+        }
+        return student;
+      }),
     }));
-
-    await REF.SUBJECT_STUDENT({
-      subject_code: subject.code,
-      student_uid: currentStudent.id,
-    }).update({
-      exercises: exercises,
-    });
   };
+
+  console.log(
+    subject?.students.find(
+      (student) => student.id === 'IbNeqTf5y0h2vl98TTNT22tq4Vb2'
+    )
+  );
 
   const changeExerciseTotalScore = async (i, totalScore) => {
     let highestScore = 0;
@@ -151,6 +217,7 @@ const SubjectProvider = ({ children }) => {
       }
       return exercise;
     });
+
     setSubject((prevSubject) => ({
       ...prevSubject,
       exercises: exercises,
@@ -158,73 +225,6 @@ const SubjectProvider = ({ children }) => {
 
     REF.SUBJECT({ subject_code: subject.code }).update({
       exercises: exercises,
-    });
-  };
-
-  const addExercise = async (setCurrentStudent) => {
-    const subjectExercises = [
-      ...subject.exercises,
-      { title: 'Exercise', totalScore: 20 },
-    ];
-
-    setCurrentStudent((prevStudent) => ({
-      ...prevStudent,
-      exercises: [...prevStudent.exercises, { score: 0 }],
-    }));
-
-    setSubject((prevSubject) => ({
-      ...prevSubject,
-      exercises: subjectExercises,
-      students: prevSubject.students.map((student) => ({
-        ...student,
-        exercises: [...student.exercises, { score: 0 }],
-      })),
-    }));
-
-    REF.SUBJECT({ subject_code: subject.code }).update({
-      exercises: subjectExercises,
-    });
-
-    subject.students.forEach(async (student) => {
-      await REF.SUBJECT_STUDENT({
-        subject_code: subject.code,
-        student_uid: student.id,
-      }).update({
-        exercises: [...student.exercises, { score: 0 }],
-      });
-    });
-  };
-
-  const deleteExercise = (setCurrentStudent, i) => {
-    const subjectExercises = subject.exercises.filter(
-      (_, index) => index !== i
-    );
-
-    setCurrentStudent((prevStudent) => ({
-      ...prevStudent,
-      exercises: prevStudent.exercises.filter((_, index) => index !== i),
-    }));
-
-    setSubject((prevSubject) => ({
-      ...prevSubject,
-      exercises: subjectExercises,
-      students: prevSubject.students.map((student) => ({
-        ...student,
-        exercises: student.exercises.filter((_, index) => index !== i),
-      })),
-    }));
-
-    REF.SUBJECT({ subject_code: subject.code }).update({
-      exercises: subjectExercises,
-    });
-
-    subject.students.forEach(async (student) => {
-      await REF.SUBJECT_STUDENT({
-        subject_code: subject.code,
-        student_uid: student.id,
-      }).update({
-        exercises: student.exercises.filter((_, index) => index !== i),
-      });
     });
   };
 
