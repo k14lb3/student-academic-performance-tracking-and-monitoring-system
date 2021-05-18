@@ -15,7 +15,6 @@ export const ACTIONS = {
   ARCHIVE_SUBJECT: 'archive_subject',
   DELETE_CURRENT_SUBJECT: 'delete_current_subject',
   DELETE_ARCHIVED_SUBJECT: 'delete_archived_subject',
-  UPDATE_SUBJECT_TITLE: 'update_subject_title',
 };
 
 const doesSubjectExists = async (code) => {
@@ -86,24 +85,10 @@ const subjectsReducer = (subjects, action) => {
           (subject) => subject.code !== action.payload.code
         ),
       };
-    case 'update_subject_title':
-      return {
-        current: subjects.current.map((subject) => {
-          if (subject.code === action.payload.code) {
-            return {
-              ...subject,
-              title: action.payload.title,
-            };
-          }
-          return subject;
-        }),
-        archived: [...subjects.archived],
-      };
     default:
       return subjects;
   }
 };
-
 
 const SubjectsProvider = ({ children }) => {
   const { user } = useAuth();
@@ -351,14 +336,6 @@ const SubjectsProvider = ({ children }) => {
     };
   };
 
-  const updateTitle = async (code, title) => {
-    REF.SUBJECT({ subject_code: code }).update({ title: title });
-    subjectsDispatch({
-      type: ACTIONS.UPDATE_SUBJECT_TITLE,
-      payload: { code: code, title: title },
-    });
-  };
-
   useEffect(() => {
     if (!user) {
       subjectsDispatch({ type: ACTIONS.RESET_SUBJECTS });
@@ -373,7 +350,6 @@ const SubjectsProvider = ({ children }) => {
     createSubject,
     joinSubject,
     deleteSubject,
-    updateTitle,
   };
 
   return (
