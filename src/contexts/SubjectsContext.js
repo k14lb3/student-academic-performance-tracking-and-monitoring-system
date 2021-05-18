@@ -86,7 +86,7 @@ const subjectsReducer = (subjects, action) => {
           (subject) => subject.code !== action.payload.code
         ),
       };
- case 'update_subject_title':
+    case 'update_subject_title':
       return {
         current: subjects.current.map((subject) => {
           if (subject.code === action.payload.code) {
@@ -99,11 +99,10 @@ const subjectsReducer = (subjects, action) => {
         }),
         archived: [...subjects.archived],
       };
-       default:
+    default:
       return subjects;
   }
 };
-
 
 const SubjectsProvider = ({ children }) => {
   const { user } = useAuth();
@@ -352,7 +351,6 @@ const SubjectsProvider = ({ children }) => {
   };
 
   const updateTitle = async (code, title) => {
-    REF.SUBJECT({ subject_code: code }).update({ title: title });
     subjectsDispatch({
       type: ACTIONS.UPDATE_SUBJECT_TITLE,
       payload: { code: code, title: title },
