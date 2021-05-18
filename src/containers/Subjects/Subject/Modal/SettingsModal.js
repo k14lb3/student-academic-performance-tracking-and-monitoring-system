@@ -3,25 +3,28 @@ import { useSubject } from 'contexts/SubjectContext';
 import Modal from 'components/Modal';
 import Label from 'components/Label';
 import Input from 'components/Input';
-import Error from 'components/Error';
 
-const SettingsModal = ({ subjectState: { subject, setSubject }, setModal }) => {
+const SettingsModal = ({ closeModal }) => {
   const titleRef = useRef();
-  const { updateTitle } = useSubject();
+  const lecturesRef = useRef();
+  const { subject, updateSubjectSettings } = useSubject();
   const [updating, setUpdating] = useState(false);
   const [updateButton, setUpdateButton] = useState(false);
 
-  const handleUpdate = async () => {
-    if (updateButton) {
-      const title = titleRef.current.value.trim();
-      await updateTitle(subject.code, title);
-      setSubject((prevSubject) => ({ ...prevSubject, title: title }));
-    }
+  const onUpdateSubjectSettings = async () => {
+    const title = titleRef.current.value.trim();
+    const lectures = lecturesRef.current.value.trim();
+    setUpdating(true);
+    await updateSubjectSettings({ title: title, lectures: lectures });
+    setUpdating(false);
+    setUpdateButton(false);
   };
 
   const handleInputChange = () => {
     const title = titleRef.current.value.trim();
-    if (title === subject.title || title === '') {
+    const lectures = parseInt(lecturesRef.current.value.trim());
+
+    if (title === subject.title && lectures === subject.lectures) {
       return setUpdateButton(false);
     }
     return setUpdateButton(true);
@@ -29,29 +32,44 @@ const SettingsModal = ({ subjectState: { subject, setSubject }, setModal }) => {
 
   return (
     <Modal
-      title="Subject Settings"
+      title="Subject settings"
       button={{
         yes: {
-          disabled: updating || !updateButton,
+          disabled: !updateButton,
           label: <span className={updating ? 'invisible' : ''}>Update</span>,
           onClick: () => {
-            handleUpdate();
+            if (updateButton) {
+              onUpdateSubjectSettings();
+            }
           },
           hasLoader: { loading: updating },
         },
       }}
       closeModal={() => {
         if (!updating) {
-          setModal('');
+          closeModal();
         }
       }}
     >
       <Label>Title</Label>
       <Input
         ref={titleRef}
-        className="w-full"
+        className="w-full mb-3"
         defaultValue={subject.title}
         onChange={handleInputChange}
+      />
+      <Label>Total Lectures</Label>
+      <Input
+        ref={lecturesRef}
+        numberOnly
+        className="w-full"
+        defaultValue={subject.lectures}
+        onChange={handleInputChange}
+        onBlur={(e) => {
+          if (parseInt(e.target.value) === 0) {
+            e.target.value = 1;
+          }
+        }}
       />
     </Modal>
   );
