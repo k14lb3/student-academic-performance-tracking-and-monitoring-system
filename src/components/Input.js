@@ -1,9 +1,15 @@
 import { forwardRef } from 'react';
 
-const Input = ({ className, numberOnly, onChange, ...rest }, ref) => {
+const Input = ({ className, numberOnly, onChange, onBlur, ...rest }, ref) => {
   const checkIfNumber = (e) => {
     const value = e.target.value.replace(/\D/g, '');
     e.target.value = value;
+  };
+
+  const zeroIfEmpty = (e) => {
+    if (e.target.value === '') {
+      e.target.value = 0;
+    }
   };
 
   return (
@@ -19,6 +25,14 @@ const Input = ({ className, numberOnly, onChange, ...rest }, ref) => {
         }
         if (onChange) {
           onChange(e);
+        }
+      }}
+      onBlur={(e) => {
+        if (numberOnly) {
+          zeroIfEmpty(e);
+        }
+        if(onBlur){
+          onBlur(e)
         }
       }}
     ></input>
