@@ -1,388 +1,296 @@
-import React, { useReducer, useEffect, useContext, createContext } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { REF } from 'refs';
-import { useAuth } from './AuthContext';
-import { useUser } from './UserContext';
 
 const SubjectContext = createContext();
 
 export const useSubject = () => useContext(SubjectContext);
 
-export const ACTIONS = {
-  RESET_SUBJECTS: 'reset_subjects',
-  SET_SUBJECTS: 'set_subjects',
-  SET_ARCHIVED_SUBJECTS: 'set_archived_subjects',
-  ADD_SUBJECT: 'add_subject',
-  ARCHIVE_SUBJECT: 'archive_subject',
-  DELETE_CURRENT_SUBJECT: 'delete_current_subject',
-  DELETE_ARCHIVED_SUBJECT: 'delete_archived_subject',
-};
-
-const doesSubjectExists = async (code) => {
-  const subjectSnapshot = await REF.SUBJECT({ subject_code: code }).get();
-  return subjectSnapshot.exists;
-};
-
-const generateCode = async () => {
-  const characters =
-    '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-
-  let code, duplicate;
-  do {
-    code = '';
-
-    for (let i = 0; i < 7; i++) {
-      code += characters[Math.floor(Math.random() * characters.length)];
-    }
-
-    duplicate = await doesSubjectExists(code);
-  } while (duplicate);
-
-  return code;
-};
-
-const subjectsInitialState = {
-  current: [],
-  archived: [],
-};
-
-const subjectsReducer = (subjects, action) => {
-  switch (action.type) {
-    case 'reset_subjects':
-      return subjectsInitialState;
-    case 'set_subjects':
-      return {
-        current: action.payload.subjects,
-        archived: [...subjects.archived],
-      };
-    case 'set_archived_subjects':
-      return {
-        current: [...subjects.current],
-        archived: action.payload.subjects,
-      };
-    case 'add_subject':
-      return {
-        current: [...subjects.current, action.payload.subject],
-        archived: [...subjects.archived],
-      };
-    case 'archive_subject':
-      return {
-        current: subjects.current.filter(
-          (subject) => subject.code !== action.payload.code
-        ),
-        archived: [...subjects.archived, action.payload.subject],
-      };
-    case 'delete_current_subject':
-      return {
-        current: subjects.current.filter(
-          (subject) => subject.code !== action.payload.code
-        ),
-        archived: [...subjects.archived],
-      };
-    case 'delete_archived_subject':
-      return {
-        current: [...subjects.current],
-        archived: subjects.archived.filter(
-          (subject) => subject.code !== action.payload.code
-        ),
-      };
-    default:
-      return subjects;
-  }
-};
-
 const SubjectProvider = ({ children }) => {
-  const { user } = useAuth();
-  const { userInfo } = useUser();
-  const [subjects, subjectsDispatch] = useReducer(
-    subjectsReducer,
-    subjectsInitialState
-  );
-
-  const createSubject = async (title) => {
-    const code = await generateCode();
-
-    await REF.USER_SUBJECT({ user_uid: user.uid, subject_code: code }).set({});
-
-    await REF.SUBJECT({ subject_code: code }).set({
-      title: title,
-      instructor: `${userInfo.lastName}, ${userInfo.firstName}${
-        userInfo.middleName && ` ${userInfo.middleName[0]}.`
-      }`,
-      students: 0,
-      lectures: 40,
-    });
-
-    subjectsDispatch({
-      type: ACTIONS.ADD_SUBJECT,
-      payload: {
-        subject: {
-          code: code,
-          title: title,
-          students: 0,
-        },
-      },
-    });
-  };
-
-  const joinSubject = async (code) => {
-    if (code.length < 5 || code.length > 7) {
-      throw new Error(
-        'Subject codes are 5-7 characters that are made up of letters and numbers, and no spaces or symbols.'
-      );
-    }
-
-    if (subjects.current.some((subject) => subject.code === code)) {
-      throw new Error('You are already in the class with that key.');
-    }
-
-    if (!(await doesSubjectExists(code))) {
-      throw new Error('Subject with that code does not exist.');
-    }
-
-    await REF.USER_SUBJECT({ user_uid: user.uid, subject_code: code }).set({});
-
-    await REF.SUBJECT_STUDENT({
-      subject_code: code,
-      student_uid: user.uid,
-    }).set({ grade: '', lectures: 0 });
-
-    const subjectSnapshot = await REF.SUBJECT({ subject_code: code }).get();
-    const { instructor, title, students } = subjectSnapshot.data();
-
-    await REF.SUBJECT({ subject_code: code }).update({
-      students: students + 1,
-    });
-
-    subjectsDispatch({
-      type: ACTIONS.ADD_SUBJECT,
-      payload: {
-        subject: {
-          code: code,
-          title: title,
-          instructor: instructor,
-          grade: '',
-        },
-      },
-    });
-  };
-
-  const archiveSubject = async (code) => {
-    const subjectSnapshot = await REF.SUBJECT({ subject_code: code }).get();
-    const { title, instructor, students } = subjectSnapshot.data();
-
-    const archivedSubjectSnapshot = await REF.USER_ARCHIVED_SUBJECTS({
-      user_uid: user.uid,
-    }).add({
-      type: 'Instructor',
-      title: title,
-      students: students,
-    });
-
-    const archive = async (id, grade) => {
-      const userSnapshot = await REF.USER({ user_uid: id }).get();
-      const { firstName, lastName, middleName } = userSnapshot.data();
-
-      const finalGrade = grade || 'inc';
-
-      await REF.USER_ARCHIVED_SUBJECTS({ user_uid: id }).add({
-        type: 'Student',
-        title: title,
-        instructor: instructor,
-        grade: finalGrade,
-      });
-
-      await REF.USER_ARCHIVED_SUBJECT_STUDENT({
-        user_uid: user.uid,
-        subject_code: archivedSubjectSnapshot.id,
-        student_uid: id,
-      }).set({
-        name: `${lastName}, ${firstName} ${middleName}`,
-        grade: finalGrade,
-      });
-
-      await REF.USER_SUBJECT({ user_uid: id, subject_code: code }).delete();
-
-      await REF.SUBJECT_STUDENT({
-        subject_code: code,
-        student_uid: id,
-      }).delete();
-    };
-
-    const subjectStudentsSnapshot = await REF.SUBJECT_STUDENTS({
-      subject_code: code,
-    }).get();
-
-    subjectStudentsSnapshot.forEach(async (student) => {
-      await archive(student.id, student.data().grade);
-    });
-
-    await REF.USER_SUBJECT({ user_uid: user.uid, subject_code: code }).delete();
-    await REF.SUBJECT({ subject_code: code }).delete();
-
-    subjectsDispatch({
-      type: ACTIONS.ARCHIVE_SUBJECT,
-      payload: { code: code, subject: subjectSnapshot.data() },
-    });
-  };
-
-  const deleteSubject = async ({ archived, code }) => {
-    if (archived) {
-      await REF.USER_ARCHIVED_SUBJECT({
-        user_uid: user.uid,
-        subject_code: code,
-      }).delete();
-      subjectsDispatch({
-        type: ACTIONS.DELETE_ARCHIVED_SUBJECT,
-        payload: { code: code },
-      });
-    } else {
-      await REF.USER_SUBJECT({
-        user_uid: user.uid,
-        subject_code: code,
-      }).delete();
-      if (userInfo.type === 'Instructor') {
-        await archiveSubject(code);
-        await REF.SUBJECT({ subject_code: code }).delete();
-      } else {
-        await REF.SUBJECT_STUDENT({
-          subject_code: code,
-          student_uid: user.uid,
-        }).delete();
-        const subjectSnapshot = await REF.SUBJECT({ subject_code: code }).get();
-        await REF.SUBJECT({ subject_code: code }).update({
-          students: parseInt(subjectSnapshot.data().students) - 1,
-        });
-        subjectsDispatch({
-          type: ACTIONS.DELETE_CURRENT_SUBJECT,
-          payload: { code: code },
-        });
-      }
-    }
-  };
-
-  const getSubjects = async () => {
-    const userSubjectsSnapshot = await REF.USER_SUBJECTS({
-      user_uid: user.uid,
-    }).get();
-    const userSubjects = userSubjectsSnapshot.docs.map((doc) => doc.id);
-
-    const subjectsSnapshot = await REF.SUBJECTS().get();
-    const joinedSubjects = subjectsSnapshot.docs.filter((doc) =>
-      userSubjects.includes(doc.id)
-    );
-
-    let subjects;
-    if (userInfo.type === 'Instructor') {
-      subjects = joinedSubjects.map((subject) => ({
-        code: subject.id,
-        title: subject.data().title,
-        students: subject.data().students,
-      }));
-    } else {
-      const getGrade = async (code) => {
-        const subjectStudentSnapshot = await REF.SUBJECT_STUDENT({
-          subject_code: code,
-          student_uid: user.uid,
-        }).get();
-        return subjectStudentSnapshot.data().grade;
-      };
-
-      subjects = joinedSubjects.map(async (subject) => ({
-        code: subject.id,
-        title: subject.data().title,
-        instructor: subject.data().instructor,
-        grade: await getGrade(subject.id),
-      }));
-
-      subjects = await Promise.all(subjects);
-    }
-
-    subjectsDispatch({
-      type: ACTIONS.SET_SUBJECTS,
-      payload: { subjects: subjects },
-    });
-  };
+  const [subject, setSubject] = useState();
 
   const getSubject = async (code) => {
     const subjectStudentsSnapshot = await REF.SUBJECT_STUDENTS({
       subject_code: code,
     }).get();
 
-    const students = subjectStudentsSnapshot.docs.map(async (student) => {
-      const userSnapshot = await REF.USER({ user_uid: student.id }).get();
-      const { firstName, lastName, middleName } = userSnapshot.data();
-      const name = `${lastName}, ${firstName} ${middleName}`;
-      return {
-        id: student.id,
-        name: name,
-        ...student.data(),
-      };
-    });
+    const subjectStudents = subjectStudentsSnapshot.docs.map(
+      async (student) => {
+        const userSnapshot = await REF.USER({ user_uid: student.id }).get();
+        const { firstName, lastName, middleName } = userSnapshot.data();
+        const name = `${lastName}, ${firstName} ${middleName}`;
+        return {
+          id: student.id,
+          name: name,
+          ...student.data(),
+        };
+      }
+    );
+
     const subjectSnapshot = await REF.SUBJECT({ subject_code: code }).get();
-    return {
+
+    const students = (await Promise.all(subjectStudents)).sort((sa, sb) => {
+      const studentA = sa.name.toLowerCase();
+      const studentB = sb.name.toLowerCase();
+      return studentA < studentB ? -1 : studentA > studentB ? 1 : 0;
+    });
+
+    setSubject({
+      code: code,
       ...subjectSnapshot.data(),
-      students: (await Promise.all(students)).sort((sa, sb) => {
-        const studentA = sa.name.toLowerCase();
-        const studentB = sb.name.toLowerCase();
-        return studentA < studentB ? -1 : studentA > studentB ? 1 : 0;
-      }),
-    };
+      students: students,
+    });
+
+    return students[0];
   };
 
-  const getArchivedSubjects = async () => {
-    const userArchivedSubjectsSnapshot = await REF.USER_ARCHIVED_SUBJECTS({
-      user_uid: user.uid,
-    }).get();
+  const updateStudent = async (studentId) => {
+    const student = subject.students.find(
+      (student) => student.id === studentId
+    );
+    const { id, name, ...rest } = student;
+    await REF.SUBJECT_STUDENT({
+      subject_code: subject.code,
+      student_uid: id,
+    }).update(rest);
+  };
 
-    const archivedSubjects = userArchivedSubjectsSnapshot.docs.map((doc) => ({
-      code: doc.id,
-      ...doc.data(),
+  const changeAttendance = async (id, studentLectures, subjectLectures, x) => {
+    if (
+      (studentLectures > 0 && x === -1) ||
+      (studentLectures < subjectLectures && x === 1)
+    ) {
+      setSubject((prevSubject) => ({
+        ...prevSubject,
+        students: prevSubject.students.map((student) => {
+          if (student.id === id) {
+            return {
+              ...student,
+              lectures: student.lectures + x,
+            };
+          }
+          return student;
+        }),
+      }));
+    }
+  };
+
+  const changeExerciseTitle = async (i, title) => {
+    const exercises = subject.exercises.map((exercise, index) => {
+      if (index === i) {
+        return {
+          ...exercise,
+          title: title,
+        };
+      }
+      return exercise;
+    });
+
+    setSubject((prevSubject) => ({
+      ...prevSubject,
+      exercises: exercises,
     }));
 
-    subjectsDispatch({
-      type: ACTIONS.SET_ARCHIVED_SUBJECTS,
-      payload: { subjects: archivedSubjects },
+    REF.SUBJECT({ subject_code: subject.code }).update({
+      exercises: exercises,
     });
   };
 
-  const getArchivedSubject = async (code) => {
-    const userArchivedSubject = await REF.USER_ARCHIVED_SUBJECT({
-      user_uid: user.uid,
-      subject_code: code,
-    }).get();
-    const userArchivedSubjectsStudents =
-      await REF.USER_ARCHIVED_SUBJECT_STUDENTS({
-        user_uid: user.uid,
-        subject_code: code,
-      }).get();
-    return {
-      title: userArchivedSubject.data().title,
-      students: userArchivedSubjectsStudents.docs.map((students) =>
-        students.data()
-      ),
-    };
-  };
-
-  const updateTitle = async (code, title) => {
-    REF.SUBJECT({ subject_code: code }).update({ title: title });
-  };
-
-  useEffect(() => {
-    if (!user) {
-      subjectsDispatch({ type: ACTIONS.RESET_SUBJECTS });
+  const changeExerciseScore = async (
+    { currentStudent, setCurrentStudent },
+    i,
+    score,
+    totalScore
+  ) => {
+    if (score > totalScore) {
+      score = totalScore;
     }
-  }, [user]);
+    const exercises = currentStudent.exercises.map((exercise, index) => {
+      if (index === i) {
+        return {
+          score: score,
+        };
+      }
+      return exercise;
+    });
+
+    setCurrentStudent((prevStudent) => ({
+      ...prevStudent,
+      exercises: exercises,
+    }));
+
+    await REF.SUBJECT_STUDENT({
+      subject_code: subject.code,
+      student_uid: currentStudent.id,
+    }).update({
+      exercises: exercises,
+    });
+  };
+
+  const changeExerciseTotalScore = async (i, totalScore) => {
+    let highestScore = 0;
+
+    subject.students.forEach((student, index) => {
+      if (index === 0) {
+        highestScore = student.exercises[i].score;
+      }
+      if (student.exercises[i].score > highestScore) {
+        highestScore = student.exercises[i].score;
+      }
+    });
+
+    if (totalScore < highestScore) {
+      totalScore = highestScore;
+    }
+
+    const exercises = subject.exercises.map((exercise, index) => {
+      if (index === i) {
+        return {
+          ...exercise,
+          totalScore: totalScore,
+        };
+      }
+      return exercise;
+    });
+    setSubject((prevSubject) => ({
+      ...prevSubject,
+      exercises: exercises,
+    }));
+
+    REF.SUBJECT({ subject_code: subject.code }).update({
+      exercises: exercises,
+    });
+  };
+
+  const addExercise = async (setCurrentStudent) => {
+    const subjectExercises = [
+      ...subject.exercises,
+      { title: 'Exercise', totalScore: 20 },
+    ];
+
+    setCurrentStudent((prevStudent) => ({
+      ...prevStudent,
+      exercises: [...prevStudent.exercises, { score: 0 }],
+    }));
+
+    setSubject((prevSubject) => ({
+      ...prevSubject,
+      exercises: subjectExercises,
+      students: prevSubject.students.map((student) => ({
+        ...student,
+        exercises: [...student.exercises, { score: 0 }],
+      })),
+    }));
+
+    REF.SUBJECT({ subject_code: subject.code }).update({
+      exercises: subjectExercises,
+    });
+
+    subject.students.forEach(async (student) => {
+      await REF.SUBJECT_STUDENT({
+        subject_code: subject.code,
+        student_uid: student.id,
+      }).update({
+        exercises: [...student.exercises, { score: 0 }],
+      });
+    });
+  };
+
+  const deleteExercise = (setCurrentStudent, i) => {
+    const subjectExercises = subject.exercises.filter(
+      (_, index) => index !== i
+    );
+
+    setCurrentStudent((prevStudent) => ({
+      ...prevStudent,
+      exercises: prevStudent.exercises.filter((_, index) => index !== i),
+    }));
+
+    setSubject((prevSubject) => ({
+      ...prevSubject,
+      exercises: subjectExercises,
+      students: prevSubject.students.map((student) => ({
+        ...student,
+        exercises: student.exercises.filter((_, index) => index !== i),
+      })),
+    }));
+
+    REF.SUBJECT({ subject_code: subject.code }).update({
+      exercises: subjectExercises,
+    });
+
+    subject.students.forEach(async (student) => {
+      await REF.SUBJECT_STUDENT({
+        subject_code: subject.code,
+        student_uid: student.id,
+      }).update({
+        exercises: student.exercises.filter((_, index) => index !== i),
+      });
+    });
+  };
+
+  const changeMajorExaminationScore = async (id, exam, score, totalScore) => {
+    setSubject((prevSubject) => ({
+      ...prevSubject,
+      students: prevSubject.students.map((student) => {
+        if (student.id === id) {
+          return {
+            ...student,
+            majorExamination: {
+              ...student.majorExamination,
+              [exam]: { score: score > totalScore ? totalScore : score },
+            },
+          };
+        }
+        return student;
+      }),
+    }));
+  };
+
+  const changeMajorExaminationTotalScore = async (exam, totalScore) => {
+    let highestScore = 0;
+
+    subject.students.forEach((student, index) => {
+      if (index === 0) {
+        highestScore = student.majorExamination[exam].score;
+      }
+      if (student.majorExamination[exam].score > highestScore) {
+        highestScore = student.majorExamination[exam].score;
+      }
+    });
+
+    if (totalScore < highestScore) {
+      totalScore = highestScore;
+    }
+
+    const majorExamination = {
+      ...subject.majorExamination,
+      [exam]: {
+        totalScore: totalScore,
+      },
+    };
+
+    setSubject((prevSubject) => ({
+      ...prevSubject,
+      majorExamination: majorExamination,
+    }));
+
+    await REF.SUBJECT({ subject_code: subject.code }).update({
+      majorExamination: majorExamination,
+    });
+  };
 
   const value = {
-    subjects,
-    getSubjects,
+    subject,
     getSubject,
-    getArchivedSubjects,
-    getArchivedSubject,
-    createSubject,
-    joinSubject,
-    deleteSubject,
-    updateTitle,
+    updateStudent,
+    changeAttendance,
+    addExercise,
+    deleteExercise,
+    changeExerciseTitle,
+    changeExerciseTotalScore,
+    changeExerciseScore,
+    changeMajorExaminationScore,
+    changeMajorExaminationTotalScore,
   };
 
   return (
