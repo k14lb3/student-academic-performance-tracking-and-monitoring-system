@@ -36,7 +36,11 @@ const Button = ({
           }py-2 px-5 border-solid border border-orange-500 rounded font-roboto font-medium xs:text-xs focus:border-black duration-200 ${
             outlined ? VARIATIONS.OUTLINED : VARIATIONS.DEFAULT
           }${className ? className : ''}`}
-          onClick={onClick}
+          onClick={(e) => {
+            if (!hasLoader?.loading) {
+              onClick(e);
+            }
+          }}
         >
           {children}
           {hasLoader && hasLoader.loading && (
