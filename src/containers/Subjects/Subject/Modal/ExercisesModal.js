@@ -15,11 +15,11 @@ import { useSubject } from 'contexts/SubjectContext';
 const ExercisesModal = ({ currentStudent, closeModal }) => {
   const {
     subject,
-    addExercise,
-    deleteExercise,
-    changeExerciseTitle,
-    changeExerciseScore,
-    changeExerciseTotalScore,
+    addActivity,
+    deleteActivity,
+    changeActivityTitle,
+    changeActivityScore,
+    changeActivityTotalScore,
   } = useSubject();
   const [editTitle, setEditTitle] = useState();
   const titleRef = useRef();
@@ -27,7 +27,7 @@ const ExercisesModal = ({ currentStudent, closeModal }) => {
 
   const onAddExercise = async () => {
     setAdding(true);
-    await addExercise();
+    await addActivity('exercises');
     setAdding(false);
   };
 
@@ -64,7 +64,7 @@ const ExercisesModal = ({ currentStudent, closeModal }) => {
                       if (editTitle === i) {
                         setEditTitle();
                         const title = titleRef.current.value.trim();
-                        await changeExerciseTitle(i, title);
+                        await changeActivityTitle('exercises', i, title);
                       } else {
                         setEditTitle(i);
                       }
@@ -76,7 +76,7 @@ const ExercisesModal = ({ currentStudent, closeModal }) => {
                   icon={faTrashAlt}
                   onClick={() => {
                     if (!adding) {
-                      deleteExercise(i);
+                      deleteActivity('exercises', i);
                     }
                   }}
                 />
@@ -92,7 +92,8 @@ const ExercisesModal = ({ currentStudent, closeModal }) => {
                       const score = parseInt(
                         e.target.value === '' ? 0 : e.target.value
                       );
-                      await changeExerciseScore(
+                      await changeActivityScore(
+                        'exercises',
                         currentStudent.id,
                         i,
                         score,
@@ -109,7 +110,11 @@ const ExercisesModal = ({ currentStudent, closeModal }) => {
                     className="w-full"
                     onBlur={async (e) => {
                       const totalScore = parseInt(e.target.value.trim());
-                      await changeExerciseTotalScore(i, totalScore);
+                      await changeActivityTotalScore(
+                        'exercises',
+                        i,
+                        totalScore
+                      );
                     }}
                   />
                 </div>

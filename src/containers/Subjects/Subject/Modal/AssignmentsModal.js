@@ -15,11 +15,11 @@ import { useSubject } from 'contexts/SubjectContext';
 const AssignmentsModal = ({ currentStudent, closeModal }) => {
   const {
     subject,
-    addAssignment,
-    deleteAssignment,
-    changeAssignmentTitle,
-    changeAssignmentScore,
-    changeAssignmentTotalScore,
+    addActivity,
+    deleteActivity,
+    changeActivityTitle,
+    changeActivityScore,
+    changeActivityTotalScore,
   } = useSubject();
   const [editTitle, setEditTitle] = useState();
   const titleRef = useRef();
@@ -27,7 +27,7 @@ const AssignmentsModal = ({ currentStudent, closeModal }) => {
 
   const onAddAssignment = async () => {
     setAdding(true);
-    await addAssignment();
+    await addActivity('assignments');
     setAdding(false);
   };
 
@@ -64,7 +64,7 @@ const AssignmentsModal = ({ currentStudent, closeModal }) => {
                       if (editTitle === i) {
                         setEditTitle();
                         const title = titleRef.current.value.trim();
-                        await changeAssignmentTitle(i, title);
+                        await changeActivityTitle('assignments', i, title);
                       } else {
                         setEditTitle(i);
                       }
@@ -76,7 +76,7 @@ const AssignmentsModal = ({ currentStudent, closeModal }) => {
                   icon={faTrashAlt}
                   onClick={() => {
                     if (!adding) {
-                      deleteAssignment(i);
+                      deleteActivity('assignments', i);
                     }
                   }}
                 />
@@ -92,7 +92,8 @@ const AssignmentsModal = ({ currentStudent, closeModal }) => {
                       const score = parseInt(
                         e.target.value === '' ? 0 : e.target.value
                       );
-                      await changeAssignmentScore(
+                      await changeActivityScore(
+                        'assignments',
                         currentStudent.id,
                         i,
                         score,
@@ -109,7 +110,11 @@ const AssignmentsModal = ({ currentStudent, closeModal }) => {
                     className="w-full"
                     onBlur={async (e) => {
                       const totalScore = parseInt(e.target.value.trim());
-                      await changeAssignmentTotalScore(i, totalScore);
+                      await changeActivityTotalScore(
+                        'assignments',
+                        i,
+                        totalScore
+                      );
                     }}
                   />
                 </div>
