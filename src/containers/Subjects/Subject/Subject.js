@@ -17,12 +17,13 @@ import Button from 'components/Button/Button';
 import SettingsModal from './Modal/SettingsModal';
 import ExercisesModal from './Modal/ExercisesModal';
 import AssignmenstModal from './Modal/AssignmentsModal';
+import QuizzesModal from './Modal/QuizzesModal';
 
 const MODAL = {
   SETTINGS: 'settings',
   EXERCISES: 'exercises',
   ASSIGNMENTS: 'assignments',
-  QUIZES: 'quizes',
+  QUIZZES: 'quizzes',
 };
 
 const Subject = ({ code }) => {
@@ -58,6 +59,13 @@ const Subject = ({ code }) => {
       case MODAL.ASSIGNMENTS:
         return (
           <AssignmenstModal
+            currentStudent={currentStudent}
+            closeModal={closeModal}
+          />
+        );
+      case MODAL.QUIZZES:
+        return (
+          <QuizzesModal
             currentStudent={currentStudent}
             closeModal={closeModal}
           />
@@ -203,7 +211,7 @@ const Subject = ({ code }) => {
                   <Button
                     className="w-full"
                     onClick={() => {
-                      setModal(MODAL.QUIZES);
+                      setModal(MODAL.QUIZZES);
                     }}
                   >
                     Quizzes
