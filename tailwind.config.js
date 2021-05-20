@@ -85,7 +85,7 @@ module.exports = {
       fontSize: ['group-hover', 'important'],
       margin: ['first', 'last', 'important'],
       padding: ['important'],
-      textColor: ['after'],
+      textColor: ['after', 'important'],
       borderRadius: ['important'],
       backgroundColor: ['important'],
     },
