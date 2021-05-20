@@ -35,7 +35,7 @@ const Subject = ({ code }) => {
     changeMajorExaminationScore,
     changeMajorExaminationTotalScore,
   } = useSubject();
-  const [currentStudent, setCurrentStudent] = useState();
+  const [studentId, setCurrentStudentId] = useState();
   const studentRef = useRef();
   const lecturesRef = useRef();
   const [loading, setLoading] = useState(true);
@@ -52,21 +52,21 @@ const Subject = ({ code }) => {
       case MODAL.EXERCISES:
         return (
           <ExercisesModal
-            currentStudent={currentStudent}
+            studentId={studentId}
             closeModal={closeModal}
           />
         );
       case MODAL.ASSIGNMENTS:
         return (
           <AssignmenstModal
-            currentStudent={currentStudent}
+            studentId={studentId}
             closeModal={closeModal}
           />
         );
       case MODAL.QUIZZES:
         return (
           <QuizzesModal
-            currentStudent={currentStudent}
+            studentId={studentId}
             closeModal={closeModal}
           />
         );
@@ -75,30 +75,23 @@ const Subject = ({ code }) => {
     }
   };
 
-  const changeStudent = () => {
-    setCurrentStudent(
-      subject.students.find(
-        (student) => student.id === studentRef.current.value
-      )
-    );
+  const changeStudent = (e) => {
+    setCurrentStudentId(e.target.value);
   };
-
+  
   useEffect(() => {
     const fetchSubject = async () => {
-      setCurrentStudent(await getSubject(code));
+      setCurrentStudentId(await getSubject(code));
     };
     fetchSubject();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (subject && currentStudent) {
+    if (subject && studentId) {
       const update = async () => {
-        await updateStudent(currentStudent.id);
+        await updateStudent(studentId);
       };
-      setCurrentStudent(() =>
-        subject.students.find((student) => student.id === currentStudent.id)
-      );
       update();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -138,20 +131,22 @@ const Subject = ({ code }) => {
               <FontAwesomeIcon icon={faCog} />
             </div>
           </div>
-          {subject.students.length > 0 ? (
+          {subject.students ? (
             <>
               <Label>Student</Label>
               <Select
                 ref={studentRef}
                 className="w-full mb-5 xs:mb-3"
                 onChange={changeStudent}
-                value={currentStudent.id}
+                value={studentId}
               >
-                {subject.students.map((student) => (
-                  <option key={uuid()} value={student.id}>
-                    {student.name}
-                  </option>
-                ))}
+                {Object.keys(subject.students).map((id) => {
+                  return (
+                    <option key={uuid()} value={id}>
+                      {subject.students[id].name}
+                    </option>
+                  );
+                })}
               </Select>
               <div className="flex mb-5 xs:mb-3">
                 <div className="flex flex-col justify-between w-2/5 mr-5">
@@ -162,8 +157,8 @@ const Subject = ({ code }) => {
                         className="!px-3 rounded-tr-none rounded-br-none"
                         onClick={() => {
                           changeAttendance(
-                            currentStudent.id,
-                            currentStudent.lectures,
+                            studentId,
+                            subject.students[studentId].lectures,
                             subject.lectures,
                             -1
                           );
@@ -174,15 +169,15 @@ const Subject = ({ code }) => {
                       <Input
                         ref={lecturesRef}
                         readOnly
-                        value={`${currentStudent.lectures} / ${subject.lectures}`}
+                        value={`${subject.students[studentId].lectures} / ${subject.lectures}`}
                         className="w-full text-center !rounded-none cursor-default outline-none"
                       />
                       <Button
                         className="!px-3 rounded-tl-none rounded-bl-none"
                         onClick={() => {
                           changeAttendance(
-                            currentStudent.id,
-                            currentStudent.lectures,
+                            studentId,
+                            subject.students[studentId].lectures,
                             subject.lectures,
                             1
                           );
@@ -228,14 +223,15 @@ const Subject = ({ code }) => {
                           <Input
                             numberOnly
                             defaultValue={
-                              currentStudent.majorExamination.prelim.score
+                              subject.students[studentId].majorExamination
+                                .prelim.score
                             }
                             className="w-full"
                             onBlur={(e) => {
                               const score = parseInt(e.target.value.trim());
 
                               changeMajorExaminationScore(
-                                currentStudent.id,
+                                studentId,
                                 'prelim',
                                 score,
                                 subject.majorExamination.prelim.totalScore
@@ -272,13 +268,13 @@ const Subject = ({ code }) => {
                           <Input
                             numberOnly
                             defaultValue={
-                              currentStudent.majorExamination.midterm.score
+                              subject.students[studentId].majorExamination.midterm.score
                             }
                             className="w-full"
                             onBlur={(e) => {
                               const score = parseInt(e.target.value.trim());
                               changeMajorExaminationScore(
-                                currentStudent.id,
+                                studentId,
                                 'midterm',
                                 score,
                                 subject.majorExamination.midterm.totalScore
@@ -317,13 +313,13 @@ const Subject = ({ code }) => {
                           <Input
                             numberOnly
                             defaultValue={
-                              currentStudent.majorExamination.semiFinals.score
+                              subject.students[studentId].majorExamination.semiFinals.score
                             }
                             className="w-full"
                             onBlur={(e) => {
                               const score = parseInt(e.target.value.trim());
                               changeMajorExaminationScore(
-                                currentStudent.id,
+                                studentId,
                                 'semiFinals',
                                 score,
                                 subject.majorExamination.semiFinals.totalScore
@@ -360,13 +356,13 @@ const Subject = ({ code }) => {
                           <Input
                             numberOnly
                             defaultValue={
-                              currentStudent.majorExamination.finals.score
+                              subject.students[studentId].majorExamination.finals.score
                             }
                             className="w-full"
                             onBlur={(e) => {
                               const score = parseInt(e.target.value.trim());
                               changeMajorExaminationScore(
-                                currentStudent.id,
+                                studentId,
                                 'finals',
                                 score,
                                 subject.majorExamination.finals.totalScore
@@ -402,7 +398,7 @@ const Subject = ({ code }) => {
                 <Label>Final Grade</Label>
                 <div className="flex justify-center items-center w-24 h-20 xm:h-16 border-b border-orange">
                   <h3 className="text-5xl xm:text-4xl">
-                    {currentStudent.grade || '--'}
+                    {studentId.grade || '--'}
                   </h3>
                 </div>
                 <Button className="mt-5 xs:mt-3">Publish grade</Button>

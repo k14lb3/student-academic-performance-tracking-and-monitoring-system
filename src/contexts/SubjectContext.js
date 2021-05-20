@@ -15,26 +15,32 @@ const SubjectProvider = ({ children }) => {
       subject_code: code,
     }).get();
 
-    const subjectStudents = subjectStudentsSnapshot.docs.map(
-      async (student) => {
-        const userSnapshot = await REF.USER({ user_uid: student.id }).get();
-        const { firstName, lastName, middleName } = userSnapshot.data();
-        const name = `${lastName}, ${firstName} ${middleName}`;
-        return {
-          id: student.id,
-          name: name,
-          ...student.data(),
-        };
-      }
-    );
+    let students = subjectStudentsSnapshot.docs.map(async (student) => {
+      const userSnapshot = await REF.USER({ user_uid: student.id }).get();
+      const { firstName, lastName, middleName } = userSnapshot.data();
+      const name = `${lastName}, ${firstName} ${middleName}`;
+      return {
+        id: student.id,
+        name: name,
+        ...student.data(),
+      };
+    });
 
     const subjectSnapshot = await REF.SUBJECT({ subject_code: code }).get();
 
-    const students = (await Promise.all(subjectStudents)).sort((sa, sb) => {
+    students = (await Promise.all(students)).sort((sa, sb) => {
       const studentA = sa.name.toLowerCase();
       const studentB = sb.name.toLowerCase();
       return studentA < studentB ? -1 : studentA > studentB ? 1 : 0;
     });
+
+    students = students.reduce((students, student) => {
+      const { id, ...rest } = student;
+      return {
+        ...students,
+        [student.id]: rest,
+      };
+    }, {});
 
     setSubject({
       code: code,
@@ -42,7 +48,7 @@ const SubjectProvider = ({ children }) => {
       students: students,
     });
 
-    return students[0];
+    return Object.keys(students)[0];
   };
 
   const updateSubjectSettings = async (settings) => {
@@ -56,15 +62,11 @@ const SubjectProvider = ({ children }) => {
   };
 
   const updateStudent = async (studentId) => {
-    const student = subject.students.find(
-      (student) => student.id === studentId
-    );
-
-    const { id, name, ...rest } = student;
+    const { name, ...rest } = subject.students[studentId];
 
     await REF.SUBJECT_STUDENT({
       subject_code: subject.code,
-      student_uid: id,
+      student_uid: studentId,
     }).update(rest);
   };
 
@@ -91,25 +93,23 @@ const SubjectProvider = ({ children }) => {
   const changeMajorExaminationScore = async (id, exam, score, totalScore) => {
     setSubject((prevSubject) => ({
       ...prevSubject,
-      students: prevSubject.students.map((student) => {
-        if (student.id === id) {
-          return {
-            ...student,
-            majorExamination: {
-              ...student.majorExamination,
-              [exam]: { score: score > totalScore ? totalScore : score },
-            },
-          };
-        }
-        return student;
-      }),
+      students: {
+        ...prevSubject.students,
+        [id]: {
+          ...prevSubject.students[id],
+          majorExamination: {
+            ...prevSubject.students[id].majorExamination,
+            [exam]: { score: score > totalScore ? totalScore : score },
+          },
+        },
+      },
     }));
   };
 
   const changeMajorExaminationTotalScore = async (exam, totalScore) => {
     let highestScore = 0;
 
-    subject.students.forEach((student, index) => {
+    Object.values(subject.students).forEach((student, index) => {
       if (index === 0) {
         highestScore = student.majorExamination[exam].score;
       }
@@ -161,24 +161,28 @@ const SubjectProvider = ({ children }) => {
     setSubject((prevSubject) => ({
       ...prevSubject,
       [activity]: activities,
-      students: prevSubject.students.map((student) => {
-        return {
-          ...student,
-          [activity]: [...student[activity], { score: 0 }],
-        };
-      }),
+      students: Object.entries(prevSubject.students).reduce(
+        (students, student) => ({
+          ...students,
+          [student[0]]: {
+            ...student[1],
+            [activity]: [...student[1][activity], { score: 0 }],
+          },
+        }),
+        {}
+      ),
     }));
 
     REF.SUBJECT({ subject_code: subject.code }).update({
       [activity]: activities,
     });
 
-    subject.students.forEach(async (student) => {
+    Object.entries(subject.students).forEach(async (student) => {
       await REF.SUBJECT_STUDENT({
         subject_code: subject.code,
-        student_uid: student.id,
+        student_uid: student[0],
       }).update({
-        [activity]: [...student[activity], { score: 0 }],
+        [activity]: [...student[1][activity], { score: 0 }],
       });
     });
   };
@@ -189,22 +193,28 @@ const SubjectProvider = ({ children }) => {
     setSubject((prevSubject) => ({
       ...prevSubject,
       [activity]: activities,
-      students: prevSubject.students.map((student) => ({
-        ...student,
-        [activity]: student[activity].filter((_, index) => index !== i),
-      })),
+      students: Object.entries(prevSubject.students).reduce(
+        (students, student) => ({
+          ...students,
+          [student[0]]: {
+            ...student[1],
+            [activity]: student[1][activity].filter((_, index) => index !== i),
+          },
+        }),
+        {}
+      ),
     }));
 
     REF.SUBJECT({ subject_code: subject.code }).update({
       [activity]: activities,
     });
 
-    subject.students.forEach(async (student) => {
+    Object.entries(subject.students).forEach(async (student) => {
       await REF.SUBJECT_STUDENT({
         subject_code: subject.code,
-        student_uid: student.id,
+        student_uid: student[0],
       }).update({
-        [activity]: student[activity].filter((_, index) => index !== i),
+        [activity]: student[1][activity].filter((_, index) => index !== i),
       });
     });
   };
@@ -235,11 +245,7 @@ const SubjectProvider = ({ children }) => {
       score = totalScore;
     }
 
-    setSubject();
-
-    const student = subject.students.find((student) => student.id === id);
-
-    const activities = student[activity].map((activity, index) => {
+    const activities = subject.students[id][activity].map((activity, index) => {
       if (index === i) {
         return {
           score: score,
@@ -250,22 +256,20 @@ const SubjectProvider = ({ children }) => {
 
     setSubject(() => ({
       ...subject,
-      students: subject.students.map((student) => {
-        if (student.id === id) {
-          return {
-            ...student,
-            [activity]: activities,
-          };
-        }
-        return student;
-      }),
+      students: {
+        ...subject.students,
+        [id]: {
+          ...subject.students[id],
+          [activity]: activities,
+        },
+      },
     }));
   };
 
   const changeActivityTotalScore = async (activity, i, totalScore) => {
     let highestScore = 0;
 
-    subject.students.forEach((student, index) => {
+    Object.values(subject.students).forEach((student, index) => {
       if (index === 0) {
         highestScore = student[activity][i].score;
       }
@@ -285,6 +289,7 @@ const SubjectProvider = ({ children }) => {
           totalScore: totalScore,
         };
       }
+
       return exercise;
     });
 

@@ -12,7 +12,7 @@ import Input from 'components/Input';
 import Button from 'components/Button/Button';
 import { useSubject } from 'contexts/SubjectContext';
 
-const ExercisesModal = ({ currentStudent, closeModal }) => {
+const ExercisesModal = ({ studentId, closeModal }) => {
   const {
     subject,
     addActivity,
@@ -86,7 +86,7 @@ const ExercisesModal = ({ currentStudent, closeModal }) => {
                   <Label>Score</Label>
                   <Input
                     numberOnly
-                    defaultValue={currentStudent.exercises[i]?.score}
+                    defaultValue={subject.students[studentId].exercises[i]?.score}
                     className="w-full"
                     onBlur={async (e) => {
                       const score = parseInt(
@@ -94,7 +94,7 @@ const ExercisesModal = ({ currentStudent, closeModal }) => {
                       );
                       await changeActivityScore(
                         'exercises',
-                        currentStudent.id,
+                        studentId,
                         i,
                         score,
                         exercise.totalScore
