@@ -37,7 +37,7 @@ const Button = ({
             outlined ? VARIATIONS.OUTLINED : VARIATIONS.DEFAULT
           }${className ? className : ''}`}
           onClick={(e) => {
-            if (!hasLoader?.loading) {
+            if (onClick && !hasLoader?.loading) {
               onClick(e);
             }
           }}
