@@ -77,15 +77,13 @@ const SubjectProvider = ({ children }) => {
     ) {
       setSubject((prevSubject) => ({
         ...prevSubject,
-        students: prevSubject.students.map((student) => {
-          if (student.id === id) {
-            return {
-              ...student,
-              lectures: student.lectures + x,
-            };
-          }
-          return student;
-        }),
+        students: {
+          ...prevSubject.students,
+          [id]: {
+            ...prevSubject.students[id],
+            lectures: prevSubject.students[id].lectures + x,
+          },
+        },
       }));
     }
   };
