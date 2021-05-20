@@ -53,11 +53,7 @@ const SubjectProvider = ({ children }) => {
 
   const updateSubjectSettings = async (settings) => {
     updateTitle(subject.code, settings.title);
-    subject.students.forEach((student) => {
-      if (settings.lectures < student.lectures) {
-        settings.lectures = student.lectures;
-      }
-    });
+
     REF.SUBJECT({ subject_code: subject.code }).update(settings);
   };
 
