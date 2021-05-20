@@ -1,5 +1,11 @@
-const Error = ({ error }) => {
-  return <div className="mt-1 xs:text-xs text-red">{error}</div>;
+const Error = ({ className, error }) => {
+  return (
+    <div
+      className={`mt-1 xs:text-xs text-red${className ? ` ${className}` : ''}`}
+    >
+      {error}
+    </div>
+  );
 };
 
 export default Error;
