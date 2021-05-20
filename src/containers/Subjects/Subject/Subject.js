@@ -223,7 +223,7 @@ const Subject = ({ code }) => {
                           <Input
                             numberOnly
                             defaultValue={
-                              subject.students[studentId].majorExamination
+                              subject.students[studentId].majorExaminations
                                 .prelim.score
                             }
                             className="w-full"
@@ -234,7 +234,7 @@ const Subject = ({ code }) => {
                                 studentId,
                                 'prelim',
                                 score,
-                                subject.majorExamination.prelim.totalScore
+                                subject.majorExaminations.prelim.totalScore
                               );
                             }}
                           />
@@ -244,7 +244,7 @@ const Subject = ({ code }) => {
                           <Input
                             numberOnly
                             defaultValue={
-                              subject.majorExamination.prelim.totalScore
+                              subject.majorExaminations.prelim.totalScore
                             }
                             className="w-full"
                             onBlur={(e) => {
@@ -268,7 +268,7 @@ const Subject = ({ code }) => {
                           <Input
                             numberOnly
                             defaultValue={
-                              subject.students[studentId].majorExamination.midterm.score
+                              subject.students[studentId].majorExaminations.midterm.score
                             }
                             className="w-full"
                             onBlur={(e) => {
@@ -277,7 +277,7 @@ const Subject = ({ code }) => {
                                 studentId,
                                 'midterm',
                                 score,
-                                subject.majorExamination.midterm.totalScore
+                                subject.majorExaminations.midterm.totalScore
                               );
                             }}
                           />
@@ -287,7 +287,7 @@ const Subject = ({ code }) => {
                           <Input
                             numberOnly
                             defaultValue={
-                              subject.majorExamination.midterm.totalScore
+                              subject.majorExaminations.midterm.totalScore
                             }
                             className="w-full"
                             onBlur={(e) => {
@@ -313,7 +313,7 @@ const Subject = ({ code }) => {
                           <Input
                             numberOnly
                             defaultValue={
-                              subject.students[studentId].majorExamination.semiFinals.score
+                              subject.students[studentId].majorExaminations.semiFinals.score
                             }
                             className="w-full"
                             onBlur={(e) => {
@@ -322,7 +322,7 @@ const Subject = ({ code }) => {
                                 studentId,
                                 'semiFinals',
                                 score,
-                                subject.majorExamination.semiFinals.totalScore
+                                subject.majorExaminations.semiFinals.totalScore
                               );
                             }}
                           />
@@ -332,7 +332,7 @@ const Subject = ({ code }) => {
                           <Input
                             numberOnly
                             defaultValue={
-                              subject.majorExamination.semiFinals.totalScore
+                              subject.majorExaminations.semiFinals.totalScore
                             }
                             className="w-full"
                             onBlur={(e) => {
@@ -356,7 +356,7 @@ const Subject = ({ code }) => {
                           <Input
                             numberOnly
                             defaultValue={
-                              subject.students[studentId].majorExamination.finals.score
+                              subject.students[studentId].majorExaminations.finals.score
                             }
                             className="w-full"
                             onBlur={(e) => {
@@ -365,7 +365,7 @@ const Subject = ({ code }) => {
                                 studentId,
                                 'finals',
                                 score,
-                                subject.majorExamination.finals.totalScore
+                                subject.majorExaminations.finals.totalScore
                               );
                             }}
                           />
@@ -375,7 +375,7 @@ const Subject = ({ code }) => {
                           <Input
                             numberOnly
                             defaultValue={
-                              subject.majorExamination.finals.totalScore
+                              subject.majorExaminations.finals.totalScore
                             }
                             className="w-full"
                             onBlur={(e) => {

@@ -95,8 +95,8 @@ const SubjectProvider = ({ children }) => {
         ...prevSubject.students,
         [id]: {
           ...prevSubject.students[id],
-          majorExamination: {
-            ...prevSubject.students[id].majorExamination,
+          majorExaminations: {
+            ...prevSubject.students[id].majorExaminations,
             [exam]: { score: score > totalScore ? totalScore : score },
           },
         },
@@ -109,10 +109,10 @@ const SubjectProvider = ({ children }) => {
 
     Object.values(subject.students).forEach((student, index) => {
       if (index === 0) {
-        highestScore = student.majorExamination[exam].score;
+        highestScore = student.majorExaminations[exam].score;
       }
-      if (student.majorExamination[exam].score > highestScore) {
-        highestScore = student.majorExamination[exam].score;
+      if (student.majorExaminations[exam].score > highestScore) {
+        highestScore = student.majorExaminations[exam].score;
       }
     });
 
@@ -120,8 +120,8 @@ const SubjectProvider = ({ children }) => {
       totalScore = highestScore;
     }
 
-    const majorExamination = {
-      ...subject.majorExamination,
+    const majorExaminations = {
+      ...subject.majorExaminations,
       [exam]: {
         totalScore: totalScore,
       },
@@ -129,11 +129,11 @@ const SubjectProvider = ({ children }) => {
 
     setSubject((prevSubject) => ({
       ...prevSubject,
-      majorExamination: majorExamination,
+      majorExaminations: majorExaminations,
     }));
 
     await REF.SUBJECT({ subject_code: subject.code }).update({
-      majorExamination: majorExamination,
+      majorExaminations: majorExaminations,
     });
   };
 

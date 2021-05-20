@@ -123,6 +123,28 @@ const SubjectsProvider = ({ children }) => {
       }`,
       students: 0,
       lectures: 40,
+      exercises: [],
+      assignments: [],
+      quizzes: [],
+      majorExaminations: {
+        prelim: {
+          score: 100,
+        },
+        midterm: {
+          score: 100,
+        },
+        semiFinals: {
+          score: 100,
+        },
+        finals: {
+          score: 100,
+        },
+      },
+      percentages: {
+        activities: 10,
+        attendance: 10,
+        majorExaminations: 80,
+      },
     });
 
     subjectsDispatch({
