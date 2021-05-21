@@ -174,6 +174,14 @@ const SubjectsProvider = ({ children }) => {
       throw new Error('Subject with that code does not exist.');
     }
 
+    const subjectSnapshot = await REF.SUBJECT({ subject_code: code }).get();
+    const { instructor, title, students, exercises, assignments, quizzes } =
+      subjectSnapshot.data();
+
+    await REF.SUBJECT({ subject_code: code }).update({
+      students: students + 1,
+    });
+
     await REF.USER_SUBJECT({ user_uid: user.uid, subject_code: code }).set({});
 
     await REF.SUBJECT_STUDENT({
@@ -182,22 +190,21 @@ const SubjectsProvider = ({ children }) => {
     }).set({
       grade: '',
       lectures: 0,
-      exercises: [],
-      assignments: [],
-      quizzes: [],
-      majorExamination: {
+      exercises: exercises.map(() => ({
+        score: 0,
+      })),
+      assignments: assignments.map(() => ({
+        score: 0,
+      })),
+      quizzes: quizzes.map(() => ({
+        score: 0,
+      })),
+      majorExaminations: {
         prelim: { score: 0 },
         midterm: { score: 0 },
         semiFinals: { score: 0 },
         finals: { score: 0 },
       },
-    });
-
-    const subjectSnapshot = await REF.SUBJECT({ subject_code: code }).get();
-    const { instructor, title, students } = subjectSnapshot.data();
-
-    await REF.SUBJECT({ subject_code: code }).update({
-      students: students + 1,
     });
 
     subjectsDispatch({
