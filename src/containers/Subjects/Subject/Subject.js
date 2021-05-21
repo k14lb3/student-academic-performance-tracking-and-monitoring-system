@@ -31,12 +31,14 @@ const Subject = ({ code }) => {
     subject,
     getSubject,
     updateStudent,
+    computeGrade,
     changeAttendance,
     changeMajorExaminationScore,
     changeMajorExaminationTotalScore,
   } = useSubject();
-  const [studentId, setCurrentStudentId] = useState();
+  const [studentId, setStudentId] = useState();
   const studentRef = useRef();
+  const finalGradeRef = useRef();
   const lecturesRef = useRef();
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState('');
@@ -50,38 +52,25 @@ const Subject = ({ code }) => {
       case MODAL.SETTINGS:
         return <SettingsModal closeModal={closeModal} />;
       case MODAL.EXERCISES:
-        return (
-          <ExercisesModal
-            studentId={studentId}
-            closeModal={closeModal}
-          />
-        );
+        return <ExercisesModal studentId={studentId} closeModal={closeModal} />;
       case MODAL.ASSIGNMENTS:
         return (
-          <AssignmenstModal
-            studentId={studentId}
-            closeModal={closeModal}
-          />
+          <AssignmenstModal studentId={studentId} closeModal={closeModal} />
         );
       case MODAL.QUIZZES:
-        return (
-          <QuizzesModal
-            studentId={studentId}
-            closeModal={closeModal}
-          />
-        );
+        return <QuizzesModal studentId={studentId} closeModal={closeModal} />;
       default:
         return null;
     }
   };
 
   const changeStudent = (e) => {
-    setCurrentStudentId(e.target.value);
+    setStudentId(e.target.value);
   };
-  
+
   useEffect(() => {
     const fetchSubject = async () => {
-      setCurrentStudentId(await getSubject(code));
+      setStudentId(await getSubject(code));
     };
     fetchSubject();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -89,8 +78,9 @@ const Subject = ({ code }) => {
 
   useEffect(() => {
     if (subject && studentId) {
+      const finalGrade = parseFloat(finalGradeRef.current.innerHTML);
       const update = async () => {
-        await updateStudent(studentId);
+        await updateStudent(studentId, finalGrade);
       };
       update();
     }
@@ -151,7 +141,9 @@ const Subject = ({ code }) => {
               <div className="flex mb-5 xs:mb-3">
                 <div className="flex flex-col justify-between w-2/5 mr-5">
                   <div>
-                    <h3 className="text-xl mb-3">Lectures attended</h3>
+                    <h3 className="mb-3 text-xl xs:text-base">
+                      Lectures attended
+                    </h3>
                     <div className="flex items-center">
                       <Button
                         className="!px-3 rounded-tr-none rounded-br-none"
@@ -213,7 +205,9 @@ const Subject = ({ code }) => {
                   </Button>
                 </div>
                 <div key={uuid()} className="w-3/5">
-                  <h3 className="text-xl mb-3">Major Examination</h3>
+                  <h3 className=" mb-3 text-xl xs:text-base">
+                    Major Examination
+                  </h3>
                   <div className="grid grid-cols-2 gap-5">
                     <div>
                       <Label className="xs:!text-sm">Prelim</Label>
@@ -268,7 +262,8 @@ const Subject = ({ code }) => {
                           <Input
                             numberOnly
                             defaultValue={
-                              subject.students[studentId].majorExaminations.midterm.score
+                              subject.students[studentId].majorExaminations
+                                .midterm.score
                             }
                             className="w-full"
                             onBlur={(e) => {
@@ -283,7 +278,7 @@ const Subject = ({ code }) => {
                           />
                         </div>
                         <div>
-                          <Label className="xs:!text-sm">Total</Label>
+                          <Label>Total</Label>
                           <Input
                             numberOnly
                             defaultValue={
@@ -313,7 +308,8 @@ const Subject = ({ code }) => {
                           <Input
                             numberOnly
                             defaultValue={
-                              subject.students[studentId].majorExaminations.semiFinals.score
+                              subject.students[studentId].majorExaminations
+                                .semiFinals.score
                             }
                             className="w-full"
                             onBlur={(e) => {
@@ -356,7 +352,8 @@ const Subject = ({ code }) => {
                           <Input
                             numberOnly
                             defaultValue={
-                              subject.students[studentId].majorExaminations.finals.score
+                              subject.students[studentId].majorExaminations
+                                .finals.score
                             }
                             className="w-full"
                             onBlur={(e) => {
@@ -395,13 +392,18 @@ const Subject = ({ code }) => {
                 </div>
               </div>
               <div className="flex flex-col items-center">
-                <Label>Final Grade</Label>
+                <h3 className="text-xl xs:text-base">Final Grade</h3>
                 <div className="flex justify-center items-center w-24 h-20 xm:h-16 border-b border-orange">
-                  <h3 className="text-5xl xm:text-4xl">
-                    {studentId.grade || '--'}
+                  <h3 ref={finalGradeRef} className="text-5xl xm:text-4xl">
+                    {computeGrade(studentId)}
                   </h3>
                 </div>
-                <Button className="mt-5 xs:mt-3">Publish grade</Button>
+                <Button
+                  className="mt-5 xs:mt-3"
+                  onClick={() => {}}
+                >
+                  Publish grade
+                </Button>
               </div>
             </>
           ) : (
