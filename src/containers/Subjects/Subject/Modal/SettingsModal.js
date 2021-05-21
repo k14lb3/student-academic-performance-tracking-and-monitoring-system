@@ -8,7 +8,6 @@ import Error from 'components/Error';
 const SettingsModal = ({ closeModal }) => {
   const titleRef = useRef();
   const lecturesRef = useRef();
-  const baseRef = useRef();
   const attendancePercentageRef = useRef();
   const activitiesPercentageRef = useRef();
   const majorExaminationsPercentageRef = useRef();
@@ -20,7 +19,6 @@ const SettingsModal = ({ closeModal }) => {
   const onUpdateSubjectSettings = async () => {
     const title = titleRef.current.value.trim();
     const lectures = parseInt(lecturesRef.current.value.trim());
-    const base = parseInt(baseRef.current.value.trim());
     let attendancePercentage = parseInt(
       attendancePercentageRef.current.value.trim()
     );
@@ -59,7 +57,6 @@ const SettingsModal = ({ closeModal }) => {
   const handleInputChange = () => {
     const title = titleRef.current.value.trim();
     const lectures = parseInt(lecturesRef.current.value.trim());
-    const base = parseInt(baseRef.current.value.trim());
     const attendancePercentage = parseInt(
       attendancePercentageRef.current.value.trim()
     );
@@ -84,8 +81,6 @@ const SettingsModal = ({ closeModal }) => {
     if (
       title === subject.title &&
       lectures === subject.lectures &&
-      (base === subject.base ** attendancePercentage) ===
-        subject.percentages.attendance &&
       activitiesPercentage === subject.percentages.activities &&
       majorExaminationsPercentage === subject.percentages.majorExaminations
     ) {
@@ -155,16 +150,6 @@ const SettingsModal = ({ closeModal }) => {
           onBlur={lecturesOnBlur}
         />
         <Label className="pt-3 mt-3 border-t border-orange text-lg xs:text-sm">
-          Base grade computation
-        </Label>
-        <Input
-          ref={baseRef}
-          numberOnly
-          defaultValue={subject.base}
-          className="w-full mb-3"
-          onChange={handleInputChange}
-        />
-        <Label className="pt-3 mt-3 border-t border-orange text-lg xs:text-sm">
           Grade calculation percentages
         </Label>
         <Label>Attendance</Label>
@@ -191,13 +176,13 @@ const SettingsModal = ({ closeModal }) => {
           className="w-full"
           onChange={handleInputChange}
         />
-        {percentagesWarning && (
-          <Error
-            className="!text-orange"
-            error="Percentages will be assigned with previous values if the total does not equal to 100%"
-          />
-        )}
       </div>
+      {percentagesWarning && (
+        <Error
+          className="!text-orange"
+          error="Percentages will be assigned with previous values if the total does not equal to 100%"
+        />
+      )}
     </Modal>
   );
 };
