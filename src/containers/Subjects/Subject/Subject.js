@@ -14,6 +14,7 @@ import Input from 'components/Input';
 import Select from 'components/Select';
 import Loader from 'components/Loader';
 import Button from 'components/Button/Button';
+import PopupNotification from 'components/PopupNotification';
 import SettingsModal from './Modal/SettingsModal';
 import ExercisesModal from './Modal/ExercisesModal';
 import AssignmenstModal from './Modal/AssignmentsModal';
@@ -32,6 +33,7 @@ const Subject = ({ code }) => {
     getSubject,
     updateStudent,
     computeGrade,
+    publishGrade,
     changeAttendance,
     changeMajorExaminationScore,
     changeMajorExaminationTotalScore,
@@ -41,7 +43,9 @@ const Subject = ({ code }) => {
   const finalGradeRef = useRef();
   const lecturesRef = useRef();
   const [loading, setLoading] = useState(true);
+  const [publishing, setPublishing] = useState(false);
   const [modal, setModal] = useState('');
+  const [popup, setPopup] = useState({ up: false, message: '' });
   const history = useHistory();
 
   const showModal = () => {
@@ -64,6 +68,14 @@ const Subject = ({ code }) => {
     }
   };
 
+  const onPublish = async () => {
+    const finalGrade = parseFloat(finalGradeRef.current.innerHTML);
+    setPublishing(true);
+    await publishGrade(studentId, finalGrade);
+    setPopup({ up: true, message: 'Grade published' });
+    setPublishing(false);
+  };
+
   const changeStudent = (e) => {
     setStudentId(e.target.value);
   };
@@ -78,9 +90,8 @@ const Subject = ({ code }) => {
 
   useEffect(() => {
     if (subject && studentId) {
-      const finalGrade = parseFloat(finalGradeRef.current.innerHTML);
       const update = async () => {
-        await updateStudent(studentId, finalGrade);
+        await updateStudent(studentId);
       };
       update();
     }
@@ -99,6 +110,11 @@ const Subject = ({ code }) => {
         <Loader className="mx-auto" />
       ) : (
         <>
+          {popup.up && (
+            <PopupNotification
+              popupState={{ popup: popup, setPopup: setPopup }}
+            />
+          )}
           {modal && showModal()}
           <div className="flex justify-between mb-5 xs:mb-3">
             <div className="flex">
@@ -123,7 +139,7 @@ const Subject = ({ code }) => {
           </div>
           {subject.students ? (
             <>
-              <Label>Student</Label>
+              <h3 className="mb-3 text-xl xs:text-base">Students</h3>
               <Select
                 ref={studentRef}
                 className="w-full mb-5 xs:mb-3"
@@ -400,9 +416,12 @@ const Subject = ({ code }) => {
                 </div>
                 <Button
                   className="mt-5 xs:mt-3"
-                  onClick={() => {}}
+                  hasLoader={{ loading: publishing }}
+                  onClick={onPublish}
                 >
-                  Publish grade
+                  <span className={publishing ? 'invisible' : ''}>
+                    Publish grade
+                  </span>
                 </Button>
               </div>
             </>
