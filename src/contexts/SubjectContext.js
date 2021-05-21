@@ -56,7 +56,7 @@ const SubjectProvider = ({ children }) => {
     REF.SUBJECT({ subject_code: subject.code }).update(settings);
   };
 
-  const updateStudent = async (studentId, finalGrade) => {
+  const updateStudent = async (studentId) => {
     const { name, ...rest } = subject.students[studentId];
 
     await REF.SUBJECT_STUDENT({
@@ -64,7 +64,6 @@ const SubjectProvider = ({ children }) => {
       student_uid: studentId,
     }).update({
       ...rest,
-      grade: finalGrade,
     });
   };
 
@@ -74,29 +73,42 @@ const SubjectProvider = ({ children }) => {
     const attendancePercentagePer = subject.percentages.attendance / 100;
 
     const attendanceComputation =
-      (student.lectures / subject.lectures) * attendancePercentagePer;
+      (((student.lectures / subject.lectures) * 62.5 + 37.5) / 100) *
+      attendancePercentagePer;
 
     const majorExaminationPercentagePer =
       subject.percentages.majorExaminations / 100 / 4;
 
     const prelimExaminationComputation =
-      (student.majorExaminations.prelim.score /
+      (((student.majorExaminations.prelim.score /
         subject.majorExaminations.prelim.totalScore) *
+        62.5 +
+        37.5) /
+        100) *
       majorExaminationPercentagePer;
 
     const midtermExaminationComputation =
-      (student.majorExaminations.midterm.score /
+      (((student.majorExaminations.midterm.score /
         subject.majorExaminations.midterm.totalScore) *
+        62.5 +
+        37.5) /
+        100) *
       majorExaminationPercentagePer;
 
     const semiFinalsExaminationComputation =
-      (student.majorExaminations.semiFinals.score /
+      (((student.majorExaminations.semiFinals.score /
         subject.majorExaminations.semiFinals.totalScore) *
+        62.5 +
+        37.5) /
+        100) *
       majorExaminationPercentagePer;
 
     const finalsExaminationComputation =
-      (student.majorExaminations.finals.score /
+      (((student.majorExaminations.finals.score /
         subject.majorExaminations.finals.totalScore) *
+        62.5 +
+        37.5) /
+        100) *
       majorExaminationPercentagePer;
 
     const activitiesPercentagePer =
@@ -108,37 +120,58 @@ const SubjectProvider = ({ children }) => {
 
     let activitiesComputation = 0;
 
-    subject.students[id].exercises.forEach((exercise, index) => {
-      activitiesComputation +=
-        (exercise.score / subject.exercises[index].totalScore) *
-        activitiesPercentagePer;
-    });
+    if (
+      subject.exercises.length === 0 &&
+      (subject.assignments.length === 0) & (subject.quizzes.length === 0)
+    ) {
+      activitiesComputation = subject.percentages.activities / 100;
+    } else {
+      subject.students[id].exercises.forEach((exercise, index) => {
+        activitiesComputation +=
+          (((exercise.score / subject.exercises[index].totalScore) * 62.5 +
+            37.5) /
+            100) *
+          activitiesPercentagePer;
+      });
 
-    subject.students[id].assignments.forEach((assignment, index) => {
-      activitiesComputation +=
-        (assignment.score / subject.assignments[index].totalScore) *
-        activitiesPercentagePer;
-    });
+      subject.students[id].assignments.forEach((assignment, index) => {
+        activitiesComputation +=
+          (((assignment.score / subject.assignments[index].totalScore) * 62.5 +
+            37.5) /
+            100) *
+          activitiesPercentagePer;
+      });
 
-    subject.students[id].quizzes.forEach((quiz, index) => {
-      activitiesComputation +=
-        (quiz.score / subject.quizzes[index].totalScore) *
-        activitiesPercentagePer;
-    });
+      subject.students[id].quizzes.forEach((quiz, index) => {
+        activitiesComputation +=
+          (((quiz.score / subject.quizzes[index].totalScore) * 62.5 + 37.5) /
+            100) *
+          activitiesPercentagePer;
+      });
+    }
 
-    const convertDecimal = (number) => {
-      return parseFloat((number * 100).toFixed(2));
+    const convertToPercentage = (number) => {
+      return number * 100;
     };
 
     const computedGrade =
-      convertDecimal(attendanceComputation) +
-      convertDecimal(activitiesComputation) +
-      convertDecimal(prelimExaminationComputation) +
-      convertDecimal(midtermExaminationComputation) +
-      convertDecimal(semiFinalsExaminationComputation) +
-      convertDecimal(finalsExaminationComputation);
+      convertToPercentage(attendanceComputation) +
+      convertToPercentage(activitiesComputation) +
+      convertToPercentage(prelimExaminationComputation) +
+      convertToPercentage(midtermExaminationComputation) +
+      convertToPercentage(semiFinalsExaminationComputation) +
+      convertToPercentage(finalsExaminationComputation);
 
-    return computedGrade;
+    return parseFloat(computedGrade.toFixed(2));
+  };
+
+  const publishGrade = async (id, grade) => {
+    await REF.SUBJECT_STUDENT({
+      subject_code: subject.code,
+      student_uid: id,
+    }).update({
+      grade: grade,
+    });
   };
 
   const changeAttendance = async (id, studentLectures, subjectLectures, x) => {
@@ -378,6 +411,7 @@ const SubjectProvider = ({ children }) => {
     updateSubjectSettings,
     updateStudent,
     computeGrade,
+    publishGrade,
     changeAttendance,
     changeMajorExaminationScore,
     changeMajorExaminationTotalScore,
