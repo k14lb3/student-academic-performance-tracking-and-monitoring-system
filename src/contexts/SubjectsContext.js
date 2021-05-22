@@ -16,6 +16,7 @@ export const ACTIONS = {
   DELETE_CURRENT_SUBJECT: 'delete_current_subject',
   DELETE_ARCHIVED_SUBJECT: 'delete_archived_subject',
   UPDATE_SUBJECT_TITLE: 'update_subject_title',
+  UPDATE_SUBJECT_STUDENTS: 'update_subject_students',
 };
 
 const doesSubjectExists = async (code) => {
@@ -48,51 +49,64 @@ const subjectsInitialState = {
 
 const subjectsReducer = (subjects, action) => {
   switch (action.type) {
-    case 'reset_subjects':
+    case ACTIONS.RESET_SUBJECTS:
       return subjectsInitialState;
-    case 'set_subjects':
+    case ACTIONS.SET_SUBJECTS:
       return {
         current: action.payload.subjects,
         archived: [...subjects.archived],
       };
-    case 'set_archived_subjects':
+    case ACTIONS.SET_ARCHIVED_SUBJECTS:
       return {
         current: [...subjects.current],
         archived: action.payload.subjects,
       };
-    case 'add_subject':
+    case ACTIONS.ADD_SUBJECT:
       return {
         current: [...subjects.current, action.payload.subject],
         archived: [...subjects.archived],
       };
-    case 'archive_subject':
+    case ACTIONS.ARCHIVE_SUBJECT:
       return {
         current: subjects.current.filter(
           (subject) => subject.code !== action.payload.code
         ),
         archived: [...subjects.archived, action.payload.subject],
       };
-    case 'delete_current_subject':
+    case ACTIONS.DELETE_CURRENT_SUBJECT:
       return {
         current: subjects.current.filter(
           (subject) => subject.code !== action.payload.code
         ),
         archived: [...subjects.archived],
       };
-    case 'delete_archived_subject':
+    case ACTIONS.DELETE_ARCHIVED_SUBJECT:
       return {
         current: [...subjects.current],
         archived: subjects.archived.filter(
           (subject) => subject.code !== action.payload.code
         ),
       };
-    case 'update_subject_title':
+    case ACTIONS.UPDATE_SUBJECT_TITLE:
       return {
         current: subjects.current.map((subject) => {
           if (subject.code === action.payload.code) {
             return {
               ...subject,
               title: action.payload.title,
+            };
+          }
+          return subject;
+        }),
+        archived: [...subjects.archived],
+      };
+    case ACTIONS.UPDATE_SUBJECT_STUDENTS:
+      return {
+        current: subjects.current.map((subject) => {
+          if (subject.code === action.payload.code) {
+            return {
+              ...subject,
+              students: action.payload.students,
             };
           }
           return subject;
@@ -128,16 +142,16 @@ const SubjectsProvider = ({ children }) => {
       quizzes: [],
       majorExaminations: {
         prelim: {
-          score: 100,
+          totalScore: 100,
         },
         midterm: {
-          score: 100,
+          totalScore: 100,
         },
         semiFinals: {
-          score: 100,
+          totalScore: 100,
         },
         finals: {
-          score: 100,
+          totalScore: 100,
         },
       },
       percentages: {
@@ -398,6 +412,13 @@ const SubjectsProvider = ({ children }) => {
     });
   };
 
+  const updateStudents = async (code, students) => {
+    subjectsDispatch({
+      type: ACTIONS.UPDATE_SUBJECT_STUDENTS,
+      payload: { code: code, students: students },
+    });
+  };
+
   useEffect(() => {
     if (!user) {
       subjectsDispatch({ type: ACTIONS.RESET_SUBJECTS });
@@ -413,6 +434,7 @@ const SubjectsProvider = ({ children }) => {
     joinSubject,
     deleteSubject,
     updateTitle,
+    updateStudents,
   };
 
   return (

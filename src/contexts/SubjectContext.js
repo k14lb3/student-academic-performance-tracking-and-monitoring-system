@@ -7,7 +7,7 @@ const SubjectContext = createContext();
 export const useSubject = () => useContext(SubjectContext);
 
 const SubjectProvider = ({ children }) => {
-  const { updateTitle } = useSubjects();
+  const { subjects, updateTitle, updateStudents } = useSubjects();
   const [subject, setSubject] = useState();
 
   const getSubject = async (code) => {
@@ -41,6 +41,15 @@ const SubjectProvider = ({ children }) => {
         [student.id]: rest,
       };
     }, {});
+
+    const studentCount = Object.keys(students).length;
+
+    if (
+      subjects.current.find((subject) => subject.code === code).students !==
+      studentCount
+    ) {
+      updateStudents(code, studentCount);
+    }
 
     setSubject({
       code: code,
@@ -170,7 +179,7 @@ const SubjectProvider = ({ children }) => {
       subject_code: subject.code,
       student_uid: id,
     }).update({
-      grade: grade,
+      grade: Math.round(grade),
     });
   };
 
