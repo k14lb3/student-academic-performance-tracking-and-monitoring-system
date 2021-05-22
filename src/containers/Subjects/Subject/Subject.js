@@ -137,7 +137,7 @@ const Subject = ({ code }) => {
               <FontAwesomeIcon icon={faCog} />
             </div>
           </div>
-          {subject.students ? (
+          {Object.entries(subject.students).length > 0 ? (
             <>
               <h3 className="mb-3 text-xl xs:text-base">Students</h3>
               <Select
@@ -154,13 +154,13 @@ const Subject = ({ code }) => {
                   );
                 })}
               </Select>
-              <div className="flex mb-5 xs:mb-3">
-                <div className="flex flex-col justify-between w-2/5 mr-5">
+              <div className="flex xm:flex-col mb-5 xs:mb-3">
+                <div className="flex flex-col justify-between w-2/5 xm:w-full mr-5">
                   <div>
                     <h3 className="mb-3 text-xl xs:text-base">
                       Lectures attended
                     </h3>
-                    <div className="flex items-center">
+                    <div className="flex xm:mb-5 items-center">
                       <Button
                         className="!px-3 rounded-tr-none rounded-br-none"
                         onClick={() => {
@@ -196,7 +196,7 @@ const Subject = ({ code }) => {
                     </div>
                   </div>
                   <Button
-                    className="w-full"
+                    className="w-full xm:mb-5"
                     onClick={() => {
                       setModal(MODAL.EXERCISES);
                     }}
@@ -204,7 +204,7 @@ const Subject = ({ code }) => {
                     Exercises
                   </Button>
                   <Button
-                    className="w-full"
+                    className="w-full xm:mb-5"
                     onClick={() => {
                       setModal(MODAL.ASSIGNMENTS);
                     }}
@@ -212,7 +212,7 @@ const Subject = ({ code }) => {
                     Assignments
                   </Button>
                   <Button
-                    className="w-full"
+                    className="w-full xm:mb-5"
                     onClick={() => {
                       setModal(MODAL.QUIZZES);
                     }}
@@ -220,7 +220,7 @@ const Subject = ({ code }) => {
                     Quizzes
                   </Button>
                 </div>
-                <div key={uuid()} className="w-3/5">
+                <div key={uuid()} className="w-3/5 xm:w-full">
                   <h3 className=" mb-3 text-xl xs:text-base">
                     Major Examination
                   </h3>
